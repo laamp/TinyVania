@@ -98,6 +98,18 @@ eval("__webpack_require__.r(__webpack_exports__);\nclass Entity {\n  constructor
 
 /***/ }),
 
+/***/ "./src/js/game.js":
+/*!************************!*\
+  !*** ./src/js/game.js ***!
+  \************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _player__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./player */ \"./src/js/player.js\");\n\n\nclass Game {\n  constructor({ DIM_X, DIM_Y, canvasCtx }) {\n    this.DIM_X = DIM_X;\n    this.DIM_Y = DIM_Y;\n    this.canvasCtx = canvasCtx;\n  }\n\n  spawnPlayer() {\n    this.player = new _player__WEBPACK_IMPORTED_MODULE_0__[\"default\"]({\n      size: { w: 20, h: 20 },\n      pos: { x: 15, y: 15 },\n      vel: { x: 0, y: 0 }\n    });\n\n    this.player.render(this.canvasCtx);\n  }\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (Game);\n\n\n//# sourceURL=webpack:///./src/js/game.js?");
+
+/***/ }),
+
 /***/ "./src/js/index.js":
 /*!*************************!*\
   !*** ./src/js/index.js ***!
@@ -106,7 +118,7 @@ eval("__webpack_require__.r(__webpack_exports__);\nclass Entity {\n  constructor
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _entity__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./entity */ \"./src/js/entity.js\");\n/* harmony import */ var _player__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./player */ \"./src/js/player.js\");\n\n\nwindow.Entity = _entity__WEBPACK_IMPORTED_MODULE_0__[\"default\"];\nwindow.Player = _player__WEBPACK_IMPORTED_MODULE_1__[\"default\"];\n\n// test vals for rendering something\n// { size: { w: 50, h: 100 }, pos: { x: 10, y: 10 }, vel: { x: 0, y: 0 } }\n\n//gets the canvas and grabs its context for rendering\nwindow.addEventListener(\"DOMContentLoaded\", () => {\n  const canvas = document.getElementById(\"game\");\n  const ctx = canvas.getContext(\"2d\");\n  window.ctx = ctx;\n});\n\n\n//# sourceURL=webpack:///./src/js/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _entity__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./entity */ \"./src/js/entity.js\");\n/* harmony import */ var _player__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./player */ \"./src/js/player.js\");\n/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./game */ \"./src/js/game.js\");\n\n\n\nwindow.Entity = _entity__WEBPACK_IMPORTED_MODULE_0__[\"default\"];\nwindow.Player = _player__WEBPACK_IMPORTED_MODULE_1__[\"default\"];\nwindow.Game = _game__WEBPACK_IMPORTED_MODULE_2__[\"default\"];\n\n//constants\nconst WINDOW_WIDTH = 1024;\nconst WINDOW_HEIGHT = 768;\n\n//gets the canvas and grabs its context for rendering\nwindow.addEventListener(\"DOMContentLoaded\", () => {\n  const canvas = document.getElementById(\"game\");\n  canvas.width = WINDOW_WIDTH;\n  canvas.height = WINDOW_HEIGHT;\n  const canvasCtx = canvas.getContext(\"2d\");\n\n  window.canvasCtx = canvasCtx;\n});\n\n\n//# sourceURL=webpack:///./src/js/index.js?");
 
 /***/ }),
 

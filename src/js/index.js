@@ -1,14 +1,20 @@
 import Entity from "./entity";
 import Player from "./player";
+import Game from "./game";
 window.Entity = Entity;
 window.Player = Player;
+window.Game = Game;
 
-// test vals for rendering something
-// { size: { w: 50, h: 100 }, pos: { x: 10, y: 10 }, vel: { x: 0, y: 0 } }
+//constants
+const WINDOW_WIDTH = 1024;
+const WINDOW_HEIGHT = 768;
 
 //gets the canvas and grabs its context for rendering
 window.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("game");
-  const ctx = canvas.getContext("2d");
-  window.ctx = ctx;
+  canvas.width = WINDOW_WIDTH;
+  canvas.height = WINDOW_HEIGHT;
+  const canvasCtx = canvas.getContext("2d");
+
+  window.canvasCtx = canvasCtx;
 });
