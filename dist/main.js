@@ -86,14 +86,39 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/js/entity.js":
+/*!**************************!*\
+  !*** ./src/js/entity.js ***!
+  \**************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\nclass Entity {\n  constructor({ size, pos, vel }) {\n    this.size = size;\n    this.pos = pos;\n    this.vel = vel;\n  }\n\n  render(ctx) {\n    ctx.fillStyle = \"blue\";\n    ctx.fillRect(\n      this.pos.x,\n      this.pos.y,\n      this.size.w,\n      this.size.h\n    );\n  }\n\n  move() {\n    this.pos.x += 1;\n  }\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (Entity);\n\n\n//# sourceURL=webpack:///./src/js/entity.js?");
+
+/***/ }),
+
 /***/ "./src/js/index.js":
 /*!*************************!*\
   !*** ./src/js/index.js ***!
   \*************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-eval("\n\n//# sourceURL=webpack:///./src/js/index.js?");
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _entity__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./entity */ \"./src/js/entity.js\");\n/* harmony import */ var _player__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./player */ \"./src/js/player.js\");\n\n\nwindow.Entity = _entity__WEBPACK_IMPORTED_MODULE_0__[\"default\"];\nwindow.Player = _player__WEBPACK_IMPORTED_MODULE_1__[\"default\"];\n\n// test vals for rendering something\n// { size: { w: 50, h: 100 }, pos: { x: 10, y: 10 }, vel: { x: 0, y: 0 } }\n\n//gets the canvas and grabs its context for rendering\nwindow.addEventListener(\"DOMContentLoaded\", () => {\n  const canvas = document.getElementById(\"game\");\n  const ctx = canvas.getContext(\"2d\");\n  window.ctx = ctx;\n});\n\n\n//# sourceURL=webpack:///./src/js/index.js?");
+
+/***/ }),
+
+/***/ "./src/js/player.js":
+/*!**************************!*\
+  !*** ./src/js/player.js ***!
+  \**************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _entity__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./entity */ \"./src/js/entity.js\");\n\n\nclass Player extends _entity__WEBPACK_IMPORTED_MODULE_0__[\"default\"] {\n  constructor(startVals) {\n    super(startVals);\n  }\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (Player);\n\n\n//# sourceURL=webpack:///./src/js/player.js?");
 
 /***/ })
 
