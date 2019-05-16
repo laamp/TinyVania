@@ -16,7 +16,7 @@ class Entity {
   }
 
   move() {
-    this.pos.x += 1;
+    this.pos.x += 10;
   }
 }
 
