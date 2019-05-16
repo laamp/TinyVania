@@ -1,58 +1,36 @@
 //top level game management file
+import "../css/reset.css";
+import "../css/style.css";
 
-import Entity from "./entity";
-import Player from "./player";
 import Game from "./game";
-window.Entity = Entity; //TESTING
-window.Player = Player; //TESTING
-window.Game = Game; //TESTING
-
-//constants
-export const WINDOW_WIDTH = 640;
-export const WINDOW_HEIGHT = 480;
-
-//control variables
-export const userController = {
-  left: false,
-  right: false,
-  up: false,
-  down: false
-};
+import {
+  canvasResolution,
+  bindKeyHandlers
+} from './util';
 
 //gets the canvas and grabs its context for rendering
+//also sets up and starts the game
 window.addEventListener("DOMContentLoaded", () => {
+  //get the canvas
   const canvas = document.getElementById("game");
-  canvas.width = WINDOW_WIDTH;
-  canvas.height = WINDOW_HEIGHT;
+  canvas.width = canvasResolution.width;
+  canvas.height = canvasResolution.height;
   const canvasCtx = canvas.getContext("2d");
 
+  //create game instance
   const game = new Game({
-    DIM_X: WINDOW_WIDTH,
-    DIM_Y: WINDOW_HEIGHT,
+    RES_X: canvasResolution.width,
+    RES_Y: canvasResolution.height,
     canvasCtx
   });
 
-  const Start = () => {
-    setInterval(game.render, 60);
+  //start the game
+  const start = () => {
+    setInterval(() => {
+      game.physics();
+      game.render();
+    }, 60);
   };
-
-  const bindKeyHandlers = () => {
-    window.onkeydown = e => {
-      if (e.key === "a") userController.left = true;
-      if (e.key === "d") userController.right = true;
-      if (e.key === "w") userController.up = true;
-      if (e.key === "s") userController.down = true;
-    };
-
-    window.onkeyup = e => {
-      if (e.key === "a") userController.left = false;
-      if (e.key === "d") userController.right = false;
-      if (e.key === "w") userController.up = false;
-      if (e.key === "s") userController.down = false;
-    };
-  };
+  start();
   bindKeyHandlers();
-
-  window.Start = Start; //TESTING
-  window.canvasCtx = canvasCtx; //TESTING
 });

@@ -1,7 +1,7 @@
 import Entity from "./entity";
-import { userController } from "./index";
+import { userController } from "./util";
 
-const movAmt = 10;
+const movAmt = 5;
 
 class Player extends Entity {
   constructor(startVals) {

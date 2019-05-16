@@ -1,34 +1,40 @@
 import Player from "./player";
 
 class Game {
-  constructor({ DIM_X, DIM_Y, canvasCtx }) {
-    this.DIM_X = DIM_X;
-    this.DIM_Y = DIM_Y;
+  constructor({ RES_X, RES_Y, canvasCtx }) {
+    this.RES_X = RES_X;
+    this.RES_Y = RES_Y;
     this.canvasCtx = canvasCtx;
+
+    //array to contain all objects currently in the game
+    this.gameObjects = [];
 
     this.player = new Player({
       size: { w: 45, h: 100 },
-      pos: { x: 15, y: 15 },
+      pos: { x: RES_X / 2, y: RES_Y / 2 },
       vel: { x: 0, y: 0 }
     });
+    this.gameObjects.push(this.player);
 
     this.render = this.render.bind(this);
     this.physics = this.physics.bind(this);
   }
 
   physics() {
-    this.player.move();
+    //loop through all objects and update their position
+    for (let i = 0; i < this.gameObjects.length; i++) {
+      this.gameObjects[i].move();
+    }
   }
 
   render() {
-    this.canvasCtx.clearRect(
-      0, 0,
-      this.DIM_X,
-      this.DIM_Y
-    );
+    //clean the canvas before each render
+    this.canvasCtx.clearRect(0, 0, this.RES_X, this.RES_Y);
 
-    this.player.render(this.canvasCtx);
-    this.physics();
+    //render all gameObjects
+    for (let i = 0; i < this.gameObjects.length; i++) {
+      this.gameObjects[i].render(this.canvasCtx);
+    }
   }
 }
 
