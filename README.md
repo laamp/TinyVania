@@ -37,19 +37,19 @@ This game is inspired by [CastleVania](https://en.wikipedia.org/wiki/Castlevania
 ## **Architecture & Technologies**
 
 * Controls
-This should all be achievable through plain JavaScript by setting up event listeners. There will be a state for player control that various keypresses will alter.
+  * This should all be achievable through plain JavaScript by setting up event listeners. There will be a state for player control that various keypresses will alter.
 
 * Rendering
-Rendering the game and sprite assets should all be done through HTML canvas.
+  * Rendering the game and sprite assets should all be done through HTML canvas.
 
 * Audio
-Web Audio API will handle playback of sound effects and any music I may have.
+  * Web Audio API will handle playback of sound effects and any music I may have.
 
 * Game logic
-This will all be handled in vanilla JavaScript.
+  * This will all be handled in vanilla JavaScript.
 
 * Script bundling
-Webpack for loading all scripts.
+  * Webpack for loading all scripts.
 
 ## **Dev Schedule**
 
