@@ -1,0 +1,31 @@
+body {
+  background-color: darkgray;
+}
+
+main {
+  width: 100%;
+}
+
+.wrapper {
+  margin: 0 auto;
+  width: 1300px;
+}
+
+#game {
+  border: 1px solid red;
+  display: inline-block;
+  height: 768px;
+  width: 1024px;
+}
+
+aside {
+  display: inline-block;
+  margin: 12px;
+  vertical-align: top;
+}
+
+h1 {
+  font-size: 48px;
+  margin: 20px 0;
+  text-align: center;
+}
