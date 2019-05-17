@@ -10,7 +10,9 @@ export const randomColor = () => {
     "8", "9", "A", "B",
     "C", "D", "E", "F"
   ];
-
+  const red2 = "FF";
+  const green2 = "FF";
+  const blue2 = "99";
   const red =
     vals[Math.floor(Math.random() * vals.length)] +
     vals[Math.floor(Math.random() * vals.length)];
@@ -24,5 +26,6 @@ export const randomColor = () => {
     vals[Math.floor(Math.random() * vals.length)] +
     vals[Math.floor(Math.random() * vals.length)];
 
-  return ("#" + red + green + blue);
+  return ("#" + red + green + blue2);
+  // return ("navy");
 };

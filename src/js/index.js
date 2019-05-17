@@ -16,7 +16,7 @@ export const GAME_STATES = {
 };
 
 export let gameState = GAME_STATES.GAME_PLAYING;
-console.log(gameState);
+console.log(gameState); //for testing
 
 //gets the canvas and grabs its context for rendering
 //also sets up and starts the game

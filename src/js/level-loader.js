@@ -1,7 +1,7 @@
 import Entity from "./entity";
 
 export const parseLevel = levelData => {
-  let gameObjects = [];
+  let tiles = [];
   const tileSize = 20;
   let depth = 0;
   let stride = 0;
@@ -14,7 +14,7 @@ export const parseLevel = levelData => {
         depth++;
         break;
       case "x":
-        gameObjects.push(new Entity({
+        tiles.push(new Entity({
           size: { w: tileSize, h: tileSize },
           pos: { x: stride * tileSize, y: depth * tileSize },
           vel: { x: 0, y: 0 }
@@ -30,5 +30,5 @@ export const parseLevel = levelData => {
     }
   }
 
-  return gameObjects;
+  return tiles;
 };
