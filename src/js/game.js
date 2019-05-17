@@ -25,7 +25,7 @@ class Game {
 
     let level = levelData.split("");
     for (let i = 0; i < level.length; i++) {
-      console.log(level[i]);
+      // console.log(level[i]);
     }
   }
 
