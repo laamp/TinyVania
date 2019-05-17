@@ -1,5 +1,5 @@
 import Player from "./player";
-import Entity from "./entity";
+// import Entity from "./entity";
 import { parseLevel } from "./level-loader";
 import { randomColor } from "./util";
 
@@ -27,6 +27,10 @@ class Game {
       pos: { x: RES_X / 2, y: RES_Y / 2 },
       vel: { x: 0, y: 0 }
     });
+    this.bCanPlayerMove = false;
+    window.canMove = b => { //for testing
+      this.bCanPlayerMove = b;
+    };
     this.gameObjects.player.push(this.player);
 
     this.render = this.render.bind(this);
@@ -39,19 +43,15 @@ class Game {
   }
 
   physics() {
-    const objs = this.gameObjects.canBeBlocked;
     const blockers = this.gameObjects.blockers;
 
-    this.player.input();
+    for (let i = 0; i < blockers.length; i++) {
+      if (this.player.bCollided(blockers[i])) {
+        console.log("collision");
+      }
+    }
 
-    //loop through all objects and update their position
-    // for (let i = 0; i < objs.length; i++) {
-    //   for (let j = 0; j < blockers.length; j++) {
-    //     if (!objs[i].bCollided(blockers[j])) {
-    //       objs[i].input();
-    //     }
-    //   }
-    // }
+    if (this.bCanPlayerMove) this.player.input();
   }
 
   render() {
@@ -67,7 +67,6 @@ class Game {
     });
 
     this.player.render(this.canvasCtx, randomColor());
-
   }
 }
 
