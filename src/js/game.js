@@ -10,7 +10,7 @@ class Game {
     this.gameObjects = [];
 
     this.player = new Player({
-      size: { w: 45, h: 100 },
+      size: { w: 20, h: 20 },
       pos: { x: RES_X / 2, y: RES_Y / 2 },
       vel: { x: 0, y: 0 }
     });
@@ -18,6 +18,15 @@ class Game {
 
     this.render = this.render.bind(this);
     this.physics = this.physics.bind(this);
+  }
+
+  loadLevel(levelData) {
+    const tileSize = 20;
+
+    let level = levelData.split("");
+    for (let i = 0; i < level.length; i++) {
+      console.log(level[i]);
+    }
   }
 
   physics() {
@@ -33,7 +42,7 @@ class Game {
 
     //render all gameObjects
     for (let i = 0; i < this.gameObjects.length; i++) {
-      this.gameObjects[i].render(this.canvasCtx);
+      this.gameObjects[i].render(this.canvasCtx, "red");
     }
   }
 }

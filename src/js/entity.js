@@ -5,8 +5,8 @@ class Entity {
     this.vel = vel;
   }
 
-  render(ctx) {
-    ctx.fillStyle = "blue";
+  render(ctx, color) {
+    ctx.fillStyle = color;
     ctx.fillRect(
       this.pos.x,
       this.pos.y,
@@ -15,6 +15,7 @@ class Entity {
     );
   }
 
+  //should be overriden by child classes
   move() {
     this.pos.x += 1;
   }

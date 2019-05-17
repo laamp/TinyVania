@@ -1,6 +1,8 @@
 //top level game management file
-import "../css/reset.css";
-import "../css/style.css";
+import "../css/reset";
+import "../css/style";
+
+import level01 from "../levels/level01";
 
 import Game from "./game";
 import {
@@ -33,4 +35,5 @@ window.addEventListener("DOMContentLoaded", () => {
   };
   start();
   bindKeyHandlers();
+  game.loadLevel(level01);
 });
