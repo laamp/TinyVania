@@ -5,19 +5,20 @@ x
 x
 x
 x
-x
-x
-x
-x
-x
-x
-x
-x
-x
-x
-x
-x
-x
-x
+x x     x  x  x
+x x    x x x  x
+x x    xxx xxx
+x xxxx x x x x
 x
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+x
+x
+x
+x
+x
+x
+x
+x
+x
+x
+x

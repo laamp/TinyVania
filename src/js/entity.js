@@ -17,7 +17,7 @@ class Entity {
 
   //should be overriden by child classes
   move() {
-    this.pos.x += 1;
+
   }
 }
 

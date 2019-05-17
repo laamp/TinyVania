@@ -184,7 +184,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\nclass Entity {\n  constructor({ size, pos, vel }) {\n    this.size = size;\n    this.pos = pos;\n    this.vel = vel;\n  }\n\n  render(ctx, color) {\n    ctx.fillStyle = color;\n    ctx.fillRect(\n      this.pos.x,\n      this.pos.y,\n      this.size.w,\n      this.size.h\n    );\n  }\n\n  //should be overriden by child classes\n  move() {\n    this.pos.x += 1;\n  }\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (Entity);\n\n\n//# sourceURL=webpack:///./src/js/entity.js?");
+eval("__webpack_require__.r(__webpack_exports__);\nclass Entity {\n  constructor({ size, pos, vel }) {\n    this.size = size;\n    this.pos = pos;\n    this.vel = vel;\n  }\n\n  render(ctx, color) {\n    ctx.fillStyle = color;\n    ctx.fillRect(\n      this.pos.x,\n      this.pos.y,\n      this.size.w,\n      this.size.h\n    );\n  }\n\n  //should be overriden by child classes\n  move() {\n\n  }\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (Entity);\n\n\n//# sourceURL=webpack:///./src/js/entity.js?");
 
 /***/ }),
 
@@ -196,7 +196,7 @@ eval("__webpack_require__.r(__webpack_exports__);\nclass Entity {\n  constructor
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _player__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./player */ \"./src/js/player.js\");\n\n\nclass Game {\n  constructor({ RES_X, RES_Y, canvasCtx }) {\n    this.RES_X = RES_X;\n    this.RES_Y = RES_Y;\n    this.canvasCtx = canvasCtx;\n\n    //array to contain all objects currently in the game\n    this.gameObjects = [];\n\n    this.player = new _player__WEBPACK_IMPORTED_MODULE_0__[\"default\"]({\n      size: { w: 20, h: 20 },\n      pos: { x: RES_X / 2, y: RES_Y / 2 },\n      vel: { x: 0, y: 0 }\n    });\n    this.gameObjects.push(this.player);\n\n    this.render = this.render.bind(this);\n    this.physics = this.physics.bind(this);\n  }\n\n  loadLevel(levelData) {\n    const tileSize = 20;\n\n    let level = levelData.split(\"\");\n    for (let i = 0; i < level.length; i++) {\n      // console.log(level[i]);\n    }\n  }\n\n  physics() {\n    //loop through all objects and update their position\n    for (let i = 0; i < this.gameObjects.length; i++) {\n      this.gameObjects[i].move();\n    }\n  }\n\n  render() {\n    //clean the canvas before each render\n    this.canvasCtx.clearRect(0, 0, this.RES_X, this.RES_Y);\n\n    //render all gameObjects\n    for (let i = 0; i < this.gameObjects.length; i++) {\n      this.gameObjects[i].render(this.canvasCtx, \"red\");\n    }\n  }\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (Game);\n\n\n//# sourceURL=webpack:///./src/js/game.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _player__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./player */ \"./src/js/player.js\");\n/* harmony import */ var _entity__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./entity */ \"./src/js/entity.js\");\n/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./util */ \"./src/js/util.js\");\n\n\n\n\n\nclass Game {\n  constructor({ RES_X, RES_Y, canvasCtx }) {\n    this.RES_X = RES_X;\n    this.RES_Y = RES_Y;\n    this.canvasCtx = canvasCtx;\n\n    //array to contain all objects currently in the game\n    this.gameObjects = [];\n\n    this.player = new _player__WEBPACK_IMPORTED_MODULE_0__[\"default\"]({\n      size: { w: 20, h: 20 },\n      pos: { x: RES_X / 2, y: RES_Y / 2 },\n      vel: { x: 0, y: 0 }\n    });\n    this.gameObjects.push(this.player);\n\n    this.render = this.render.bind(this);\n    this.physics = this.physics.bind(this);\n  }\n\n  loadLevel(levelData) {\n    const tileSize = 20;\n    let depth = 0;\n    let stride = 0;\n\n    let level = levelData.split(\"\");\n    for (let i = 0; i < level.length; i++) {\n      switch (level[i]) {\n        case \"\\n\":\n          stride = 0;\n          depth++;\n          break;\n        case \"x\":\n          this.gameObjects.push(new _entity__WEBPACK_IMPORTED_MODULE_1__[\"default\"]({\n            size: { w: tileSize, h: tileSize },\n            pos: { x: stride * tileSize, y: depth * tileSize },\n            vel: { x: 0, y: 0 }\n          }));\n          stride++;\n          break;\n        case \" \":\n          stride++;\n          break;\n        default:\n          console.warn(\"Unhandled level character!\");\n          break;\n      }\n    }\n  }\n\n  physics() {\n    //loop through all objects and update their position\n    for (let i = 0; i < this.gameObjects.length; i++) {\n      this.gameObjects[i].move();\n    }\n  }\n\n  render() {\n    //clean the canvas before each render\n    this.canvasCtx.clearRect(0, 0, this.RES_X, this.RES_Y);\n\n    //render all gameObjects\n    for (let i = 0; i < this.gameObjects.length; i++) {\n      this.gameObjects[i].render(this.canvasCtx, Object(_util__WEBPACK_IMPORTED_MODULE_2__[\"randomColor\"])());\n    }\n  }\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (Game);\n\n\n//# sourceURL=webpack:///./src/js/game.js?");
 
 /***/ }),
 
@@ -228,11 +228,11 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _ent
 /*!************************!*\
   !*** ./src/js/util.js ***!
   \************************/
-/*! exports provided: canvasResolution */
+/*! exports provided: canvasResolution, randomColor */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"canvasResolution\", function() { return canvasResolution; });\nconst canvasResolution = {\n  width: 640,\n  height: 480\n};\n\n\n//# sourceURL=webpack:///./src/js/util.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"canvasResolution\", function() { return canvasResolution; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"randomColor\", function() { return randomColor; });\nconst canvasResolution = {\n  width: 640,\n  height: 480\n};\n\nconst randomColor = () => {\n  const vals = [\n    \"0\", \"1\", \"2\", \"3\",\n    \"4\", \"5\", \"6\", \"7\",\n    \"8\", \"9\", \"A\", \"B\",\n    \"C\", \"D\", \"E\", \"F\"\n  ];\n\n  const red =\n    vals[Math.floor(Math.random() * vals.length)] +\n    vals[Math.floor(Math.random() * vals.length)];\n  const green =\n    vals[Math.floor(Math.random() * vals.length)] +\n    vals[Math.floor(Math.random() * vals.length)];\n  const blue =\n    vals[Math.floor(Math.random() * vals.length)] +\n    vals[Math.floor(Math.random() * vals.length)];\n  const alpha =\n    vals[Math.floor(Math.random() * vals.length)] +\n    vals[Math.floor(Math.random() * vals.length)];\n\n  return (\"#\" + red + green + blue);\n};\n\n\n//# sourceURL=webpack:///./src/js/util.js?");
 
 /***/ }),
 
@@ -244,7 +244,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony default export */ __webpack_exports__[\"default\"] = (\"x\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\n\");\n\n//# sourceURL=webpack:///./src/levels/level01.txt?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony default export */ __webpack_exports__[\"default\"] = (\"x\\nx\\nx\\nx\\nx\\nx\\nx\\nx x     x  x  x\\nx x    x x x  x\\nx x    xxx xxx\\nx xxxx x x x x\\nx\\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\n\");\n\n//# sourceURL=webpack:///./src/levels/level01.txt?");
 
 /***/ })
 
