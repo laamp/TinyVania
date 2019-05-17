@@ -36,6 +36,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   //start the game
   const start = () => {
+    game.startLevel();
     setInterval(() => {
       game.physics();
       game.render();
@@ -43,5 +44,4 @@ window.addEventListener("DOMContentLoaded", () => {
   };
   start();
   bindKeyHandlers();
-  game.loadLevel(level01);
 });

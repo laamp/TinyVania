@@ -1,7 +1,12 @@
 import Player from "./player";
 import Entity from "./entity";
+import { parseLevel } from "./level-loader";
 
-import { randomColor } from "./util";
+import level01 from "../levels/level01";
+
+const levels = {
+  1: level01
+};
 
 class Game {
   constructor({ RES_X, RES_Y, canvasCtx }) {
@@ -23,34 +28,9 @@ class Game {
     this.physics = this.physics.bind(this);
   }
 
-  loadLevel(levelData) {
-    const tileSize = 20;
-    let depth = 0;
-    let stride = 0;
-
-    let level = levelData.split("");
-    for (let i = 0; i < level.length; i++) {
-      switch (level[i]) {
-        case "\n":
-          stride = 0;
-          depth++;
-          break;
-        case "x":
-          this.gameObjects.push(new Entity({
-            size: { w: tileSize, h: tileSize },
-            pos: { x: stride * tileSize, y: depth * tileSize },
-            vel: { x: 0, y: 0 }
-          }));
-          stride++;
-          break;
-        case " ":
-          stride++;
-          break;
-        default:
-          console.warn("Unhandled level character!");
-          break;
-      }
-    }
+  startLevel() {
+    let level = parseLevel(levels[1]);
+    this.gameObjects = this.gameObjects.concat(level);
   }
 
   physics() {
@@ -66,7 +46,7 @@ class Game {
 
     //render all gameObjects
     for (let i = 0; i < this.gameObjects.length; i++) {
-      this.gameObjects[i].render(this.canvasCtx, randomColor());
+      this.gameObjects[i].render(this.canvasCtx, "blue");
     }
   }
 }
