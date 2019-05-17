@@ -1,4 +1,5 @@
 import Entity from "./entity";
+import { randomColor } from "./util";
 
 export const parseLevel = levelData => {
   let tiles = [];
@@ -17,7 +18,8 @@ export const parseLevel = levelData => {
         tiles.push(new Entity({
           size: { w: tileSize, h: tileSize },
           pos: { x: stride * tileSize, y: depth * tileSize },
-          vel: { x: 0, y: 0 }
+          vel: { x: 0, y: 0 },
+          color: randomColor()
         }));
         stride++;
         break;

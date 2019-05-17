@@ -25,9 +25,10 @@ class Game {
     this.player = new Player({
       size: { w: 20, h: 20 },
       pos: { x: RES_X / 2, y: RES_Y / 2 },
-      vel: { x: 0, y: 0 }
+      vel: { x: 0, y: 3 },
+      color: randomColor()
     });
-    this.bCanPlayerMove = false;
+    this.bCanPlayerMove = true;
     window.canMove = b => { //for testing
       this.bCanPlayerMove = b;
     };
@@ -47,11 +48,14 @@ class Game {
 
     for (let i = 0; i < blockers.length; i++) {
       if (this.player.bCollided(blockers[i])) {
-        console.log("collision");
+        this.bCanPlayerMove = false;
       }
     }
 
-    if (this.bCanPlayerMove) this.player.input();
+    this.player.input();
+    if (this.bCanPlayerMove) this.player.gravity();
+
+    this.bCanPlayerMove = true;
   }
 
   render() {
@@ -62,11 +66,11 @@ class Game {
     layerNames.forEach(name => {
       const renderObjs = this.gameObjects[name];
       for (let i = 0; i < renderObjs.length; i++) {
-        renderObjs[i].render(this.canvasCtx, randomColor());
+        renderObjs[i].render(this.canvasCtx);
       }
     });
 
-    this.player.render(this.canvasCtx, randomColor());
+    this.player.render(this.canvasCtx);
   }
 }
 

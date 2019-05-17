@@ -13,6 +13,10 @@ class Player extends Entity {
     super(startVals);
   }
 
+  gravity() {
+    this.pos.y += this.vel.y;
+  }
+
   input() {
     if (gameState === GAME_STATES.GAME_PLAYING) {
       if (userController.right) this.pos.x += movAmt;

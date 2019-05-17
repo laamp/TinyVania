@@ -1,14 +1,15 @@
 class Entity {
-  constructor({ size, pos, vel }) {
-    this.size = size;
-    this.pos = pos;
-    this.vel = vel;
+  constructor({ size, pos, vel, color }) {
+    this.size = size || { w: 100, h: 100 };
+    this.pos = pos || { x: 0, y: 0 };
+    this.vel = vel || { x: 0, y: 0 };
+    this.color = color || "magenta";
 
     this.render = this.render.bind(this);
   }
 
-  render(ctx, color) {
-    ctx.fillStyle = color;
+  render(ctx) {
+    ctx.fillStyle = this.color;
     ctx.fillRect(
       this.pos.x,
       this.pos.y,
