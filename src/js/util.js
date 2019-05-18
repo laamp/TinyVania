@@ -1,4 +1,4 @@
-export const canvasResolution = {
+export const renderResolution = {
   width: 640,
   height: 480
 };

@@ -1,6 +1,12 @@
 import Entity from "./entity";
 import { randomColor } from "./util";
 
+import level01 from "../levels/level01";
+
+export const levels = {
+  1: level01
+};
+
 export const parseLevel = levelData => {
   let tiles = [];
   const tileSize = 20;

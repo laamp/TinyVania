@@ -1,13 +1,8 @@
 import Player from "./player";
-// import Entity from "./entity";
-import { parseLevel } from "./level-loader";
-import { randomColor } from "./util";
 
-import level01 from "../levels/level01";
-
-const levels = {
-  1: level01
-};
+import { levels, parseLevel } from "./level-loader";
+import { bindKeyHandlers } from "./controller";
+import { renderResolution, randomColor } from "./util";
 
 //game state
 export const GAME_STATES = {
@@ -20,10 +15,10 @@ export let gameState = GAME_STATES.GAME_PLAYING;
 console.log(gameState); //for testing
 
 class Game {
-  constructor({ RES_X, RES_Y, canvasCtx }) {
-    this.RES_X = RES_X;
-    this.RES_Y = RES_Y;
-    this.canvasCtx = canvasCtx;
+  constructor(canvas) {
+    canvas.width = renderResolution.width;
+    canvas.height = renderResolution.height;
+    this.canvasCtx = canvas.getContext("2d");
 
     //object to contain all objects currently in the game
     this.gameObjects = {
@@ -34,7 +29,7 @@ class Game {
 
     this.player = new Player({
       size: { w: 20, h: 20 },
-      pos: { x: RES_X / 2, y: RES_Y / 2 },
+      pos: { x: canvas.width / 2, y: canvas.height / 2 },
       vel: { x: 0, y: 3 },
       color: randomColor()
     });
@@ -43,10 +38,10 @@ class Game {
       this.bCanPlayerMove = b;
     };
     this.gameObjects.player.push(this.player);
-
-    this.render = this.render.bind(this);
-    this.physics = this.physics.bind(this);
+    bindKeyHandlers();
     this.step = this.step.bind(this);
+    this.startLevel();
+    this.step();
   }
 
   step() {
@@ -79,7 +74,11 @@ class Game {
 
   render() {
     //clean the canvas before each render
-    this.canvasCtx.clearRect(0, 0, this.RES_X, this.RES_Y);
+    this.canvasCtx.clearRect(
+      0, 0,
+      renderResolution.width,
+      renderResolution.height
+    );
 
     let layerNames = Object.keys(this.gameObjects);
     layerNames.forEach(name => {
