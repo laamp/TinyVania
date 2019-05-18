@@ -1,6 +1,7 @@
-export const renderResolution = {
-  width: 640,
-  height: 480
+export const globals = {
+  screenWidth: 640,
+  screenHeight: 480,
+  gravity: 9.81
 };
 
 export const randomColor = () => {

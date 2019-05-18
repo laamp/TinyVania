@@ -1,3 +1,5 @@
+import { globals } from "./util";
+
 class Entity {
   constructor({ size, pos, vel, color }) {
     this.size = size || { w: 100, h: 100 };
@@ -19,9 +21,12 @@ class Entity {
     );
   }
 
-  applyVelocity() {
-    this.pos.y += this.vel.y;
+  applyVelocity(deltaT) {
+    const timeAdj = 0.009;
+    this.pos.y += (this.vel.y * (deltaT * timeAdj));
     this.pos.x += this.vel.x;
+
+    this.vel.y += (globals.gravity * (deltaT * timeAdj));
   }
 
   bCollided(box2) {
@@ -40,6 +45,10 @@ class Entity {
   //should be overriden by child classes
   input() {
 
+  }
+
+  resetVertVelocity() {
+    this.vel.y = 0;
   }
 }
 

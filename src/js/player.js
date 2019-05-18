@@ -2,6 +2,7 @@ import Entity from "./entity";
 import { userController } from "./controller";
 
 const movAmt = 3.5;
+const jumpAmt = -50;
 const controllerResets = {
   attack: true,
   jump: true
@@ -26,6 +27,7 @@ class Player extends Entity {
 
     if ((userController.jump) && (controllerResets.jump)) {
       controllerResets.jump = false;
+      this.vel.y = jumpAmt;
       console.log("jump"); //for testing
       setTimeout(() => {
         controllerResets.jump = true;
