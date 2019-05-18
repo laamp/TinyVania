@@ -7,4 +7,5 @@ import Game from "./game";
 window.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("game");
   const game = new Game(canvas);
+  window.game = game; //for testing
 });

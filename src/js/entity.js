@@ -4,6 +4,7 @@ class Entity {
     this.pos = pos || { x: 0, y: 0 };
     this.vel = vel || { x: 0, y: 0 };
     this.color = color || "magenta";
+    this.bApplyGravity = false;
 
     this.render = this.render.bind(this);
   }
@@ -16,6 +17,11 @@ class Entity {
       this.size.w,
       this.size.h
     );
+  }
+
+  applyVelocity() {
+    this.pos.y += this.vel.y;
+    this.pos.x += this.vel.x;
   }
 
   bCollided(box2) {
