@@ -2,21 +2,9 @@
 import "../css/reset";
 import "../css/style";
 
-import level01 from "../levels/level01";
-
 import Game from "./game";
 import { canvasResolution } from "./util";
 import { bindKeyHandlers } from "./controller";
-
-//game state
-export const GAME_STATES = {
-  MENU: "MENU",
-  GAME_PLAYING: "GAME_PLAYING",
-  GAME_PAUSED: "GAME_PAUSED"
-};
-
-export let gameState = GAME_STATES.GAME_PLAYING;
-console.log(gameState); //for testing
 
 //gets the canvas and grabs its context for rendering
 //also sets up and starts the game
@@ -37,10 +25,12 @@ window.addEventListener("DOMContentLoaded", () => {
   //start the game
   const start = () => {
     game.startLevel();
-    setInterval(() => {
-      game.physics();
-      game.render();
-    }, 60);
+    game.step();
+
+    // setInterval(() => {
+    //   game.physics();
+    //   game.render();
+    // }, 60);
   };
   start();
   bindKeyHandlers();

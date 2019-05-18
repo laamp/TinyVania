@@ -9,6 +9,16 @@ const levels = {
   1: level01
 };
 
+//game state
+export const GAME_STATES = {
+  MENU: "MENU",
+  GAME_PLAYING: "GAME_PLAYING",
+  GAME_PAUSED: "GAME_PAUSED"
+};
+
+export let gameState = GAME_STATES.GAME_PLAYING;
+console.log(gameState); //for testing
+
 class Game {
   constructor({ RES_X, RES_Y, canvasCtx }) {
     this.RES_X = RES_X;
@@ -36,6 +46,15 @@ class Game {
 
     this.render = this.render.bind(this);
     this.physics = this.physics.bind(this);
+    this.step = this.step.bind(this);
+  }
+
+  step() {
+    this.physics();
+    this.render();
+    if (gameState === GAME_STATES.GAME_PLAYING) {
+      requestAnimationFrame(this.step);
+    }
   }
 
   startLevel() {
@@ -53,7 +72,7 @@ class Game {
     }
 
     this.player.input();
-    if (this.bCanPlayerMove) this.player.gravity();
+    if (this.bCanPlayerMove) this.player.applyVelocity();
 
     this.bCanPlayerMove = true;
   }

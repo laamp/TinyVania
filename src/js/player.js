@@ -1,6 +1,6 @@
 import Entity from "./entity";
 import { userController } from "./controller";
-import { gameState, GAME_STATES } from "./index";
+import { gameState, GAME_STATES } from "./game";
 
 const movAmt = 5;
 const controllerResets = {
@@ -13,8 +13,9 @@ class Player extends Entity {
     super(startVals);
   }
 
-  gravity() {
+  applyVelocity() {
     this.pos.y += this.vel.y;
+    this.pos.x += this.vel.x;
   }
 
   input() {
