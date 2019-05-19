@@ -13,6 +13,7 @@ export const GAME_STATES = {
 export let timeSinceLastFrame;
 export let previousTime;
 let camOffsetX, camOffsetY;
+let oldPosY;
 
 class Game {
   constructor(canvas) {
@@ -43,6 +44,8 @@ class Game {
     });
     this.gameObjects.player.push(this.player);
 
+    oldPosY = this.player.pos.y;
+
     bindKeyHandlers();
 
     timeSinceLastFrame = 0;
@@ -63,23 +66,23 @@ class Game {
     //stuff for camera tracking
 
     if (userController.left &&
-      (this.player.pos.x < (globals.screenWidth * 0.35 - camOffsetX))) {
+      (this.player.pos.x < (globals.screenWidth * 0.4 - camOffsetX))) {
       camOffsetX += this.player.moveAmt;
     }
 
     if (userController.right &&
-      (this.player.pos.x > (globals.screenWidth * 0.5 - camOffsetX))) {
+      (this.player.pos.x > (globals.screenWidth * 0.55 - camOffsetX))) {
       camOffsetX -= this.player.moveAmt;
     }
 
     if ((this.player.pos.y < (globals.screenHeight * 0.2 - camOffsetY))) {
-      camOffsetY += 4;
+      camOffsetY -= this.player.pos.y - oldPosY;
     }
 
     if ((this.player.pos.y + this.player.size.h) > (globals.screenHeight * 0.9 - camOffsetY)) {
-      camOffsetY -= 4;
+      camOffsetY -= this.player.pos.y - oldPosY;
     }
-
+    oldPosY = this.player.pos.y;
     //end of camera tracking
 
     this.update(timeSinceLastFrame);
