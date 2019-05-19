@@ -184,7 +184,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./util */ \"./src/js/util.js\");\n\n\nclass Entity {\n  constructor({ size, pos, vel, color }) {\n    this.size = size || { w: 100, h: 100 };\n    this.pos = pos || { x: 0, y: 0 };\n    this.vel = vel || { x: 0, y: 0 };\n    this.color = color || \"magenta\";\n    this.prevY = 0;\n\n    this.render = this.render.bind(this);\n  }\n\n  render(ctx) {\n    ctx.fillStyle = this.color;\n    ctx.fillRect(\n      this.pos.x,\n      this.pos.y,\n      this.size.w,\n      this.size.h\n    );\n  }\n\n  applyVelocity(deltaT) {\n    const timeAdj = 0.009;\n    this.prevY = this.pos.y;\n    this.pos.y += (this.vel.y * (deltaT * timeAdj));\n    this.pos.x += this.vel.x;\n\n    this.vel.y += (_util__WEBPACK_IMPORTED_MODULE_0__[\"globals\"].gravity * (deltaT * timeAdj));\n    if (this.vel.y > _util__WEBPACK_IMPORTED_MODULE_0__[\"globals\"].maxVelocity) this.vel.y = _util__WEBPACK_IMPORTED_MODULE_0__[\"globals\"].maxVelocity;\n  }\n\n  bCollided(box2) {\n    let box1 = this;\n    if (\n      (box1.pos.x <= (box2.pos.x + box2.size.w)) &&\n      ((box1.pos.x + box1.size.w) >= box2.pos.x) &&\n      (box1.pos.y <= (box2.pos.y + box2.size.h)) &&\n      ((box1.pos.y + box1.size.h) >= box2.pos.y)\n    ) {\n      return true;\n    }\n    return false;\n  }\n\n  input() {\n    //should be overriden by child classes\n  }\n\n  resetVertVelocity() {\n    this.vel.y = 0;\n  }\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (Entity);\n\n\n//# sourceURL=webpack:///./src/js/entity.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./util */ \"./src/js/util.js\");\n/* harmony import */ var _img_loader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./img-loader */ \"./src/js/img-loader.js\");\n\n\n\nclass Entity {\n  constructor({ size, pos, vel, color }) {\n    this.size = size || { w: 100, h: 100 };\n    this.pos = pos || { x: 0, y: 0 };\n    this.vel = vel || { x: 0, y: 0 };\n    this.color = color || \"magenta\";\n    this.prevY = 0;\n\n    this.render = this.render.bind(this);\n  }\n\n  render(ctx) {\n    ctx.fillStyle = this.color;\n    ctx.fillRect(\n      this.pos.x,\n      this.pos.y,\n      this.size.w,\n      this.size.h\n    );\n    let img = new Image();\n    img.src = _img_loader__WEBPACK_IMPORTED_MODULE_1__[\"images\"].walk[1];\n    ctx.drawImage(img, this.pos.x - 40, this.pos.y - 5);\n  }\n\n  applyVelocity(deltaT) {\n    const timeAdj = 0.009;\n    this.prevY = this.pos.y;\n    this.pos.y += (this.vel.y * (deltaT * timeAdj));\n    this.pos.x += this.vel.x;\n\n    this.vel.y += (_util__WEBPACK_IMPORTED_MODULE_0__[\"globals\"].gravity * (deltaT * timeAdj));\n    if (this.vel.y > _util__WEBPACK_IMPORTED_MODULE_0__[\"globals\"].maxVelocity) this.vel.y = _util__WEBPACK_IMPORTED_MODULE_0__[\"globals\"].maxVelocity;\n  }\n\n  bCollided(box2) {\n    let box1 = this;\n    if (\n      (box1.pos.x <= (box2.pos.x + box2.size.w)) &&\n      ((box1.pos.x + box1.size.w) >= box2.pos.x) &&\n      (box1.pos.y <= (box2.pos.y + box2.size.h)) &&\n      ((box1.pos.y + box1.size.h) >= box2.pos.y)\n    ) {\n      return true;\n    }\n    return false;\n  }\n\n  input() {\n    //should be overriden by child classes\n  }\n\n  resetVertVelocity() {\n    this.vel.y = 0;\n  }\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (Entity);\n\n\n//# sourceURL=webpack:///./src/js/entity.js?");
 
 /***/ }),
 
@@ -197,6 +197,18 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _uti
 
 "use strict";
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"GAME_STATES\", function() { return GAME_STATES; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"timeSinceLastFrame\", function() { return timeSinceLastFrame; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"previousTime\", function() { return previousTime; });\n/* harmony import */ var _player__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./player */ \"./src/js/player.js\");\n/* harmony import */ var _level_loader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./level-loader */ \"./src/js/level-loader.js\");\n/* harmony import */ var _controller__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./controller */ \"./src/js/controller.js\");\n/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./util */ \"./src/js/util.js\");\n\n\n\n\n\n\nconst GAME_STATES = {\n  MENU: \"MENU\",\n  GAME_PLAYING: \"GAME_PLAYING\",\n  GAME_PAUSED: \"GAME_PAUSED\"\n};\n\nlet timeSinceLastFrame;\nlet previousTime;\nlet camOffsetX, camOffsetY;\n\nclass Game {\n  constructor(canvas) {\n\n\n    camOffsetX = 0;\n    camOffsetY = 0;\n\n\n    canvas.width = _util__WEBPACK_IMPORTED_MODULE_3__[\"globals\"].screenWidth;\n    canvas.height = _util__WEBPACK_IMPORTED_MODULE_3__[\"globals\"].screenHeight;\n    this.canvasCtx = canvas.getContext(\"2d\");\n\n    this.gameState = GAME_STATES.GAME_PLAYING;\n    this.gameObjects = {\n      noCollision: [],\n      blockers: [],\n      player: []\n    };\n\n    this.loadLevel();\n\n    this.player = new _player__WEBPACK_IMPORTED_MODULE_0__[\"default\"]({\n      size: { w: 40, h: 80 },\n      pos: { x: canvas.width / 2, y: canvas.height / 2 },\n      vel: { x: 0, y: 0 },\n      color: Object(_util__WEBPACK_IMPORTED_MODULE_3__[\"randomColor\"])()\n    });\n    this.gameObjects.player.push(this.player);\n\n    Object(_controller__WEBPACK_IMPORTED_MODULE_2__[\"bindKeyHandlers\"])();\n\n    timeSinceLastFrame = 0;\n    previousTime = Date.now();\n    this.step = this.step.bind(this);\n    this.step();\n  }\n\n  step() {\n    this.canvasCtx.save();\n    this.canvasCtx.translate(camOffsetX, camOffsetY);\n\n    let currentTime = Date.now();\n    timeSinceLastFrame = currentTime - previousTime;\n    previousTime = currentTime;\n    if (timeSinceLastFrame > 20) timeSinceLastFrame = 20;\n\n    //stuff for camera tracking\n\n    if (_controller__WEBPACK_IMPORTED_MODULE_2__[\"userController\"].left &&\n      (this.player.pos.x < (_util__WEBPACK_IMPORTED_MODULE_3__[\"globals\"].screenWidth * 0.35 - camOffsetX))) {\n      camOffsetX += this.player.moveAmt;\n    }\n\n    if (_controller__WEBPACK_IMPORTED_MODULE_2__[\"userController\"].right &&\n      (this.player.pos.x > (_util__WEBPACK_IMPORTED_MODULE_3__[\"globals\"].screenWidth * 0.5 - camOffsetX))) {\n      camOffsetX -= this.player.moveAmt;\n    }\n\n    if ((this.player.pos.y < (_util__WEBPACK_IMPORTED_MODULE_3__[\"globals\"].screenHeight * 0.2 - camOffsetY))) {\n      camOffsetY += 4;\n    }\n\n    if ((this.player.pos.y + this.player.size.h) > (_util__WEBPACK_IMPORTED_MODULE_3__[\"globals\"].screenHeight * 0.9 - camOffsetY)) {\n      camOffsetY -= 4;\n    }\n\n    //end of camera tracking\n\n    this.update(timeSinceLastFrame);\n    this.render();\n\n\n    this.canvasCtx.restore();\n\n\n    if (this.gameState === GAME_STATES.GAME_PLAYING) {\n      requestAnimationFrame(this.step);\n    }\n  }\n\n  loadLevel() {\n    let level = Object(_level_loader__WEBPACK_IMPORTED_MODULE_1__[\"parseLevel\"])(_level_loader__WEBPACK_IMPORTED_MODULE_1__[\"levels\"][1]);\n\n    //TODO perform merge to handle different chars in level txt files\n    this.gameObjects.blockers = this.gameObjects.blockers.concat(level);\n  }\n\n  update(deltaT) {\n    if (this.gameState === GAME_STATES.GAME_PLAYING) this.player.input();\n\n    this.player.applyVelocity(deltaT);\n\n    const blockers = this.gameObjects.blockers;\n    for (let i = 0; i < blockers.length; i++) {\n      if (this.player.bCollided(blockers[i])) {\n        this.player.resetVertVelocity();\n      }\n    }\n  }\n\n  render() {\n    this.canvasCtx.clearRect(\n      -camOffsetX, -camOffsetY,\n      _util__WEBPACK_IMPORTED_MODULE_3__[\"globals\"].screenWidth,\n      _util__WEBPACK_IMPORTED_MODULE_3__[\"globals\"].screenHeight\n    );\n\n    let layerNames = Object.keys(this.gameObjects);\n    layerNames.forEach(name => {\n      const renderObjs = this.gameObjects[name];\n      for (let i = 0; i < renderObjs.length; i++) {\n        renderObjs[i].render(this.canvasCtx);\n      }\n    });\n\n    this.player.render(this.canvasCtx);\n  }\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (Game);\n\n\n//# sourceURL=webpack:///./src/js/game.js?");
+
+/***/ }),
+
+/***/ "./src/js/img-loader.js":
+/*!******************************!*\
+  !*** ./src/js/img-loader.js ***!
+  \******************************/
+/*! exports provided: images */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"images\", function() { return images; });\n/* harmony import */ var _sprites_characterSprite_walk1_png__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../sprites/characterSprite_walk1.png */ \"./src/sprites/characterSprite_walk1.png\");\n/* harmony import */ var _sprites_characterSprite_walk1_png__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_sprites_characterSprite_walk1_png__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _sprites_characterSprite_walk2_png__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../sprites/characterSprite_walk2.png */ \"./src/sprites/characterSprite_walk2.png\");\n/* harmony import */ var _sprites_characterSprite_walk2_png__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_sprites_characterSprite_walk2_png__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _sprites_characterSprite_walk3_png__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../sprites/characterSprite_walk3.png */ \"./src/sprites/characterSprite_walk3.png\");\n/* harmony import */ var _sprites_characterSprite_walk3_png__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_sprites_characterSprite_walk3_png__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _sprites_characterSprite_walk4_png__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../sprites/characterSprite_walk4.png */ \"./src/sprites/characterSprite_walk4.png\");\n/* harmony import */ var _sprites_characterSprite_walk4_png__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_sprites_characterSprite_walk4_png__WEBPACK_IMPORTED_MODULE_3__);\n\n\n\n\n\nconst images = {\n  walk: {\n    1: _sprites_characterSprite_walk1_png__WEBPACK_IMPORTED_MODULE_0___default.a,\n    2: _sprites_characterSprite_walk2_png__WEBPACK_IMPORTED_MODULE_1___default.a,\n    3: _sprites_characterSprite_walk3_png__WEBPACK_IMPORTED_MODULE_2___default.a,\n    4: _sprites_characterSprite_walk4_png__WEBPACK_IMPORTED_MODULE_3___default.a\n  }\n};\n\n\n//# sourceURL=webpack:///./src/js/img-loader.js?");
 
 /***/ }),
 
@@ -257,6 +269,50 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 
 "use strict";
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony default export */ __webpack_exports__[\"default\"] = (\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx\\nx                                                    xxxxxxxxxx\\nx\\nx                                            xxxxxxxxx\\nx\\nx                                  xxxxxxxxxxxxx\\nx\\nxxxxxxxxxxxxxxx   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\n\\n\\n\\n\\n                xxx\\n\\n\\n            xxxx \\n\\n\\n        xxxx    \\n\");\n\n//# sourceURL=webpack:///./src/levels/level01.txt?");
+
+/***/ }),
+
+/***/ "./src/sprites/characterSprite_walk1.png":
+/*!***********************************************!*\
+  !*** ./src/sprites/characterSprite_walk1.png ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("module.exports = __webpack_require__.p + \"23646899a34140831aa6733afa98550b.png\";\n\n//# sourceURL=webpack:///./src/sprites/characterSprite_walk1.png?");
+
+/***/ }),
+
+/***/ "./src/sprites/characterSprite_walk2.png":
+/*!***********************************************!*\
+  !*** ./src/sprites/characterSprite_walk2.png ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("module.exports = __webpack_require__.p + \"387ce5c17dbbd825c6f89f575d90260a.png\";\n\n//# sourceURL=webpack:///./src/sprites/characterSprite_walk2.png?");
+
+/***/ }),
+
+/***/ "./src/sprites/characterSprite_walk3.png":
+/*!***********************************************!*\
+  !*** ./src/sprites/characterSprite_walk3.png ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("module.exports = __webpack_require__.p + \"4c579227a0d37cea09c7818bfeabe4f4.png\";\n\n//# sourceURL=webpack:///./src/sprites/characterSprite_walk3.png?");
+
+/***/ }),
+
+/***/ "./src/sprites/characterSprite_walk4.png":
+/*!***********************************************!*\
+  !*** ./src/sprites/characterSprite_walk4.png ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("module.exports = __webpack_require__.p + \"387ce5c17dbbd825c6f89f575d90260a.png\";\n\n//# sourceURL=webpack:///./src/sprites/characterSprite_walk4.png?");
 
 /***/ })
 

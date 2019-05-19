@@ -1,4 +1,5 @@
 import { globals } from "./util";
+import { images } from "./img-loader";
 
 class Entity {
   constructor({ size, pos, vel, color }) {
@@ -19,6 +20,9 @@ class Entity {
       this.size.w,
       this.size.h
     );
+    let img = new Image();
+    img.src = images.walk[1];
+    ctx.drawImage(img, this.pos.x - 40, this.pos.y - 5);
   }
 
   applyVelocity(deltaT) {
