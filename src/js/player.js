@@ -1,7 +1,6 @@
 import Entity from "./entity";
 import { userController } from "./controller";
 
-const movAmt = 3.5;
 const jumpAmt = -50;
 const controllerResets = {
   attack: true,
@@ -11,11 +10,12 @@ const controllerResets = {
 class Player extends Entity {
   constructor(startVals) {
     super(startVals);
+    this.moveAmt = 3.5;
   }
 
   input() {
-    if (userController.right) this.pos.x += movAmt;
-    if (userController.left) this.pos.x -= movAmt;
+    if (userController.right) this.pos.x += this.moveAmt;
+    if (userController.left) this.pos.x -= this.moveAmt;
 
     if ((userController.attack) && (controllerResets.attack)) {
       controllerResets.attack = false;

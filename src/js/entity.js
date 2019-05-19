@@ -6,7 +6,7 @@ class Entity {
     this.pos = pos || { x: 0, y: 0 };
     this.vel = vel || { x: 0, y: 0 };
     this.color = color || "magenta";
-    this.bApplyGravity = false;
+    this.prevY = 0;
 
     this.render = this.render.bind(this);
   }
@@ -23,10 +23,12 @@ class Entity {
 
   applyVelocity(deltaT) {
     const timeAdj = 0.009;
+    this.prevY = this.pos.y;
     this.pos.y += (this.vel.y * (deltaT * timeAdj));
     this.pos.x += this.vel.x;
 
     this.vel.y += (globals.gravity * (deltaT * timeAdj));
+    if (this.vel.y > globals.maxVelocity) this.vel.y = globals.maxVelocity;
   }
 
   bCollided(box2) {
@@ -42,9 +44,8 @@ class Entity {
     return false;
   }
 
-  //should be overriden by child classes
   input() {
-
+    //should be overriden by child classes
   }
 
   resetVertVelocity() {

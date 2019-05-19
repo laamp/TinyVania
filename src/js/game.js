@@ -1,7 +1,7 @@
 import Player from "./player";
 
 import { levels, parseLevel } from "./level-loader";
-import { bindKeyHandlers } from "./controller";
+import { userController, bindKeyHandlers } from "./controller";
 import { globals, randomColor } from "./util";
 
 export const GAME_STATES = {
@@ -12,9 +12,16 @@ export const GAME_STATES = {
 
 export let timeSinceLastFrame;
 export let previousTime;
+let camOffsetX, camOffsetY;
 
 class Game {
   constructor(canvas) {
+
+
+    camOffsetX = 0;
+    camOffsetY = 0;
+
+
     canvas.width = globals.screenWidth;
     canvas.height = globals.screenHeight;
     this.canvasCtx = canvas.getContext("2d");
@@ -45,13 +52,43 @@ class Game {
   }
 
   step() {
+    this.canvasCtx.save();
+    this.canvasCtx.translate(camOffsetX, camOffsetY);
+
     let currentTime = Date.now();
     timeSinceLastFrame = currentTime - previousTime;
     previousTime = currentTime;
     if (timeSinceLastFrame > 20) timeSinceLastFrame = 20;
 
+    //stuff for camera tracking
+
+    if (userController.left &&
+      (this.player.pos.x < (globals.screenWidth * 0.35 - camOffsetX))) {
+      camOffsetX += this.player.moveAmt;
+    }
+
+    if (userController.right &&
+      (this.player.pos.x > (globals.screenWidth * 0.5 - camOffsetX))) {
+      camOffsetX -= this.player.moveAmt;
+    }
+
+    if ((this.player.pos.y < (globals.screenHeight * 0.2 - camOffsetY))) {
+      camOffsetY += 4;
+    }
+
+    if ((this.player.pos.y + this.player.size.h) > (globals.screenHeight * 0.9 - camOffsetY)) {
+      camOffsetY -= 4;
+    }
+
+    //end of camera tracking
+
     this.update(timeSinceLastFrame);
     this.render();
+
+
+    this.canvasCtx.restore();
+
+
     if (this.gameState === GAME_STATES.GAME_PLAYING) {
       requestAnimationFrame(this.step);
     }
@@ -79,7 +116,7 @@ class Game {
 
   render() {
     this.canvasCtx.clearRect(
-      0, 0,
+      -camOffsetX, -camOffsetY,
       globals.screenWidth,
       globals.screenHeight
     );

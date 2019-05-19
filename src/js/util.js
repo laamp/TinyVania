@@ -1,7 +1,8 @@
 export const globals = {
   screenWidth: 640,
   screenHeight: 480,
-  gravity: 9.81
+  gravity: 15,
+  maxVelocity: 100
 };
 
 export const randomColor = () => {
