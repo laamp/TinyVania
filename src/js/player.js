@@ -28,7 +28,6 @@ class Player extends Entity {
     if ((userController.jump) && (controllerResets.jump)) {
       controllerResets.jump = false;
       this.vel.y = jumpAmt;
-      console.log("jump"); //for testing
       setTimeout(() => {
         controllerResets.jump = true;
       }, 1000);

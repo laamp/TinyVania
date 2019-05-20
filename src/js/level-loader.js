@@ -2,6 +2,7 @@ import Entity from "./entity";
 import { randomColor } from "./util";
 
 import level01 from "../levels/level01";
+import { environmentImgs } from "./img-loader";
 
 export const levels = {
   1: level01
@@ -25,7 +26,14 @@ export const parseLevel = levelData => {
           size: { w: tileSize, h: tileSize },
           pos: { x: stride * tileSize, y: depth * tileSize },
           vel: { x: 0, y: 0 },
-          color: randomColor()
+          color: randomColor(),
+          sprites: environmentImgs,
+          spriteOffset: {
+            x: 0,
+            y: 0,
+            w: tileSize,
+            h: tileSize
+          }
         }));
         stride++;
         break;

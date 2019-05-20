@@ -1,6 +1,7 @@
 body {
   background-color: black;
   color: white;
+  font-family: 'Raleway', sans-serif;
 }
 
 main {
@@ -10,23 +11,47 @@ main {
 .wrapper {
   margin: 0 auto;
   width: 1300px;
+  display: flex;
+  flex-direction: row;
 }
 
 #game {
-  border: 1px solid chartreuse;
   display: inline-block;
   height: 768px;
   width: 1024px;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
 aside {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   margin: 12px;
   vertical-align: top;
+  width: 245px;
+}
+
+ul {
+  list-style: disc outside url('../sprites/list-icon.png');
+}
+
+li {
+  font-weight: bold;
+  font-size: 16px;
+  margin: 0 0 8px 20px;
 }
 
 h1 {
-  font-size: 48px;
+  font-size: 54px;
   margin: 20px 0;
   text-align: center;
+  font-family: 'Patua One';
+}
+
+h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0 0 15px 0;
 }

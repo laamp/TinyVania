@@ -5,6 +5,13 @@ export const globals = {
   maxVelocity: 100
 };
 
+export const isObjEmpty = obj => {
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) return false;
+  }
+  return true;
+};
+
 export const randomColor = () => {
   const vals = [
     "0", "1", "2", "3",

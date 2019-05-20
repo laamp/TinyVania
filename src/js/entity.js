@@ -1,28 +1,40 @@
-import { globals } from "./util";
-import { images } from "./img-loader";
+import { globals, isObjEmpty } from "./util";
 
 class Entity {
-  constructor({ size, pos, vel, color }) {
+  constructor({ size, pos, vel, color, sprites, spriteOffset }) {
     this.size = size || { w: 100, h: 100 };
     this.pos = pos || { x: 0, y: 0 };
     this.vel = vel || { x: 0, y: 0 };
     this.color = color || "magenta";
+    this.sprites = sprites || {};
+    this.spriteOffset = spriteOffset || {
+      x: 0,
+      y: 0,
+      w: 0,
+      h: 0
+    };
     this.prevY = 0;
 
     this.render = this.render.bind(this);
   }
 
   render(ctx) {
-    ctx.fillStyle = this.color;
-    ctx.fillRect(
-      this.pos.x,
-      this.pos.y,
-      this.size.w,
-      this.size.h
+    if (isObjEmpty(this.sprites)) {
+      ctx.fillStyle = this.color;
+      ctx.fillRect(
+        this.pos.x,
+        this.pos.y,
+        this.size.w,
+        this.size.h
+      );
+    }
+    ctx.drawImage(
+      this.sprites[1],
+      this.pos.x + this.spriteOffset.x,
+      this.pos.y + this.spriteOffset.y,
+      this.spriteOffset.w,
+      this.spriteOffset.h
     );
-    let img = new Image();
-    img.src = images.walk[1];
-    ctx.drawImage(img, this.pos.x - 40, this.pos.y - 5);
   }
 
   applyVelocity(deltaT) {

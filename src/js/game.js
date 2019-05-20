@@ -3,6 +3,7 @@ import Player from "./player";
 import { levels, parseLevel } from "./level-loader";
 import { userController, bindKeyHandlers } from "./controller";
 import { globals, randomColor } from "./util";
+import { characterImgs, bgImgs } from "./img-loader";
 
 export const GAME_STATES = {
   MENU: "MENU",
@@ -12,16 +13,17 @@ export const GAME_STATES = {
 
 export let timeSinceLastFrame;
 export let previousTime;
+
+//for camera tracking
 let camOffsetX, camOffsetY;
 let oldPosY;
 
 class Game {
   constructor(canvas) {
 
-
+    //for camera tracking
     camOffsetX = 0;
     camOffsetY = 0;
-
 
     canvas.width = globals.screenWidth;
     canvas.height = globals.screenHeight;
@@ -37,14 +39,16 @@ class Game {
     this.loadLevel();
 
     this.player = new Player({
-      size: { w: 40, h: 80 },
+      size: { w: 30, h: 55 },
       pos: { x: canvas.width / 2, y: canvas.height / 2 },
       vel: { x: 0, y: 0 },
-      color: randomColor()
+      color: randomColor(),
+      sprites: characterImgs,
+      spriteOffset: { x: -56, y: -10, w: 115, h: 66 }
     });
     this.gameObjects.player.push(this.player);
 
-    oldPosY = this.player.pos.y;
+    oldPosY = this.player.pos.y; //for camera tracking
 
     bindKeyHandlers();
 
@@ -123,6 +127,8 @@ class Game {
       globals.screenWidth,
       globals.screenHeight
     );
+
+    this.canvasCtx.drawImage(bgImgs[1], -camOffsetX, -camOffsetY, 640, 480);
 
     let layerNames = Object.keys(this.gameObjects);
     layerNames.forEach(name => {
