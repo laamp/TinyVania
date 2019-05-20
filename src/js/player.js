@@ -14,8 +14,14 @@ class Player extends Entity {
   }
 
   input() {
-    if (userController.right) this.pos.x += this.moveAmt;
-    if (userController.left) this.pos.x -= this.moveAmt;
+    if (userController.right) {
+      this.spriteIdx = 2;
+      this.pos.x += this.moveAmt;
+    }
+    if (userController.left) {
+      this.spriteIdx = 1;
+      this.pos.x -= this.moveAmt;
+    }
 
     if ((userController.attack) && (controllerResets.attack)) {
       controllerResets.attack = false;
@@ -28,9 +34,6 @@ class Player extends Entity {
     if ((userController.jump) && (controllerResets.jump)) {
       controllerResets.jump = false;
       this.vel.y = jumpAmt;
-      // setTimeout(() => {
-      //   controllerResets.jump = true;
-      // }, 1000);
     }
   }
 }

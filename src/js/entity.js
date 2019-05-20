@@ -10,6 +10,7 @@ class Entity {
     this.spriteOffset = spriteOffset || { x: 0, y: 0, w: 0, h: 0 };
 
     this.prevY = 0;
+    this.spriteIdx = 1;
 
     this.render = this.render.bind(this);
   }
@@ -25,7 +26,7 @@ class Entity {
       );
     }
     ctx.drawImage(
-      this.sprites[1],
+      this.sprites[this.spriteIdx],
       this.pos.x + this.spriteOffset.x,
       this.pos.y + this.spriteOffset.y,
       this.spriteOffset.w,

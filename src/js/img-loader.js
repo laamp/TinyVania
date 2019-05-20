@@ -1,4 +1,5 @@
 import walk1 from "../sprites/characterSprite_walk1.png";
+import walk1r from "../sprites/characterSprite_walk1_flipped.png";
 import walk2 from "../sprites/characterSprite_walk2.png";
 import walk3 from "../sprites/characterSprite_walk3.png";
 import walk4 from "../sprites/characterSprite_walk4.png";
@@ -14,6 +15,8 @@ import greenStoneTile from "../sprites/green-stone-tile.png";
 
 const walk1Img = new Image();
 walk1Img.src = walk1;
+const walk1rImg = new Image();
+walk1rImg.src = walk1r;
 const walk2Img = new Image();
 walk2Img.src = walk2;
 const walk3Img = new Image();
@@ -41,16 +44,17 @@ greenStoneTileImg.src = greenStoneTile;
 
 export const characterImgs = {
   1: walk1Img,
-  2: walk2Img,
-  3: walk3Img,
-  4: walk4Img,
-  5: whip1Img,
-  6: whip2Img,
-  7: whip3Img,
-  8: jumpImg,
-  9: fallImg,
-  10: damageImg,
-  11: deadImg
+  2: walk1rImg,
+  3: walk2Img,
+  5: walk3Img,
+  7: walk4Img,
+  9: whip1Img,
+  11: whip2Img,
+  13: whip3Img,
+  15: jumpImg,
+  17: fallImg,
+  19: damageImg,
+  21: deadImg
 };
 
 export const environmentImgs = {
