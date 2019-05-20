@@ -1,6 +1,6 @@
 body {
-  background-color: black;
-  color: white;
+  background-color: rgb(34, 34, 34);
+  color: rgb(255, 255, 255);
   font-family: 'Raleway', sans-serif;
 }
 
@@ -16,6 +16,7 @@ main {
 }
 
 #game {
+  border: 2px solid rgb(87, 87, 87);
   display: inline-block;
   height: 768px;
   width: 1024px;
@@ -28,12 +29,18 @@ main {
 aside {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   margin: 12px;
   vertical-align: top;
   width: 245px;
 }
 
-ul {
+#credits {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+#controls ul {
   list-style: disc outside url('../sprites/list-icon.png');
 }
 

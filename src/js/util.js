@@ -19,23 +19,24 @@ export const randomColor = () => {
     "8", "9", "A", "B",
     "C", "D", "E", "F"
   ];
+
   const r = "FF";
   const g = "FF";
   const b = "99";
 
-  const red =
+  const randR =
     vals[Math.floor(Math.random() * vals.length)] +
     vals[Math.floor(Math.random() * vals.length)];
-  const green =
+  const randG =
     vals[Math.floor(Math.random() * vals.length)] +
     vals[Math.floor(Math.random() * vals.length)];
-  const blue =
+  const randB =
     vals[Math.floor(Math.random() * vals.length)] +
     vals[Math.floor(Math.random() * vals.length)];
   const alpha =
     vals[Math.floor(Math.random() * vals.length)] +
     vals[Math.floor(Math.random() * vals.length)];
 
-  return ("#" + red + green + blue);
-  // return ("navy");
+  return ("#" + randR + randG + randB);
+  return ("#" + r + g + b);
 };

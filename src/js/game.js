@@ -1,4 +1,4 @@
-import Player from "./player";
+import Player, { controllerResets } from "./player";
 
 import { levels, parseLevel } from "./level-loader";
 import { userController, bindKeyHandlers } from "./controller";
@@ -117,6 +117,7 @@ class Game {
     for (let i = 0; i < blockers.length; i++) {
       if (this.player.bCollided(blockers[i])) {
         this.player.resetVertVelocity();
+        controllerResets.jump = true;
       }
     }
   }

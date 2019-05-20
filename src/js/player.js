@@ -2,7 +2,7 @@ import Entity from "./entity";
 import { userController } from "./controller";
 
 const jumpAmt = -50;
-const controllerResets = {
+export const controllerResets = {
   attack: true,
   jump: true
 };
@@ -28,9 +28,9 @@ class Player extends Entity {
     if ((userController.jump) && (controllerResets.jump)) {
       controllerResets.jump = false;
       this.vel.y = jumpAmt;
-      setTimeout(() => {
-        controllerResets.jump = true;
-      }, 1000);
+      // setTimeout(() => {
+      //   controllerResets.jump = true;
+      // }, 1000);
     }
   }
 }
