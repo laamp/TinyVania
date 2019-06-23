@@ -1,35 +1,18 @@
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-x
-x
-x
-x
-x
-x
-x
-x
-x
-x
-x                  xxxxxxxx
-x
-x
-x      xxxxxxxx
-x
-x xx
-x                                                    xxxxxxxxxx
-x xxxxxx
-x                                            xxxxxxxxx
-x xxxxxxxxxxxxx
-x                                  xxxxxxxxxxxxx
-x
-xxxxxxxxxxxxxxx   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-
-
-
-                xxx
-
-
-            xxxx 
-
-
-        xxxx    
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                    xxx   xxx   xxx       x
+x                                 xxx                      x
+x                                                          x
+x                             xxx                          x
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

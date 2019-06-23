@@ -59,16 +59,13 @@ class Game {
   }
 
   step() {
-    this.canvasCtx.save();
-    this.canvasCtx.translate(camOffsetX, camOffsetY);
-
     let currentTime = Date.now();
     timeSinceLastFrame = currentTime - previousTime;
     previousTime = currentTime;
     if (timeSinceLastFrame > 20) timeSinceLastFrame = 20;
+    this.update(timeSinceLastFrame);
 
     //stuff for camera tracking
-
     if (userController.left &&
       (this.player.pos.x < (globals.screenWidth * 0.4 - camOffsetX))) {
       camOffsetX += this.player.moveAmt;
@@ -89,12 +86,10 @@ class Game {
     oldPosY = this.player.pos.y;
     //end of camera tracking
 
-    this.update(timeSinceLastFrame);
+    this.canvasCtx.save();
+    this.canvasCtx.translate(camOffsetX, camOffsetY);
     this.render();
-
-
     this.canvasCtx.restore();
-
 
     if (this.gameState === GAME_STATES.GAME_PLAYING) {
       requestAnimationFrame(this.step);
@@ -129,7 +124,7 @@ class Game {
       globals.screenHeight
     );
 
-    this.canvasCtx.drawImage(bgImgs[1], -camOffsetX, -camOffsetY, 640, 480);
+    this.canvasCtx.drawImage(bgImgs[1], -camOffsetX, -camOffsetY, globals.screenWidth, globals.screenHeight);
 
     let layerNames = Object.keys(this.gameObjects);
     layerNames.forEach(name => {
