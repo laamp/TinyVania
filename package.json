@@ -4,8 +4,7 @@
   "description": "_A tiny Castlevania-inspired game_",
   "private": true,
   "directories": {
-    "doc": "docs",
-    "dist": "dist"
+    "doc": "docs"
   },
   "scripts": {
     "start": "webpack --mode=development --watch",
