@@ -4,7 +4,8 @@ module.exports = {
   entry: './src/js/index.js',
   output: {
     filename: 'main.js',
-    path: path.resolve(__dirname)
+    publicPath: __dirname + "/dist/",
+    path: path.resolve(__dirname, "dist")
   },
   module: {
     rules: [
@@ -26,6 +27,6 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.js', '.css', '.txt', '*']
+    extensions: ['.js', '.css', '.txt', '.png', '*']
   }
 };
