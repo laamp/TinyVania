@@ -4,7 +4,7 @@ module.exports = {
   entry: './src/js/index.js',
   output: {
     filename: 'main.js',
-    publicPath: "/TinyVania/dist/"
+    publicPath: __dirname + "/dist/"
   },
   module: {
     rules: [
