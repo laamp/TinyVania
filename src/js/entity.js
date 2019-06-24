@@ -35,7 +35,7 @@ class Entity {
   }
 
   applyVelocity(deltaT) {
-    const timeAdj = 0.009;
+    const timeAdj = 0.01;
     this.prevY = this.pos.y;
     this.pos.y += (this.vel.y * (deltaT * timeAdj));
     this.pos.x += this.vel.x;
@@ -46,12 +46,11 @@ class Entity {
 
   bCollided(box2) {
     let box1 = this;
-    if (
-      (box1.pos.x <= (box2.pos.x + box2.size.w)) &&
+
+    if ((box1.pos.x <= (box2.pos.x + box2.size.w)) &&
       ((box1.pos.x + box1.size.w) >= box2.pos.x) &&
       (box1.pos.y <= (box2.pos.y + box2.size.h)) &&
-      ((box1.pos.y + box1.size.h) >= box2.pos.y)
-    ) {
+      ((box1.pos.y + box1.size.h) >= box2.pos.y)) {
       return true;
     }
     return false;
@@ -61,8 +60,9 @@ class Entity {
     //should be overriden by child classes
   }
 
-  resetVertVelocity() {
+  resetVelocity() {
     this.vel.y = 0;
+    this.vel.x = 0;
   }
 }
 

@@ -18,9 +18,10 @@ export let previousTime;
 let camOffsetX, camOffsetY;
 let oldPosY;
 
+let posBuffer = { x: 0, y: 0 };
+
 class Game {
   constructor(canvas) {
-
     //for camera tracking
     camOffsetX = 0;
     camOffsetY = 0;
@@ -59,6 +60,9 @@ class Game {
   }
 
   step() {
+    posBuffer.x = this.player.pos.x;
+    posBuffer.y = this.player.pos.y;
+
     let currentTime = Date.now();
     timeSinceLastFrame = currentTime - previousTime;
     previousTime = currentTime;
@@ -108,24 +112,36 @@ class Game {
 
     this.player.applyVelocity(deltaT);
 
+    let xOffset = this.player.pos.x - posBuffer.x;
+    let yOffset = this.player.pos.y - posBuffer.y;
+
     const blockers = this.gameObjects.blockers;
     for (let i = 0; i < blockers.length; i++) {
       if (this.player.bCollided(blockers[i])) {
-        this.player.resetVertVelocity();
+        this.player.resetVelocity();
+        this.player.pos.x -= xOffset;
+        this.player.pos.y -= yOffset;
         controllerResets.jump = true;
       }
     }
   }
 
   render() {
+    //clearing the screen for a new render
     this.canvasCtx.clearRect(
       -camOffsetX, -camOffsetY,
       globals.screenWidth,
       globals.screenHeight
     );
 
-    this.canvasCtx.drawImage(bgImgs[1], -camOffsetX, -camOffsetY, globals.screenWidth, globals.screenHeight);
+    //drawing the background
+    this.canvasCtx.drawImage(
+      bgImgs[1],
+      -camOffsetX, -camOffsetY,
+      globals.screenWidth, globals.screenHeight
+    );
 
+    //loop through all objects and call their respective render functions
     let layerNames = Object.keys(this.gameObjects);
     layerNames.forEach(name => {
       const renderObjs = this.gameObjects[name];
