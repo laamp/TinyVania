@@ -12,6 +12,10 @@ export const isObjEmpty = obj => {
   return true;
 };
 
+export const transparentColor = () => {
+  return ("#FFFFFFFF");
+}
+
 export const randomColor = () => {
   const vals = [
     "0", "1", "2", "3",

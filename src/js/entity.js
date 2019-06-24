@@ -6,10 +6,9 @@ class Entity {
     this.pos = pos || { x: 0, y: 0 };
     this.vel = vel || { x: 0, y: 0 };
     this.color = color || "magenta";
-    this.sprites = sprites || {};
+    this.sprites = sprites || { 1: new Image() };
     this.spriteOffset = spriteOffset || { x: 0, y: 0, w: 0, h: 0 };
 
-    this.prevY = 0;
     this.spriteIdx = 1;
 
     this.render = this.render.bind(this);
@@ -36,7 +35,6 @@ class Entity {
 
   applyVelocity(deltaT) {
     const timeAdj = 0.01;
-    this.prevY = this.pos.y;
     this.pos.y += (this.vel.y * (deltaT * timeAdj));
     this.pos.x += this.vel.x;
 

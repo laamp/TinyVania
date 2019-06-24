@@ -1,5 +1,5 @@
 import Entity from "./entity";
-import { randomColor } from "./util";
+import { randomColor, transparentColor } from "./util";
 
 import level01 from "../levels/level01";
 import { environmentImgs } from "./img-loader";
@@ -10,6 +10,7 @@ export const levels = {
 
 export const parseLevel = levelData => {
   let tiles = [];
+  let killVolumes = [];
   const tileSize = 20;
   let depth = 0;
   let stride = 0;
@@ -37,6 +38,21 @@ export const parseLevel = levelData => {
         }));
         stride++;
         break;
+      case "0":
+        killVolumes.push(new Entity({
+          size: { w: tileSize, h: tileSize },
+          pos: { x: stride * tileSize, y: depth * tileSize },
+          vel: { x: 0, y: 0 },
+          color: randomColor(),
+          spriteOffset: {
+            x: 0,
+            y: 0,
+            w: tileSize,
+            h: tileSize
+          }
+        }));
+        stride++;
+        break;
       case " ":
         stride++;
         break;
@@ -46,5 +62,5 @@ export const parseLevel = levelData => {
     }
   }
 
-  return tiles;
+  return { tiles, killVolumes };
 };
