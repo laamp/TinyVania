@@ -1,66 +1,90 @@
-import walk1 from "../sprites/characterSprite_walk1.png";
-import walk1r from "../sprites/characterSprite_walk1_flipped.png";
-import walk2 from "../sprites/characterSprite_walk2.png";
-import walk3 from "../sprites/characterSprite_walk3.png";
-import walk4 from "../sprites/characterSprite_walk4.png";
-import whip1 from "../sprites/characterSprite_whip1.png";
-import whip2 from "../sprites/characterSprite_whip2.png";
-import whip3 from "../sprites/characterSprite_whip3.png";
-import jump from "../sprites/characterSprite_jump.png";
-import fall from "../sprites/characterSprite_fall.png";
-import damage from "../sprites/characterSprite_damage.png";
-import dead from "../sprites/characterSprite_dead.png";
+import walk1_left from "../sprites/walk1_left.png";
+import walk1_right from "../sprites/walk1_right.png";
+import walk2_left from "../sprites/walk2_left.png";
+import walk2_right from "../sprites/walk2_right.png";
+import walk3_left from "../sprites/walk3_left.png";
+import walk3_right from "../sprites/walk3_right.png";
+import walk4_left from "../sprites/walk4_left.png";
+import walk4_right from "../sprites/walk4_right.png";
+import whip1_left from "../sprites/whip1_left.png";
+import whip1_right from "../sprites/whip1_right.png";
+import whip2_left from "../sprites/whip2_left.png";
+import whip2_right from "../sprites/whip2_right.png";
+import whip3_left from "../sprites/whip3_left.png";
+import whip3_right from "../sprites/whip3_right.png";
+import jump_left from "../sprites/jump_left.png";
+import jump_right from "../sprites/jump_right.png";
+import fall_left from "../sprites/fall_left.png";
+import fall_right from "../sprites/fall_right.png";
+import damage_left from "../sprites/damage_left.png";
+import damage_right from "../sprites/damage_right.png";
+import dead_left from "../sprites/dead_left.png";
+import dead_right from "../sprites/dead_right.png";
+
 import bg1 from "../sprites/background-outside.png";
 import greenStoneTile from "../sprites/green-stone-tile.png";
 
-const walk1Img = new Image();
-walk1Img.src = walk1;
-const walk1rImg = new Image();
-walk1rImg.src = walk1r;
-const walk2Img = new Image();
-walk2Img.src = walk2;
-const walk3Img = new Image();
-walk3Img.src = walk3;
-const walk4Img = new Image();
-walk4Img.src = walk4;
-const whip1Img = new Image();
-whip1Img.src = whip1;
-const whip2Img = new Image();
-whip2Img.src = whip2;
-const whip3Img = new Image();
-whip3Img.src = whip3;
-const jumpImg = new Image();
-jumpImg.src = jump;
-const fallImg = new Image();
-fallImg.src = fall;
-const damageImg = new Image();
-damageImg.src = damage;
-const deadImg = new Image();
-deadImg.src = dead;
+const walk1LeftImg = new Image();
+walk1LeftImg.src = walk1_left;
+const walk1RightImg = new Image();
+walk1RightImg.src = walk1_right;
+const walk2LeftImg = new Image();
+walk2LeftImg.src = walk2_left;
+const walk2RightImg = new Image();
+walk2RightImg.src = walk2_right;
+const walk3LeftImg = new Image();
+walk3LeftImg.src = walk3_left;
+const walk3RightImg = new Image();
+walk3RightImg.src = walk3_right;
+const walk4LeftImg = new Image();
+walk4LeftImg.src = walk4_left;
+const walk4RightImg = new Image();
+walk4RightImg.src = walk4_right;
+const whip1LeftImg = new Image();
+whip1LeftImg.src = whip1_left;
+const whip1RightImg = new Image();
+whip1RightImg.src = whip1_right;
+const whip2LeftImg = new Image();
+whip2LeftImg.src = whip2_left;
+const whip2RightImg = new Image();
+whip2RightImg.src = whip2_right;
+const whip3LeftImg = new Image();
+whip3LeftImg.src = whip3_left;
+const whip3RightImg = new Image();
+whip3RightImg.src = whip3_right;
+const jumpLeftImg = new Image();
+jumpLeftImg.src = jump_left;
+const jumpRightImg = new Image();
+jumpRightImg.src = jump_right;
+const fallLeftImg = new Image();
+fallLeftImg.src = fall_left;
+const fallRightImg = new Image();
+fallRightImg.src = fall_right;
+const damageLeftImg = new Image();
+damageLeftImg.src = damage_left;
+const damageRightImg = new Image();
+damageRightImg.src = damage_right;
+const deadLeftImg = new Image();
+deadLeftImg.src = dead_left;
+const deadRightImg = new Image();
+deadRightImg.src = dead_right;
+
 const bg1Img = new Image();
 bg1Img.src = bg1;
 const greenStoneTileImg = new Image();
 greenStoneTileImg.src = greenStoneTile;
 
-export const characterImgs = {
-  1: walk1Img,
-  2: walk1rImg,
-  3: walk2Img,
-  5: walk3Img,
-  7: walk4Img,
-  9: whip1Img,
-  11: whip2Img,
-  13: whip3Img,
-  15: jumpImg,
-  17: fallImg,
-  19: damageImg,
-  21: deadImg
-};
+export const characterWalkingLeft = [walk1LeftImg, walk2LeftImg, walk3LeftImg, walk4LeftImg];
+export const characterWalkingRight = [walk1RightImg, walk2RightImg, walk3RightImg, walk4RightImg];
+export const characterWhipLeft = [whip1LeftImg, whip2LeftImg, whip3LeftImg];
+export const characterWhipRight = [whip1RightImg, whip2RightImg, whip3RightImg];
+export const characterJumpLeft = [jumpLeftImg, fallLeftImg];
+export const characterJumpRight = [jumpRightImg, fallRightImg];
+export const characterDamageLeft = [damageLeftImg];
+export const characterDamageRight = [damageRightImg];
+export const characterDeadLeft = [deadLeftImg];
+export const characterDeadRight = [deadRightImg];
 
-export const environmentImgs = {
-  1: greenStoneTileImg
-};
+export const environmentImgs = [greenStoneTileImg];
 
-export const bgImgs = {
-  1: bg1Img
-};
+export const bgImgs = [bg1Img];

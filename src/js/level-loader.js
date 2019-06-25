@@ -28,7 +28,7 @@ export const parseLevel = levelData => {
           pos: { x: stride * tileSize, y: depth * tileSize },
           vel: { x: 0, y: 0 },
           color: randomColor(),
-          sprites: { 1: environmentImgs[1] },
+          sprites: environmentImgs,
           spriteOffset: {
             x: 0,
             y: 0,

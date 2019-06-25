@@ -3,7 +3,19 @@ import Player, { controllerResets } from "./player";
 import { levels, parseLevel } from "./level-loader";
 import { userController, bindKeyHandlers } from "./controller";
 import { globals, randomColor } from "./util";
-import { characterImgs, bgImgs } from "./img-loader";
+import {
+  characterWalkingLeft,
+  characterWalkingRight,
+  characterWhipLeft,
+  characterWhipRight,
+  characterJumpLeft,
+  characterJumpRight,
+  characterDamageLeft,
+  characterDamageRight,
+  characterDeadLeft,
+  characterDeadRight,
+  bgImgs
+} from "./img-loader";
 
 export const GAME_STATES = {
   MENU: "MENU",
@@ -23,38 +35,12 @@ let bWouldHitGround;
 
 class Game {
   constructor(canvas) {
-    //for camera tracking
-    camOffsetX = 0;
-    camOffsetY = 0;
-
     this.canvas = canvas;
-
     this.canvas.width = globals.screenWidth;
     this.canvas.height = globals.screenHeight;
     this.canvasCtx = canvas.getContext("2d");
 
-    this.gameState = GAME_STATES.GAME_PLAYING;
-    this.gameObjects = {
-      noCollision: [],
-      blockers: [],
-      player: [],
-      killVolumes: []
-    };
-
-    this.loadLevel();
-
-    this.player = new Player({
-      size: { w: 30, h: 55 },
-      pos: { x: canvas.width / 2, y: canvas.height / 2 },
-      vel: { x: 0, y: 0 },
-      color: randomColor(),
-      sprites: characterImgs,
-      spriteOffset: { x: -56, y: -10, w: 115, h: 66 }
-    });
-    this.gameObjects.player.push(this.player);
-
-    oldPosY = this.player.pos.y; //for camera tracking
-
+    this.reset();
     bindKeyHandlers();
 
     timeSinceLastFrame = 0;
@@ -82,8 +68,8 @@ class Game {
       pos: { x: this.canvas.width / 2, y: this.canvas.height / 2 },
       vel: { x: 0, y: 0 },
       color: randomColor(),
-      sprites: characterImgs,
-      spriteOffset: { x: -56, y: -10, w: 115, h: 66 }
+      sprites: characterWalkingRight,
+      spriteOffset: { x: -59, y: -12, w: 146, h: 67 }
     });
     this.gameObjects.player.push(this.player);
 
@@ -142,7 +128,7 @@ class Game {
   update(deltaT) {
     if (this.gameState === GAME_STATES.GAME_PLAYING) this.player.input();
 
-    if (!bWouldHitGround) this.player.applyVelocity(deltaT, bWouldHitGround);
+    if (!bWouldHitGround) this.player.applyVelocity(deltaT);
     bWouldHitGround = false;
 
     const blockers = this.gameObjects.blockers;
@@ -175,7 +161,7 @@ class Game {
 
     //drawing the background
     this.canvasCtx.drawImage(
-      bgImgs[1],
+      bgImgs[0],
       -camOffsetX, -camOffsetY,
       globals.screenWidth, globals.screenHeight
     );

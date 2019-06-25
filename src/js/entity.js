@@ -1,4 +1,6 @@
-import { globals, isObjEmpty } from "./util";
+import { globals } from "./util";
+
+const nullImg = new Image();
 
 class Entity {
   constructor({ size, pos, vel, color, sprites, spriteOffset }) {
@@ -6,16 +8,16 @@ class Entity {
     this.pos = pos || { x: 0, y: 0 };
     this.vel = vel || { x: 0, y: 0 };
     this.color = color || "magenta";
-    this.sprites = sprites || { 1: new Image() };
+    this.sprites = sprites || [nullImg];
     this.spriteOffset = spriteOffset || { x: 0, y: 0, w: 0, h: 0 };
 
-    this.spriteIdx = 1;
+    this.spriteIdx = 0;
 
     this.render = this.render.bind(this);
   }
 
   render(ctx) {
-    if (isObjEmpty(this.sprites)) {
+    if (this.sprites.length < 1) {
       ctx.fillStyle = this.color;
       ctx.fillRect(
         this.pos.x,
