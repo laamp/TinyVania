@@ -2,7 +2,8 @@ export const globals = {
   screenWidth: 640,
   screenHeight: 480,
   gravity: 15,
-  maxVelocity: 100
+  maxVelocity: 100,
+  transparentColor: "#FFFFFFFF"
 };
 
 export const isObjEmpty = obj => {
@@ -12,10 +13,6 @@ export const isObjEmpty = obj => {
   return true;
 };
 
-export const transparentColor = () => {
-  return ("#FFFFFFFF");
-}
-
 export const randomColor = () => {
   const vals = [
     "0", "1", "2", "3",
@@ -23,10 +20,6 @@ export const randomColor = () => {
     "8", "9", "A", "B",
     "C", "D", "E", "F"
   ];
-
-  const r = "FF";
-  const g = "FF";
-  const b = "99";
 
   const randR =
     vals[Math.floor(Math.random() * vals.length)] +
@@ -37,10 +30,6 @@ export const randomColor = () => {
   const randB =
     vals[Math.floor(Math.random() * vals.length)] +
     vals[Math.floor(Math.random() * vals.length)];
-  const alpha =
-    vals[Math.floor(Math.random() * vals.length)] +
-    vals[Math.floor(Math.random() * vals.length)];
 
   return ("#" + randR + randG + randB);
-  return ("#" + r + g + b);
 };

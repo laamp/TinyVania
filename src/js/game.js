@@ -1,20 +1,11 @@
 import Player, { controllerResets } from "./player";
-
+import Camera from "./camera";
 import { levels, parseLevel } from "./level-loader";
-import { userController, bindKeyHandlers } from "./controller";
+import { bindKeyHandlers } from "./controller";
 import { globals, randomColor } from "./util";
 import {
   characterWalkingLeft,
-  characterWalkingRight,
-  characterWhipLeft,
-  characterWhipRight,
-  characterJumpLeft,
-  characterJumpRight,
-  characterDamageLeft,
-  characterDamageRight,
-  characterDeadLeft,
-  characterDeadRight,
-  bgImgs
+  characterWalkingRight
 } from "./img-loader";
 
 export const GAME_STATES = {
@@ -25,10 +16,6 @@ export const GAME_STATES = {
 
 export let timeSinceLastFrame;
 export let previousTime;
-
-//for camera tracking
-let camOffsetX, camOffsetY;
-let oldPosY;
 
 let posBuffer = { x: 0, y: 0 };
 let bWouldHitGround;
@@ -50,9 +37,6 @@ class Game {
   }
 
   reset() {
-    camOffsetX = 0;
-    camOffsetY = 0;
-
     this.gameState = GAME_STATES.GAME_PLAYING;
     this.gameObjects = {
       noCollision: [],
@@ -71,9 +55,9 @@ class Game {
       sprites: characterWalkingRight,
       spriteOffset: { x: -59, y: -12, w: 146, h: 67 }
     });
-    this.gameObjects.player.push(this.player);
 
-    oldPosY = this.player.pos.y; //for camera tracking
+    this.gameObjects.player.push(this.player);
+    this.camera = new Camera(this.player, this.gameObjects, this.canvasCtx);
   }
 
   step() {
@@ -86,31 +70,7 @@ class Game {
     if (timeSinceLastFrame > 20) timeSinceLastFrame = 20;
     this.update(timeSinceLastFrame);
 
-    //stuff for camera tracking
-    if (userController.left &&
-      (this.player.pos.x < (globals.screenWidth * 0.4 - camOffsetX))) {
-      camOffsetX += this.player.moveAmt;
-    }
-
-    if (userController.right &&
-      (this.player.pos.x > (globals.screenWidth * 0.55 - camOffsetX))) {
-      camOffsetX -= this.player.moveAmt;
-    }
-
-    if ((this.player.pos.y < (globals.screenHeight * 0.2 - camOffsetY))) {
-      camOffsetY -= this.player.pos.y - oldPosY;
-    }
-
-    if ((this.player.pos.y + this.player.size.h) > (globals.screenHeight * 0.9 - camOffsetY)) {
-      camOffsetY -= this.player.pos.y - oldPosY;
-    }
-    oldPosY = this.player.pos.y;
-    //end of camera tracking
-
-    this.canvasCtx.save();
-    this.canvasCtx.translate(camOffsetX, camOffsetY);
-    this.render();
-    this.canvasCtx.restore();
+    this.camera.update();
 
     if (this.gameState === GAME_STATES.GAME_PLAYING) {
       requestAnimationFrame(this.step);
@@ -149,33 +109,6 @@ class Game {
         this.reset();
       }
     }
-  }
-
-  render() {
-    //clearing the screen for a new render
-    this.canvasCtx.clearRect(
-      -camOffsetX, -camOffsetY,
-      globals.screenWidth,
-      globals.screenHeight
-    );
-
-    //drawing the background
-    this.canvasCtx.drawImage(
-      bgImgs[0],
-      -camOffsetX, -camOffsetY,
-      globals.screenWidth, globals.screenHeight
-    );
-
-    //loop through all objects and call their respective render functions
-    let layerNames = Object.keys(this.gameObjects);
-    layerNames.forEach(name => {
-      const renderObjs = this.gameObjects[name];
-      for (let i = 0; i < renderObjs.length; i++) {
-        renderObjs[i].render(this.canvasCtx);
-      }
-    });
-
-    this.player.render(this.canvasCtx);
   }
 }
 
