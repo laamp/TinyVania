@@ -13,19 +13,20 @@ Two of my all-time favorite games are similar in style. ([Super Metroid](https:/
 
 This game is inspired by [CastleVania](https://en.wikipedia.org/wiki/Castlevania), a series of games dating back to the 80's. They are typically 2D sidescrolling games where you play as a hero with a sword or whip and fight monsters. The first games had a linear level-based progression.
 
-## **Functionality/MVPs**
+## **Functionality**
 
 * Level creation
-  * Game logic will be able to load a level from some other format that is easy to assemble
+  * Game logic is able to generate the level based on a user created text file
   * Starting the game will spawn the player in the level
 * Player controls
-  * Player object will respond to player input (left, right, jump, attack)
+  * Player object respond to player input (left, right, jump, attack) through JavaScript event handlers
 * Animated sprites
-  * Player and enemies should animate between at least a few sprites when moving
+  * Player and enemies animate between sprites when moving, idling, or reacting
 * Physics & Collision
-  * Player will be affected by gravity and colliding with obstacles
+  * Player is affected by gravity and colliding with obstacles
   * Collision detection for players attacking enemies and vice versa
-```
+
+```javascript
 //calculate velocity for falling
 applyVelocity(deltaT) {
   const timeAdj = 0.01;
@@ -49,6 +50,7 @@ bCollided(box2) {
   return false;
 }
 ```
+
 * Game win & loss states
   * Player can die from damage and reset game
   * Win state achieved at end of level
@@ -56,13 +58,13 @@ bCollided(box2) {
 ## **Architecture & Technologies**
 
 * Controls
-  * This should all be achievable through plain JavaScript by setting up event listeners. There will be a state for player control that various keypresses will alter.
+  * This is achieved through JavaScript event listeners. Each listens for a specific keypress that will alter a JavaScript object that represents the state of the player's controller. The game logic then applies the appropriate actions to the player game object.
 
 * Rendering
-  * Rendering the game and sprite assets should all be done through HTML canvas.
+  * Rendering the game and sprite assets is achieved through HTML canvas. An object is built that holds a reference to every game object that should be rendered each frame. The main game loop iterates through this object, drawing each object on the screen.
 
 * Game logic
-  * This will all be handled in vanilla JavaScript. There will be a master Game object spawned on load that will manage all game functionality.
+  * This is handled in vanilla JavaScript. There will be a master Game object spawned on load that will manage all game functionality and hold references to important objects like the level, player, and other game logic.
 
 * Script bundling
-  * Webpack for loading all scripts and bundling assets into one directory.
+  * Webpack for loading all scripts and bundling assets into one directory. This makes the project easier to maintain as assets and scripts are added.
