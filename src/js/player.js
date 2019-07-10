@@ -39,7 +39,7 @@ export const PLAYER_STATES = {
 class Player extends Entity {
   constructor(startVals) {
     super(startVals);
-    this.moveAmt = 3.5;
+    this.moveAmt = 5;
 
     this.playerState = PLAYER_STATES.IDLE;
   }

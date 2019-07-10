@@ -17,15 +17,15 @@ class Entity {
   }
 
   render(ctx) {
-    if (this.sprites.length < 1) {
-      ctx.fillStyle = this.color;
-      ctx.fillRect(
-        this.pos.x,
-        this.pos.y,
-        this.size.w,
-        this.size.h
-      );
-    }
+    // if (this.sprites.length < 1) {
+    ctx.fillStyle = this.color;
+    ctx.fillRect(
+      this.pos.x,
+      this.pos.y,
+      this.size.w,
+      this.size.h
+    );
+    // }
     ctx.drawImage(
       this.sprites[this.spriteIdx],
       this.pos.x + this.spriteOffset.x,

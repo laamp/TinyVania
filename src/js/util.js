@@ -1,6 +1,6 @@
 export const globals = {
-  screenWidth: 640,
-  screenHeight: 480,
+  screenWidth: 1024,
+  screenHeight: 768,
   gravity: 15,
   maxVelocity: 100,
   transparentColor: "#FFFFFFFF"

@@ -48,12 +48,12 @@ class Game {
     this.loadLevel();
 
     this.player = new Player({
-      size: { w: 30, h: 55 },
+      size: { w: 60, h: 110 },
       pos: { x: this.canvas.width / 2, y: this.canvas.height / 2 },
       vel: { x: 0, y: 0 },
       color: randomColor(),
       sprites: characterWalkingRight,
-      spriteOffset: { x: -59, y: -12, w: 146, h: 67 }
+      spriteOffset: { x: -102, y: -10, w: 260, h: 119.6 }
     });
 
     this.gameObjects.player.push(this.player);

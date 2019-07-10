@@ -11,7 +11,7 @@ export const levels = {
 export const parseLevel = levelData => {
   let tiles = [];
   let killVolumes = [];
-  const tileSize = 20;
+  const tileSize = 40;
   let depth = 0;
   let stride = 0;
 
