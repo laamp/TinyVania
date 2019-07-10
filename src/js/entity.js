@@ -12,20 +12,20 @@ class Entity {
     this.spriteOffset = spriteOffset || { x: 0, y: 0, w: 0, h: 0 };
 
     this.spriteIdx = 0;
-
+    this.nullImg = nullImg;
     this.render = this.render.bind(this);
   }
 
   render(ctx) {
-    // if (this.sprites.length < 1) {
-    ctx.fillStyle = this.color;
-    ctx.fillRect(
-      this.pos.x,
-      this.pos.y,
-      this.size.w,
-      this.size.h
-    );
-    // }
+    if (this.sprites.length < 1) {
+      ctx.fillStyle = this.color;
+      ctx.fillRect(
+        this.pos.x,
+        this.pos.y,
+        this.size.w,
+        this.size.h
+      );
+    }
     ctx.drawImage(
       this.sprites[this.spriteIdx],
       this.pos.x + this.spriteOffset.x,
@@ -57,6 +57,10 @@ class Entity {
   }
 
   input() {
+    //should be overriden by child classes
+  }
+
+  update() {
     //should be overriden by child classes
   }
 

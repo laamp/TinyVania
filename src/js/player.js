@@ -45,25 +45,37 @@ class Player extends Entity {
       vel: { x: 0, y: 0 },
       color: randomColor(),
       sprites: characterWalkingRight,
-      spriteOffset: { x: -104, y: -12, w: 260, h: 119.6 }
+      spriteOffset: { x: -102, y: -12, w: 260, h: 119.6 }
     };
     super(startVals);
     this.moveAmt = 5;
-    this.playerState = PLAYER_STATES.IDLE;
+    this.playerState = PLAYER_STATES.IDLE_LEFT;
   }
 
   update() {
-
+    switch (this.playerState) {
+      case PLAYER_STATES.IDLE_RIGHT:
+        this.sprites = characterWalkingRight;
+        break;
+      case PLAYER_STATES.IDLE_LEFT:
+        this.sprites = characterWalkingLeft;
+        break;
+      default:
+        this.sprites = [this.nullImg];
+        break;
+    }
   }
 
   input() {
     if (userController.right) {
       this.spriteIdx = 0;
       this.pos.x += this.moveAmt;
+      this.playerState = PLAYER_STATES.IDLE_RIGHT;
     }
     if (userController.left) {
       this.spriteIdx = 0;
       this.pos.x -= this.moveAmt;
+      this.playerState = PLAYER_STATES.IDLE_LEFT;
     }
 
     if ((userController.attack) && (controllerResets.attack)) {

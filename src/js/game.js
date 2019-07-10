@@ -54,6 +54,7 @@ class Game {
   }
 
   step() {
+    this.player.update();
     posBuffer.x = this.player.pos.x;
     posBuffer.y = this.player.pos.y;
 
