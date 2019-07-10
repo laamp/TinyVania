@@ -31,11 +31,11 @@ class Camera {
     }
 
     if ((this.thePlayer.pos.y < (globals.screenHeight * this.camBounds.top - this.offsetY))) {
-      this.offsetY -= this.thePlayer.pos.y - oldPosY;
+      this.offsetY -= this.thePlayer.pos.y - this.oldPosY;
     }
 
     if ((this.thePlayer.pos.y + this.thePlayer.size.h) > (globals.screenHeight * this.camBounds.bottom - this.offsetY)) {
-      this.offsetY -= this.thePlayer.pos.y - oldPosY;
+      this.offsetY -= this.thePlayer.pos.y - this.oldPosY;
     }
     console.log(this.oldPosY);
     this.oldPosY = this.thePlayer.pos.y;

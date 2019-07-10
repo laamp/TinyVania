@@ -47,14 +47,7 @@ class Game {
 
     this.loadLevel();
 
-    this.player = new Player({
-      size: { w: 60, h: 110 },
-      pos: { x: this.canvas.width / 2, y: this.canvas.height / 2 },
-      vel: { x: 0, y: 0 },
-      color: randomColor(),
-      sprites: characterWalkingRight,
-      spriteOffset: { x: -102, y: -10, w: 260, h: 119.6 }
-    });
+    this.player = new Player(this.canvas);
 
     this.gameObjects.player.push(this.player);
     this.camera = new Camera(this.player, this.gameObjects, this.canvasCtx);

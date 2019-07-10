@@ -1,5 +1,6 @@
 import Entity from "./entity";
 import { userController } from "./controller";
+import { randomColor } from "./util";
 import {
   characterWalkingLeft,
   characterWalkingRight,
@@ -37,10 +38,17 @@ export const PLAYER_STATES = {
 };
 
 class Player extends Entity {
-  constructor(startVals) {
+  constructor(canvas) {
+    let startVals = {
+      size: { w: 58, h: 107 },
+      pos: { x: canvas.width / 2, y: canvas.height / 2 },
+      vel: { x: 0, y: 0 },
+      color: randomColor(),
+      sprites: characterWalkingRight,
+      spriteOffset: { x: -104, y: -12, w: 260, h: 119.6 }
+    };
     super(startVals);
     this.moveAmt = 5;
-
     this.playerState = PLAYER_STATES.IDLE;
   }
 
