@@ -79,12 +79,12 @@ class Player extends Entity {
 
   input() {
     this.vel.x = 0;
-    if (userController.right) {
+    if (userController.right && !this.boundaryCollision.right) {
       this.spriteIdx = 0;
       this.vel.x = this.moveAmt;
       this.playerState = PLAYER_STATES.IDLE_RIGHT;
     }
-    if (userController.left) {
+    if (userController.left && !this.boundaryCollision.left) {
       this.spriteIdx = 0;
       this.vel.x = -this.moveAmt;
       this.playerState = PLAYER_STATES.IDLE_LEFT;
@@ -98,7 +98,7 @@ class Player extends Entity {
       }, 1000);
     }
 
-    if ((userController.jump) && (controllerResets.jump)) {
+    if ((userController.jump) && this.boundaryCollision.bottom) {
       controllerResets.jump = false;
       this.vel.y = jumpAmt;
     }
@@ -116,9 +116,20 @@ class Player extends Entity {
   calcBoundsCollision(otherBox) {
     if ((this.boundaries.top.x > otherBox.pos.x) && (this.boundaries.top.x < (otherBox.pos.x + otherBox.size.w)) &&
       (this.boundaries.top.y > otherBox.pos.y) && (this.boundaries.top.y < (otherBox.pos.y + otherBox.size.h))) {
-      console.log("top hit");
+      this.boundaryCollision.top = true;
     }
-    console.log("sfdsad");
+    if ((this.boundaries.right.x > otherBox.pos.x) && (this.boundaries.right.x < (otherBox.pos.x + otherBox.size.w)) &&
+      (this.boundaries.right.y > otherBox.pos.y) && (this.boundaries.right.y < (otherBox.pos.y + otherBox.size.h))) {
+      this.boundaryCollision.right = true;
+    }
+    if ((this.boundaries.bottom.x > otherBox.pos.x) && (this.boundaries.bottom.x < (otherBox.pos.x + otherBox.size.w)) &&
+      (this.boundaries.bottom.y > otherBox.pos.y) && (this.boundaries.bottom.y < (otherBox.pos.y + otherBox.size.h))) {
+      this.boundaryCollision.bottom = true;
+    }
+    if ((this.boundaries.left.x > otherBox.pos.x) && (this.boundaries.left.x < (otherBox.pos.x + otherBox.size.w)) &&
+      (this.boundaries.left.y > otherBox.pos.y) && (this.boundaries.left.y < (otherBox.pos.y + otherBox.size.h))) {
+      this.boundaryCollision.left = true;
+    }
   }
 }
 

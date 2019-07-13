@@ -43,6 +43,9 @@ class Game {
     this.player = new Player(this.canvas);
     this.gameObjects.player.push(this.player);
     this.camera = new Camera(this.player, this.gameObjects, this.canvasCtx);
+
+    //experimental collision
+    setInterval(() => this.checkCollision(this.player), 1000);
   }
 
   step() {
@@ -74,23 +77,40 @@ class Game {
 
     this.player.update(); // this is just handling sprites right now
 
-    posBuffer.x = this.player.pos.x; // this is storing the player's previous position
-    posBuffer.y = this.player.pos.y;
+    // posBuffer.x = this.player.pos.x; // this is storing the player's previous position
+    // posBuffer.y = this.player.pos.y;
+
+    this.player.posBuffer.x = this.player.pos.x;
+    this.player.posBuffer.y = this.player.pos.y;
+
+    if (this.player.vel.y > 0 && this.player.boundaryCollision.bottom) {
+      this.player.vel.y = 0;
+    }
+
+    if (this.player.vel.y < 0 && this.player.boundaryCollision.top) {
+      this.player.vel.y = 0;
+    }
 
     // if the player is not on the ground, apply gravity
     this.player.applyVelocity(deltaT);
+
+    // reset player collision
+    this.player.boundaryCollision.top = false;
+    this.player.boundaryCollision.right = false;
+    this.player.boundaryCollision.bottom = false;
+    this.player.boundaryCollision.left = false;
 
     // loop through game objects to detect collision
     const blockers = this.gameObjects.blockers;
     for (let i = 0; i < blockers.length; i++) {
       this.player.calcBoundsCollision(blockers[i]);
-      if (this.player.bCollided(blockers[i])) {
-        bOnTheGround = true;
-        // this.player.pos.x = posBuffer.x;
-        // this.player.pos.y = posBuffer.y;
-        controllerResets.jump = true;
-        this.player.resetVelocity();
-      }
+      // if (this.player.bCollided(blockers[i])) {
+      //   bOnTheGround = true;
+      //   // this.player.pos.x = posBuffer.x;
+      //   // this.player.pos.y = posBuffer.y;
+      //   controllerResets.jump = true;
+      //   this.player.resetVelocity();
+      // }
     }
 
     // this checks to see if player died in a pit
@@ -102,14 +122,9 @@ class Game {
     }
   }
 
-  /*
-    * start in the air
-    * applying gravity to player
-    * apply velocity to player
-    * if player touches ground, stop applying gravity
-    * pressing jump makes the player jump, but also restarts gravity for player
-  */
-
+  checkCollision(player) {
+    console.log(player);
+  }
 }
 
 export default Game;
