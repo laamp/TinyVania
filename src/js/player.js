@@ -14,12 +14,6 @@ import {
   characterDeadRight
 } from "./img-loader";
 
-const jumpAmt = -50;
-export const controllerResets = {
-  attack: true,
-  jump: true
-};
-
 export const PLAYER_STATES = {
   IDLE_LEFT: "IDLE_LEFT",
   IDLE_RIGHT: "IDLE_RIGHT",
@@ -48,12 +42,12 @@ class Player extends Entity {
       spriteOffset: { x: -102, y: -12, w: 260, h: 119.6 }
     };
     super(startVals);
-    this.moveAmt = 5;
-    this.posBuffer = { x: 0, y: 0 };
-    this.bOnTheGround = false;
-    this.playerState = PLAYER_STATES.IDLE_LEFT;
 
-    this.boundaries = {};
+    this.moveSpeed = 5;
+    this.jumpAmount = -50;
+    this.playerState = PLAYER_STATES.IDLE_LEFT;
+    this.actionResets = { attack: true, jump: true };
+
     this.boundaryCollision = {
       top: false, right: false,
       bottom: false, left: false
@@ -62,8 +56,7 @@ class Player extends Entity {
   }
 
   update() {
-    this.calculateBounds();
-
+    //sprite switching
     switch (this.playerState) {
       case PLAYER_STATES.IDLE_RIGHT:
         this.sprites = characterWalkingRight;
@@ -79,56 +72,102 @@ class Player extends Entity {
 
   input() {
     this.vel.x = 0;
+    //moving right
     if (userController.right && !this.boundaryCollision.right) {
       this.spriteIdx = 0;
-      this.vel.x = this.moveAmt;
+      this.vel.x = this.moveSpeed;
       this.playerState = PLAYER_STATES.IDLE_RIGHT;
     }
+    //moving left
     if (userController.left && !this.boundaryCollision.left) {
       this.spriteIdx = 0;
-      this.vel.x = -this.moveAmt;
+      this.vel.x = -this.moveSpeed;
       this.playerState = PLAYER_STATES.IDLE_LEFT;
     }
-
-    if ((userController.attack) && (controllerResets.attack)) {
-      controllerResets.attack = false;
-      console.log("attack!"); //for testing
-      setTimeout(() => {
-        controllerResets.attack = true;
-      }, 1000);
+    //attacking
+    if (userController.attack && this.actionResets.attack) {
+      this.actionResets.attack = false;
+      console.log("attack!");
+      setTimeout(() => this.actionResets.attack = true, 1000);
     }
-
-    if ((userController.jump) && this.boundaryCollision.bottom) {
-      controllerResets.jump = false;
-      this.vel.y = jumpAmt;
+    //jumping
+    if ((userController.jump) && this.actionResets.jump) {
+      this.actionResets.jump = false;
+      this.vel.y = this.jumpAmount;
     }
   }
 
   calculateBounds() {
     this.boundaries = {
-      top: { x: this.pos.x + (this.size.w / 2.0), y: this.pos.y },
-      right: { x: this.pos.x + this.size.w, y: this.pos.y + (this.size.h / 2.0) },
-      bottom: { x: this.pos.x + (this.size.w / 2.0), y: this.pos.y + this.size.h },
-      left: { x: this.pos.x, y: this.pos.y + (this.size.h / 2.0) }
+      topLeft: { x: this.pos.x + (this.size.w * 0.2), y: this.pos.y },
+      topRight: { x: this.pos.x + (this.size.w * 0.8), y: this.pos.y },
+      rightTop: { x: this.pos.x + this.size.w, y: this.pos.y + (this.size.h * 0.2) },
+      right: { x: this.pos.x + this.size.w, y: this.pos.y + (this.size.h * 0.5) },
+      rightBottom: { x: this.pos.x + this.size.w, y: this.pos.y + (this.size.h * 0.8) },
+      bottomLeft: { x: this.pos.x + (this.size.w * 0.2), y: this.pos.y + this.size.h },
+      bottomRight: { x: this.pos.x + (this.size.w * 0.8), y: this.pos.y + this.size.h },
+      leftTop: { x: this.pos.x, y: this.pos.y + (this.size.h * 0.2) },
+      left: { x: this.pos.x, y: this.pos.y + (this.size.h * 0.5) },
+      leftBottom: { x: this.pos.x, y: this.pos.y + (this.size.h * 0.8) }
     };
   }
 
   calcBoundsCollision(otherBox) {
-    if ((this.boundaries.top.x > otherBox.pos.x) && (this.boundaries.top.x < (otherBox.pos.x + otherBox.size.w)) &&
-      (this.boundaries.top.y > otherBox.pos.y) && (this.boundaries.top.y < (otherBox.pos.y + otherBox.size.h))) {
+    if ((this.boundaries.topLeft.x >= otherBox.pos.x) && (this.boundaries.topLeft.x <= (otherBox.pos.x + otherBox.size.w)) &&
+      (this.boundaries.topLeft.y >= otherBox.pos.y) && (this.boundaries.topLeft.y <= (otherBox.pos.y + otherBox.size.h))) {
       this.boundaryCollision.top = true;
     }
-    if ((this.boundaries.right.x > otherBox.pos.x) && (this.boundaries.right.x < (otherBox.pos.x + otherBox.size.w)) &&
-      (this.boundaries.right.y > otherBox.pos.y) && (this.boundaries.right.y < (otherBox.pos.y + otherBox.size.h))) {
+    if ((this.boundaries.topRight.x >= otherBox.pos.x) && (this.boundaries.topRight.x <= (otherBox.pos.x + otherBox.size.w)) &&
+      (this.boundaries.topRight.y >= otherBox.pos.y) && (this.boundaries.topRight.y <= (otherBox.pos.y + otherBox.size.h))) {
+      this.boundaryCollision.top = true;
+    }
+
+    if ((this.boundaries.rightTop.x >= otherBox.pos.x) && (this.boundaries.rightTop.x <= (otherBox.pos.x + otherBox.size.w)) &&
+      (this.boundaries.rightTop.y >= otherBox.pos.y) && (this.boundaries.rightTop.y <= (otherBox.pos.y + otherBox.size.h))) {
       this.boundaryCollision.right = true;
     }
-    if ((this.boundaries.bottom.x > otherBox.pos.x) && (this.boundaries.bottom.x < (otherBox.pos.x + otherBox.size.w)) &&
-      (this.boundaries.bottom.y > otherBox.pos.y) && (this.boundaries.bottom.y < (otherBox.pos.y + otherBox.size.h))) {
-      this.boundaryCollision.bottom = true;
+    if ((this.boundaries.right.x >= otherBox.pos.x) && (this.boundaries.right.x <= (otherBox.pos.x + otherBox.size.w)) &&
+      (this.boundaries.right.y >= otherBox.pos.y) && (this.boundaries.right.y <= (otherBox.pos.y + otherBox.size.h))) {
+      this.boundaryCollision.right = true;
     }
-    if ((this.boundaries.left.x > otherBox.pos.x) && (this.boundaries.left.x < (otherBox.pos.x + otherBox.size.w)) &&
-      (this.boundaries.left.y > otherBox.pos.y) && (this.boundaries.left.y < (otherBox.pos.y + otherBox.size.h))) {
+    if ((this.boundaries.rightBottom.x >= otherBox.pos.x) && (this.boundaries.rightBottom.x <= (otherBox.pos.x + otherBox.size.w)) &&
+      (this.boundaries.rightBottom.y >= otherBox.pos.y) && (this.boundaries.rightBottom.y <= (otherBox.pos.y + otherBox.size.h))) {
+      this.boundaryCollision.right = true;
+    }
+
+    if ((this.boundaries.bottomLeft.x >= otherBox.pos.x) && (this.boundaries.bottomLeft.x <= (otherBox.pos.x + otherBox.size.w)) &&
+      (this.boundaries.bottomLeft.y >= otherBox.pos.y) && (this.boundaries.bottomLeft.y <= (otherBox.pos.y + otherBox.size.h))) {
+      this.boundaryCollision.bottom = true;
+      this.actionResets.jump = true;
+    }
+    if ((this.boundaries.bottomRight.x >= otherBox.pos.x) && (this.boundaries.bottomRight.x <= (otherBox.pos.x + otherBox.size.w)) &&
+      (this.boundaries.bottomRight.y >= otherBox.pos.y) && (this.boundaries.bottomRight.y <= (otherBox.pos.y + otherBox.size.h))) {
+      this.boundaryCollision.bottom = true;
+      this.actionResets.jump = true;
+    }
+
+    if ((this.boundaries.leftTop.x >= otherBox.pos.x) && (this.boundaries.leftTop.x <= (otherBox.pos.x + otherBox.size.w)) &&
+      (this.boundaries.leftTop.y >= otherBox.pos.y) && (this.boundaries.leftTop.y <= (otherBox.pos.y + otherBox.size.h))) {
       this.boundaryCollision.left = true;
+    }
+    if ((this.boundaries.left.x >= otherBox.pos.x) && (this.boundaries.left.x <= (otherBox.pos.x + otherBox.size.w)) &&
+      (this.boundaries.left.y >= otherBox.pos.y) && (this.boundaries.left.y <= (otherBox.pos.y + otherBox.size.h))) {
+      this.boundaryCollision.left = true;
+    }
+    if ((this.boundaries.leftBottom.x >= otherBox.pos.x) && (this.boundaries.leftBottom.x <= (otherBox.pos.x + otherBox.size.w)) &&
+      (this.boundaries.leftBottom.y >= otherBox.pos.y) && (this.boundaries.leftBottom.y <= (otherBox.pos.y + otherBox.size.h))) {
+      this.boundaryCollision.left = true;
+    }
+  }
+
+  floorChecker(otherBox) {
+    if ((this.boundaries.bottomLeft.x > otherBox.pos.x) && (this.boundaries.bottomLeft.x < (otherBox.pos.x + otherBox.size.w)) &&
+      (this.boundaries.bottomLeft.y > otherBox.pos.y) && (this.boundaries.bottomLeft.y < (otherBox.pos.y + otherBox.size.h))) {
+      this.pos.y--;
+    }
+    if ((this.boundaries.bottomRight.x > otherBox.pos.x) && (this.boundaries.bottomRight.x < (otherBox.pos.x + otherBox.size.w)) &&
+      (this.boundaries.bottomRight.y > otherBox.pos.y) && (this.boundaries.bottomRight.y < (otherBox.pos.y + otherBox.size.h))) {
+      this.pos.y--;
     }
   }
 }

@@ -22,12 +22,12 @@ class Camera {
   update() {
     if (userController.left &&
       (this.thePlayer.pos.x < (globals.screenWidth * this.camBounds.left - this.offsetX))) {
-      this.offsetX += this.thePlayer.moveAmt;
+      this.offsetX += this.thePlayer.moveSpeed;
     }
 
     if (userController.right &&
       (this.thePlayer.pos.x > (globals.screenWidth * this.camBounds.right - this.offsetX))) {
-      this.offsetX -= this.thePlayer.moveAmt;
+      this.offsetX -= this.thePlayer.moveSpeed;
     }
 
     if ((this.thePlayer.pos.y < (globals.screenHeight * this.camBounds.top - this.offsetY))) {

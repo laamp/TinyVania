@@ -1,8 +1,8 @@
-import Player, { controllerResets } from "./player";
+import Player from "./player";
 import Camera from "./camera";
 import { levels, parseLevel } from "./level-loader";
 import { bindKeyHandlers } from "./controller";
-import { globals, randomColor } from "./util";
+import { globals, boxCollision } from "./util";
 
 export const GAME_STATES = {
   MENU: "MENU",
@@ -10,28 +10,29 @@ export const GAME_STATES = {
   GAME_PAUSED: "GAME_PAUSED"
 };
 
-export let timeSinceLastFrame;
-export let previousTime;
-
-let posBuffer = { x: 0, y: 0 };
-let bOnTheGround;
-
 class Game {
   constructor(canvas) {
     this.canvas = canvas;
     this.canvas.width = globals.screenWidth;
     this.canvas.height = globals.screenHeight;
     this.canvasCtx = canvas.getContext("2d");
-    this.reset();
+    this.init();
     bindKeyHandlers();
 
-    timeSinceLastFrame = 0;
-    previousTime = Date.now();
+    this.timeSinceLastFrame = 0;
+    this.previousTime = Date.now();
+
     this.step = this.step.bind(this);
     this.step();
+
+    this.timeSinceLastTick = 0;
+    this.previousTickTime = Date.now();
+
+    this.tick = this.tick.bind(this);
+    setInterval(this.tick);
   }
 
-  reset() {
+  init() {
     this.gameState = GAME_STATES.GAME_PLAYING;
     this.gameObjects = {
       noCollision: [],
@@ -43,17 +44,15 @@ class Game {
     this.player = new Player(this.canvas);
     this.gameObjects.player.push(this.player);
     this.camera = new Camera(this.player, this.gameObjects, this.canvasCtx);
-
-    //experimental collision
-    setInterval(() => this.checkCollision(this.player), 1000);
   }
 
   step() {
     let currentTime = Date.now();
-    timeSinceLastFrame = currentTime - previousTime;
-    previousTime = currentTime;
-    if (timeSinceLastFrame > 20) timeSinceLastFrame = 20;
-    this.update(timeSinceLastFrame);
+    this.timeSinceLastFrame = currentTime - this.previousTime;
+    this.previousTime = currentTime;
+
+    this.update();
+    this.player.applyVelocity(this.timeSinceLastFrame);
 
     this.camera.update();
 
@@ -62,68 +61,57 @@ class Game {
     }
   }
 
-  loadLevel() {
-    let level = parseLevel(levels[1]);
+  tick() {
+    let currentTick = Date.now();
+    this.timeSinceLastTick = currentTick - this.previousTickTime;
+    this.previousTickTime = currentTick;
 
-    this.gameObjects.blockers = this.gameObjects.blockers.concat(level.tiles);
-    this.gameObjects.killVolumes = this.gameObjects.killVolumes.concat(level.killVolumes);
+    if (this.player.boundaryCollision.bottom && this.player.vel.y > 0) {
+      this.player.vel.y = 0;
+    }
+    if (this.player.boundaryCollision.top && this.player.vel.y < 0) {
+      this.player.vel.y = 0;
+    }
+
+    this.player.calculateBounds();
+    this.player.update();
+    Object.keys(this.player.boundaryCollision).forEach(k => {
+      this.player.boundaryCollision[k] = false;
+    });
+
+    // loop through game objects to detect collision
+    const blockers = this.gameObjects.blockers;
+    for (let i = 0; i < blockers.length; i++) {
+      this.player.floorChecker(blockers[i]);
+      this.player.calcBoundsCollision(blockers[i]);
+    }
   }
 
-  update(deltaT) {
+  update() {
     // if the game is running, the player will receive input
     if (this.gameState === GAME_STATES.GAME_PLAYING) {
       this.player.input();
     }
 
-    this.player.update(); // this is just handling sprites right now
-
-    // posBuffer.x = this.player.pos.x; // this is storing the player's previous position
-    // posBuffer.y = this.player.pos.y;
-
-    this.player.posBuffer.x = this.player.pos.x;
-    this.player.posBuffer.y = this.player.pos.y;
-
-    if (this.player.vel.y > 0 && this.player.boundaryCollision.bottom) {
-      this.player.vel.y = 0;
-    }
-
-    if (this.player.vel.y < 0 && this.player.boundaryCollision.top) {
-      this.player.vel.y = 0;
-    }
-
-    // if the player is not on the ground, apply gravity
-    this.player.applyVelocity(deltaT);
-
-    // reset player collision
-    this.player.boundaryCollision.top = false;
-    this.player.boundaryCollision.right = false;
-    this.player.boundaryCollision.bottom = false;
-    this.player.boundaryCollision.left = false;
-
     // loop through game objects to detect collision
     const blockers = this.gameObjects.blockers;
     for (let i = 0; i < blockers.length; i++) {
-      this.player.calcBoundsCollision(blockers[i]);
-      // if (this.player.bCollided(blockers[i])) {
-      //   bOnTheGround = true;
-      //   // this.player.pos.x = posBuffer.x;
-      //   // this.player.pos.y = posBuffer.y;
-      //   controllerResets.jump = true;
-      //   this.player.resetVelocity();
-      // }
     }
 
     // this checks to see if player died in a pit
     const killVolumes = this.gameObjects.killVolumes;
     for (let i = 0; i < killVolumes.length; i++) {
-      if (this.player.bCollided(killVolumes[i])) {
-        this.reset();
+      if (boxCollision(this.player, killVolumes[i])) {
+        this.init();
       }
     }
   }
 
-  checkCollision(player) {
-    console.log(player);
+  loadLevel() {
+    let level = parseLevel(levels[1]);
+
+    this.gameObjects.blockers = this.gameObjects.blockers.concat(level.tiles);
+    this.gameObjects.killVolumes = this.gameObjects.killVolumes.concat(level.killVolumes);
   }
 }
 

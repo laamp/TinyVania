@@ -33,3 +33,13 @@ export const randomColor = () => {
 
   return ("#" + randR + randG + randB);
 };
+
+export const boxCollision = (b1, b2) => {
+  if ((b1.pos.x <= (b2.pos.x + b2.size.w)) &&
+    ((b1.pos.x + b1.size.w) >= b2.pos.x) &&
+    (b1.pos.y <= (b2.pos.y + b2.size.h)) &&
+    ((b1.pos.y + b1.size.h) >= b2.pos.y)) {
+    return true;
+  }
+  return false;
+};

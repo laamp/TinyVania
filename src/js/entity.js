@@ -44,30 +44,9 @@ class Entity {
     if (this.vel.y > globals.maxVelocity) this.vel.y = globals.maxVelocity;
   }
 
-  bCollided(box2) {
-    let box1 = this;
+  input() { }
 
-    if ((box1.pos.x <= (box2.pos.x + box2.size.w)) &&
-      ((box1.pos.x + box1.size.w) >= box2.pos.x) &&
-      (box1.pos.y <= (box2.pos.y + box2.size.h)) &&
-      ((box1.pos.y + box1.size.h) >= box2.pos.y)) {
-      return true;
-    }
-    return false;
-  }
-
-  input() {
-    //should be overriden by child classes
-  }
-
-  update() {
-    //should be overriden by child classes
-  }
-
-  resetVelocity() {
-    this.vel.y = 0;
-    this.vel.x = 0;
-  }
+  update() { }
 }
 
 export default Entity;
