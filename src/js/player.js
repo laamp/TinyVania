@@ -45,6 +45,7 @@ class Player extends Entity {
 
     this.moveSpeed = 5;
     this.jumpAmount = -50;
+    this.bumped = false;
     this.playerState = PLAYER_STATES.IDLE_LEFT;
     this.actionResets = { attack: true, jump: true };
 
@@ -93,6 +94,7 @@ class Player extends Entity {
     //jumping
     if ((userController.jump) && this.actionResets.jump) {
       this.actionResets.jump = false;
+      this.bumped = false;
       this.vel.y = this.jumpAmount;
     }
   }
@@ -139,11 +141,19 @@ class Player extends Entity {
       (this.boundaries.bottomLeft.y >= otherBox.pos.y) && (this.boundaries.bottomLeft.y <= (otherBox.pos.y + otherBox.size.h))) {
       this.boundaryCollision.bottom = true;
       this.actionResets.jump = true;
+      if (!this.bumped) {
+        let offset = this.boundaries.bottomLeft.y - otherBox.pos.y;
+        this.bump(offset);
+      }
     }
     if ((this.boundaries.bottomRight.x >= otherBox.pos.x) && (this.boundaries.bottomRight.x <= (otherBox.pos.x + otherBox.size.w)) &&
       (this.boundaries.bottomRight.y >= otherBox.pos.y) && (this.boundaries.bottomRight.y <= (otherBox.pos.y + otherBox.size.h))) {
       this.boundaryCollision.bottom = true;
       this.actionResets.jump = true;
+      if (!this.bumped) {
+        let offset = this.boundaries.bottomLeft.y - otherBox.pos.y;
+        this.bump(offset);
+      }
     }
 
     if ((this.boundaries.leftTop.x >= otherBox.pos.x) && (this.boundaries.leftTop.x <= (otherBox.pos.x + otherBox.size.w)) &&
@@ -160,15 +170,9 @@ class Player extends Entity {
     }
   }
 
-  floorChecker(otherBox) {
-    if ((this.boundaries.bottomLeft.x > otherBox.pos.x) && (this.boundaries.bottomLeft.x < (otherBox.pos.x + otherBox.size.w)) &&
-      (this.boundaries.bottomLeft.y > otherBox.pos.y) && (this.boundaries.bottomLeft.y < (otherBox.pos.y + otherBox.size.h))) {
-      this.pos.y--;
-    }
-    if ((this.boundaries.bottomRight.x > otherBox.pos.x) && (this.boundaries.bottomRight.x < (otherBox.pos.x + otherBox.size.w)) &&
-      (this.boundaries.bottomRight.y > otherBox.pos.y) && (this.boundaries.bottomRight.y < (otherBox.pos.y + otherBox.size.h))) {
-      this.pos.y--;
-    }
+  bump(amount) {
+    this.pos.y -= amount;
+    this.bumped = true;
   }
 }
 

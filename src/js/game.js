@@ -82,7 +82,6 @@ class Game {
     // loop through game objects to detect collision
     const blockers = this.gameObjects.blockers;
     for (let i = 0; i < blockers.length; i++) {
-      this.player.floorChecker(blockers[i]);
       this.player.calcBoundsCollision(blockers[i]);
     }
   }
@@ -91,11 +90,6 @@ class Game {
     // if the game is running, the player will receive input
     if (this.gameState === GAME_STATES.GAME_PLAYING) {
       this.player.input();
-    }
-
-    // loop through game objects to detect collision
-    const blockers = this.gameObjects.blockers;
-    for (let i = 0; i < blockers.length; i++) {
     }
 
     // this checks to see if player died in a pit
