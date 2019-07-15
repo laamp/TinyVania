@@ -155,6 +155,9 @@ class Player extends Entity {
         this.bump(offset);
       }
     }
+    if (!this.boundaryCollision.bottom) {
+      this.bumped = false;
+    }
 
     if ((this.boundaries.leftTop.x >= otherBox.pos.x) && (this.boundaries.leftTop.x <= (otherBox.pos.x + otherBox.size.w)) &&
       (this.boundaries.leftTop.y >= otherBox.pos.y) && (this.boundaries.leftTop.y <= (otherBox.pos.y + otherBox.size.h))) {
