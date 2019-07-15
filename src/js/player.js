@@ -46,8 +46,10 @@ class Player extends Entity {
     this.moveSpeed = 5;
     this.jumpAmount = -50;
     this.bumped = false;
-    this.playerState = PLAYER_STATES.IDLE_LEFT;
+    this.playerState = PLAYER_STATES.RUNNING_LEFT;
     this.actionResets = { attack: true, jump: true };
+
+    this.animationRunning = false;
 
     this.boundaryCollision = {
       top: false, right: false,
@@ -56,18 +58,32 @@ class Player extends Entity {
     this.calculateBounds();
   }
 
+  render(ctx) {
+    super.render(ctx);
+  }
+
   update() {
     //sprite switching
     switch (this.playerState) {
-      case PLAYER_STATES.IDLE_RIGHT:
+      case PLAYER_STATES.RUNNING_RIGHT:
         this.sprites = characterWalkingRight;
         break;
-      case PLAYER_STATES.IDLE_LEFT:
+      case PLAYER_STATES.RUNNING_LEFT:
         this.sprites = characterWalkingLeft;
+        break;
+      case PLAYER_STATES.JUMPING_RIGHT:
+        this.sprites = characterJumpRight;
+        break;
+      case PLAYER_STATES.JUMPING_LEFT:
+        this.sprites = characterJumpLeft;
         break;
       default:
         this.sprites = [this.nullImg];
         break;
+    }
+
+    if ((userController.right || userController.left) && (this.vel.y === 0)) {
+      // this.spriteIdx = (this.spriteIdx + 1) % this.sprites.length;
     }
   }
 
@@ -75,15 +91,13 @@ class Player extends Entity {
     this.vel.x = 0;
     //moving right
     if (userController.right && !this.boundaryCollision.right) {
-      this.spriteIdx = 0;
       this.vel.x = this.moveSpeed;
-      this.playerState = PLAYER_STATES.IDLE_RIGHT;
+      this.playerState = PLAYER_STATES.RUNNING_RIGHT;
     }
     //moving left
     if (userController.left && !this.boundaryCollision.left) {
-      this.spriteIdx = 0;
       this.vel.x = -this.moveSpeed;
-      this.playerState = PLAYER_STATES.IDLE_LEFT;
+      this.playerState = PLAYER_STATES.RUNNING_LEFT;
     }
     //attacking
     if (userController.attack && this.actionResets.attack) {
@@ -157,6 +171,7 @@ class Player extends Entity {
     }
     if (!this.boundaryCollision.bottom) {
       this.bumped = false;
+      this.playerState = PLAYER_STATES.JUMPING_LEFT;
     }
 
     if ((this.boundaries.leftTop.x >= otherBox.pos.x) && (this.boundaries.leftTop.x <= (otherBox.pos.x + otherBox.size.w)) &&
