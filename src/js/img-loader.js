@@ -74,6 +74,8 @@ bg1Img.src = bg1;
 const greenStoneTileImg = new Image();
 greenStoneTileImg.src = greenStoneTile;
 
+export const characterIdleLeft = [walk1LeftImg];
+export const characterIdleRight = [walk1RightImg];
 export const characterWalkingLeft = [walk1LeftImg, walk2LeftImg, walk3LeftImg, walk4LeftImg];
 export const characterWalkingRight = [walk1RightImg, walk2RightImg, walk3RightImg, walk4RightImg];
 export const characterWhipLeft = [whip1LeftImg, whip2LeftImg, whip3LeftImg];

@@ -2,6 +2,8 @@ import Entity from "./entity";
 import { userController } from "./controller";
 import { randomColor } from "./util";
 import {
+  characterIdleLeft,
+  characterIdleRight,
   characterWalkingLeft,
   characterWalkingRight,
   characterWhipLeft,
@@ -56,6 +58,8 @@ class Player extends Entity {
       bottom: false, left: false
     };
     this.calculateBounds();
+
+    this.time = Date.now();
   }
 
   render(ctx) {
@@ -65,6 +69,12 @@ class Player extends Entity {
   update() {
     //sprite switching
     switch (this.playerState) {
+      case PLAYER_STATES.IDLE_LEFT:
+        this.sprites = characterIdleLeft;
+        break;
+      case PLAYER_STATES.IDLE_RIGHT:
+        this.sprites = characterIdleRight;
+        break;
       case PLAYER_STATES.RUNNING_RIGHT:
         this.sprites = characterWalkingRight;
         break;
@@ -82,9 +92,22 @@ class Player extends Entity {
         break;
     }
 
-    if ((userController.right || userController.left) && (this.vel.y === 0)) {
-      // this.spriteIdx = (this.spriteIdx + 1) % this.sprites.length;
+    this.animate();
+  }
+
+  animate() {
+    if ((userController.right) && (this.vel.y === 0)) {
+      this.playerState = PLAYER_STATES.RUNNING_RIGHT;
+    } else if ((userController.left) && (this.vel.y === 0)) {
+      this.playerState = PLAYER_STATES.RUNNING_LEFT;
+    } else if ((!userController.left && !userController.right) && this.playerState === PLAYER_STATES.RUNNING_LEFT) {
+      this.playerState = PLAYER_STATES.IDLE_LEFT;
+    } else if ((!userController.left && !userController.right) && this.playerState === PLAYER_STATES.RUNNING_RIGHT) {
+      this.playerState = PLAYER_STATES.IDLE_RIGHT;
     }
+
+    this.spriteIdx = (this.spriteIdx + 1) % this.sprites.length;
+    if (!this.sprites[this.spriteIdx]) this.spriteIdx = 0;
   }
 
   input() {
@@ -92,12 +115,10 @@ class Player extends Entity {
     //moving right
     if (userController.right && !this.boundaryCollision.right) {
       this.vel.x = this.moveSpeed;
-      this.playerState = PLAYER_STATES.RUNNING_RIGHT;
     }
     //moving left
     if (userController.left && !this.boundaryCollision.left) {
       this.vel.x = -this.moveSpeed;
-      this.playerState = PLAYER_STATES.RUNNING_LEFT;
     }
     //attacking
     if (userController.attack && this.actionResets.attack) {
@@ -171,7 +192,6 @@ class Player extends Entity {
     }
     if (!this.boundaryCollision.bottom) {
       this.bumped = false;
-      this.playerState = PLAYER_STATES.JUMPING_LEFT;
     }
 
     if ((this.boundaries.leftTop.x >= otherBox.pos.x) && (this.boundaries.leftTop.x <= (otherBox.pos.x + otherBox.size.w)) &&
