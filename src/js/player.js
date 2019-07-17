@@ -51,7 +51,11 @@ class Player extends Entity {
     this.jumpAmount = -50;
     this.bumped = false;
     this.playerState = PLAYER_STATES.IDLE_RIGHT;
-    this.actionResets = { attack: true, jump: true };
+    this.actionResets = {
+      attack: true,
+      onGround: false,
+      jumpPressed: false
+    };
 
     this.boundaryCollision = {
       top: false, right: false,
@@ -163,8 +167,13 @@ class Player extends Entity {
       setTimeout(() => this.actionResets.attack = true, 1000);
     }
     //jumping
-    if ((userController.jump) && this.actionResets.jump) {
-      this.actionResets.jump = false;
+    if (!userController.jump) this.actionResets.jumpPressed = false;
+    if (!this.boundaryCollision.bottom) this.actionResets.onGround = false;
+    if ((userController.jump) &&
+      this.actionResets.onGround &&
+      !this.actionResets.jumpPressed) {
+      this.actionResets.jumpPressed = true;
+      this.actionResets.onGround = false;
       this.bumped = false;
       this.vel.y = this.jumpAmount;
     }
@@ -211,7 +220,7 @@ class Player extends Entity {
     if ((this.boundaries.bottomLeft.x >= otherBox.pos.x) && (this.boundaries.bottomLeft.x <= (otherBox.pos.x + otherBox.size.w)) &&
       (this.boundaries.bottomLeft.y >= otherBox.pos.y) && (this.boundaries.bottomLeft.y <= (otherBox.pos.y + otherBox.size.h))) {
       this.boundaryCollision.bottom = true;
-      this.actionResets.jump = true;
+      this.actionResets.onGround = true;
       if (!this.bumped) {
         let offset = this.boundaries.bottomLeft.y - otherBox.pos.y;
         this.bump(offset);
@@ -220,7 +229,7 @@ class Player extends Entity {
     if ((this.boundaries.bottomRight.x >= otherBox.pos.x) && (this.boundaries.bottomRight.x <= (otherBox.pos.x + otherBox.size.w)) &&
       (this.boundaries.bottomRight.y >= otherBox.pos.y) && (this.boundaries.bottomRight.y <= (otherBox.pos.y + otherBox.size.h))) {
       this.boundaryCollision.bottom = true;
-      this.actionResets.jump = true;
+      this.actionResets.onGround = true;
       if (!this.bumped) {
         let offset = this.boundaries.bottomLeft.y - otherBox.pos.y;
         this.bump(offset);
