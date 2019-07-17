@@ -10,6 +10,8 @@ import {
   characterWhipRight,
   characterJumpLeft,
   characterJumpRight,
+  characterFallLeft,
+  characterFallRight,
   characterDamageLeft,
   characterDamageRight,
   characterDeadLeft,
@@ -48,18 +50,14 @@ class Player extends Entity {
     this.moveSpeed = 5;
     this.jumpAmount = -50;
     this.bumped = false;
-    this.playerState = PLAYER_STATES.RUNNING_LEFT;
+    this.playerState = PLAYER_STATES.IDLE_RIGHT;
     this.actionResets = { attack: true, jump: true };
-
-    this.animationRunning = false;
 
     this.boundaryCollision = {
       top: false, right: false,
       bottom: false, left: false
     };
     this.calculateBounds();
-
-    this.time = Date.now();
   }
 
   render(ctx) {
@@ -87,6 +85,12 @@ class Player extends Entity {
       case PLAYER_STATES.JUMPING_LEFT:
         this.sprites = characterJumpLeft;
         break;
+      case PLAYER_STATES.FALLING_LEFT:
+        this.sprites = characterFallLeft;
+        break;
+      case PLAYER_STATES.FALLING_RIGHT:
+        this.sprites = characterFallRight;
+        break;
       default:
         this.sprites = [this.nullImg];
         break;
@@ -96,14 +100,46 @@ class Player extends Entity {
   }
 
   animate() {
-    if ((userController.right) && (this.vel.y === 0)) {
+    if ((userController.right) && (this.vel.y === 0)) { //running right on the ground
       this.playerState = PLAYER_STATES.RUNNING_RIGHT;
-    } else if ((userController.left) && (this.vel.y === 0)) {
+    } else if ((userController.left) && (this.vel.y === 0)) { //running left on the ground
       this.playerState = PLAYER_STATES.RUNNING_LEFT;
-    } else if ((!userController.left && !userController.right) && this.playerState === PLAYER_STATES.RUNNING_LEFT) {
+    } else if ((!userController.left && !userController.right) && this.playerState === PLAYER_STATES.RUNNING_LEFT) { //running left -> idle
       this.playerState = PLAYER_STATES.IDLE_LEFT;
-    } else if ((!userController.left && !userController.right) && this.playerState === PLAYER_STATES.RUNNING_RIGHT) {
+    } else if ((!userController.left && !userController.right) && this.playerState === PLAYER_STATES.RUNNING_RIGHT) { //running right -> idle
       this.playerState = PLAYER_STATES.IDLE_RIGHT;
+    } else if ((this.playerState === PLAYER_STATES.RUNNING_LEFT) && (this.vel.y > 0)) { //running left -> falling
+      this.playerState = PLAYER_STATES.FALLING_LEFT;
+    } else if ((this.playerState === PLAYER_STATES.RUNNING_LEFT) && (this.vel.y < 0)) { //running left -> jumping
+      this.playerState = PLAYER_STATES.JUMPING_LEFT;
+    } else if ((this.playerState === PLAYER_STATES.RUNNING_RIGHT) && (this.vel.y > 0)) { //running right -> falling
+      this.playerState = PLAYER_STATES.FALLING_RIGHT;
+    } else if ((this.playerState === PLAYER_STATES.RUNNING_RIGHT) && (this.vel.y < 0)) { //running right -> jumping
+      this.playerState = PLAYER_STATES.JUMPING_RIGHT;
+    } else if ((this.playerState === PLAYER_STATES.JUMPING_LEFT) && (this.vel.y > 0)) { //jumping left -> falling left
+      this.playerState = PLAYER_STATES.FALLING_LEFT;
+    } else if ((this.playerState === PLAYER_STATES.JUMPING_RIGHT) && (this.vel.y > 0)) { //jumping right -> falling right
+      this.playerState = PLAYER_STATES.FALLING_RIGHT;
+    } else if ((this.playerState === PLAYER_STATES.IDLE_LEFT) && this.vel.y < 0) { //idle left -> jumping
+      this.playerState = PLAYER_STATES.JUMPING_LEFT;
+    } else if ((this.playerState === PLAYER_STATES.IDLE_RIGHT) && this.vel.y < 0) { //idle right -> jumping
+      this.playerState = PLAYER_STATES.JUMPING_RIGHT;
+    } else if ((this.playerState === PLAYER_STATES.FALLING_LEFT) && this.vel.y === 0) { //falling left -> on the ground
+      this.playerState = PLAYER_STATES.IDLE_LEFT;
+    } else if ((this.playerState === PLAYER_STATES.FALLING_RIGHT) && this.vel.y === 0) { //falling right -> on the ground
+      this.playerState = PLAYER_STATES.IDLE_RIGHT;
+    } else if ((this.playerState === PLAYER_STATES.JUMPING_LEFT) && userController.right) { //jumping left -> turning to the right
+      this.playerState = PLAYER_STATES.JUMPING_RIGHT;
+    } else if ((this.playerState === PLAYER_STATES.JUMPING_RIGHT) && userController.left) { //jumping right -> turning to the left
+      this.playerState = PLAYER_STATES.JUMPING_LEFT;
+    } else if ((this.playerState === PLAYER_STATES.FALLING_LEFT) && userController.right) { //falling left -> turning to the right
+      this.playerState = PLAYER_STATES.FALLING_RIGHT;
+    } else if ((this.playerState === PLAYER_STATES.FALLING_RIGHT) && userController.left) { //falling right -> turning to the left
+      this.playerState = PLAYER_STATES.FALLING_LEFT;
+    } else if ((this.playerState === PLAYER_STATES.IDLE_LEFT) && this.vel.y > 0) {
+      this.playerState = PLAYER_STATES.FALLING_LEFT;
+    } else if ((this.playerState === PLAYER_STATES.IDLE_RIGHT) && this.vel.y > 0) {
+      this.playerState = PLAYER_STATES.FALLING_RIGHT;
     }
 
     this.spriteIdx = (this.spriteIdx + 1) % this.sprites.length;
