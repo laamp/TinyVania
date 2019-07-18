@@ -47,6 +47,13 @@ class Player extends Entity {
     };
     super(startVals);
 
+    this.intervalId = 0;
+    this.attackSpeed = 1000;
+    this.facingLeft = false;
+
+
+
+
     this.moveSpeed = 5;
     this.jumpAmount = -50;
     this.bumped = false;
@@ -54,7 +61,8 @@ class Player extends Entity {
     this.actionResets = {
       attack: true,
       onGround: false,
-      jumpPressed: false
+      jumpPressed: false,
+      animating: false
     };
 
     this.boundaryCollision = {
@@ -62,6 +70,10 @@ class Player extends Entity {
       bottom: false, left: false
     };
     this.calculateBounds();
+
+    this.attack = this.attack.bind(this);
+    this.attackAnimation = this.attackAnimation.bind(this);
+    this.attackReset = this.attackReset.bind(this);
   }
 
   render(ctx) {
@@ -95,12 +107,27 @@ class Player extends Entity {
       case PLAYER_STATES.FALLING_RIGHT:
         this.sprites = characterFallRight;
         break;
+      case PLAYER_STATES.ATTACKING_LEFT:
+        this.sprites = characterWhipLeft;
+        break;
+      case PLAYER_STATES.ATTACKING_RIGHT:
+        this.sprites = characterWhipRight;
+        break;
       default:
         this.sprites = [this.nullImg];
         break;
     }
 
-    this.animate();
+    //is the player facing left?
+    if ((this.playerState === PLAYER_STATES.IDLE_LEFT) ||
+      (this.playerState === PLAYER_STATES.RUNNING_LEFT) ||
+      (this.playerState === PLAYER_STATES.JUMPING_LEFT) ||
+      (this.playerState === PLAYER_STATES.FALLING_LEFT) ||
+      (this.playerState === PLAYER_STATES.ATTACKING_LEFT)) {
+      this.facingLeft = true;
+    } else { this.facingLeft = false; }
+
+    if (!this.actionResets.animating) this.animate();
   }
 
   animate() {
@@ -140,10 +167,14 @@ class Player extends Entity {
       this.playerState = PLAYER_STATES.FALLING_RIGHT;
     } else if ((this.playerState === PLAYER_STATES.FALLING_RIGHT) && userController.left) { //falling right -> turning to the left
       this.playerState = PLAYER_STATES.FALLING_LEFT;
-    } else if ((this.playerState === PLAYER_STATES.IDLE_LEFT) && this.vel.y > 0) {
+    } else if ((this.playerState === PLAYER_STATES.IDLE_LEFT) && this.vel.y > 0) { //idle left -> falling left
       this.playerState = PLAYER_STATES.FALLING_LEFT;
-    } else if ((this.playerState === PLAYER_STATES.IDLE_RIGHT) && this.vel.y > 0) {
+    } else if ((this.playerState === PLAYER_STATES.IDLE_RIGHT) && this.vel.y > 0) { //idle right -> falling right
       this.playerState = PLAYER_STATES.FALLING_RIGHT;
+    } else if (this.playerState === PLAYER_STATES.ATTACKING_LEFT) { //attacking left -> idle
+      this.playerState = PLAYER_STATES.IDLE_LEFT;
+    } else if (this.playerState === PLAYER_STATES.ATTACKING_RIGHT) { //attacking right -> idle
+      this.playerState = PLAYER_STATES.IDLE_RIGHT;
     }
 
     this.spriteIdx = (this.spriteIdx + 1) % this.sprites.length;
@@ -156,16 +187,17 @@ class Player extends Entity {
     if (userController.right && !this.boundaryCollision.right) {
       this.vel.x = this.moveSpeed;
     }
+
     //moving left
     if (userController.left && !this.boundaryCollision.left) {
       this.vel.x = -this.moveSpeed;
     }
+
     //attacking
     if (userController.attack && this.actionResets.attack) {
-      this.actionResets.attack = false;
-      console.log("attack!");
-      setTimeout(() => this.actionResets.attack = true, 1000);
+      this.attack();
     }
+
     //jumping
     if (!userController.jump) this.actionResets.jumpPressed = false;
     if (!this.boundaryCollision.bottom) this.actionResets.onGround = false;
@@ -177,6 +209,33 @@ class Player extends Entity {
       this.bumped = false;
       this.vel.y = this.jumpAmount;
     }
+  }
+
+  attack() {
+    console.log("Attack was pressed");
+
+    this.spriteIdx = 0;
+    Object.assign(this.actionResets, { animating: true, attack: false });
+    if (this.facingLeft) {
+      this.playerState = PLAYER_STATES.ATTACKING_LEFT;
+    } else {
+      this.playerState = PLAYER_STATES.ATTACKING_RIGHT;
+    }
+
+    setTimeout(this.attackReset, this.attackSpeed);
+  }
+
+  attackAnimation() {
+    console.log(this.spriteIdx);
+    this.spriteIdx++;
+    if (this.spriteIdx > this.sprites.length) {
+      this.spriteIdx = 0;
+    }
+  }
+
+  attackReset() {
+    Object.assign(this.actionResets, { animating: false, attack: true });
+    this.spriteIdx = 0;
   }
 
   calculateBounds() {
