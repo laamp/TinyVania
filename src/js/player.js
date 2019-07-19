@@ -138,14 +138,14 @@ class Player extends Entity {
     } else { this.facingLeft = false; }
 
     if (!this.actionResets.animatingAttack) this.animate();
-  }
 
-  animate() {
     //figure out attack frames
     if (this.actionResets.animatingAttack && this.spriteIdx === 2) {
       this.attackFrames = true;
     }
+  }
 
+  animate() {
     if (!this.actionResets.animatingAttack) {
       if ((userController.right) && (this.vel.y === 0)) { //running right on the ground
         this.playerState = PLAYER_STATES.RUNNING_RIGHT;
@@ -235,7 +235,6 @@ class Player extends Entity {
   attack() {
     Object.assign(this.actionResets, { animatingAttack: true, attack: false });
     this.spriteIdx = 0;
-    console.log(this.spriteIdx);
 
     if (this.facingLeft) {
       this.playerState = PLAYER_STATES.ATTACKING_LEFT;
@@ -252,7 +251,6 @@ class Player extends Entity {
       clearInterval(this.attackId);
     } else {
       this.spriteIdx++;
-      console.log(this.spriteIdx);
     }
   }
 
