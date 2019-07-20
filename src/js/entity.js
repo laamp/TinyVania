@@ -8,7 +8,7 @@ class Entity {
     this.pos = pos || { x: 0, y: 0 };
     this.vel = vel || { x: 0, y: 0 };
     this.color = color || "magenta";
-    this.sprites = sprites || [nullImg];
+    this.sprites = sprites || null;
     this.spriteOffset = spriteOffset || { x: 0, y: 0, w: 0, h: 0 };
 
     this.spriteIdx = 0;
@@ -17,7 +17,7 @@ class Entity {
   }
 
   render(ctx) {
-    if (this.sprites.length < 1) {
+    if (this.sprites === null) {
       ctx.fillStyle = this.color;
       ctx.fillRect(
         this.pos.x,
@@ -25,14 +25,15 @@ class Entity {
         this.size.w,
         this.size.h
       );
+    } else {
+      ctx.drawImage(
+        this.sprites[this.spriteIdx],
+        this.pos.x + this.spriteOffset.x,
+        this.pos.y + this.spriteOffset.y,
+        this.spriteOffset.w,
+        this.spriteOffset.h
+      );
     }
-    ctx.drawImage(
-      this.sprites[this.spriteIdx],
-      this.pos.x + this.spriteOffset.x,
-      this.pos.y + this.spriteOffset.y,
-      this.spriteOffset.w,
-      this.spriteOffset.h
-    );
   }
 
   applyVelocity(deltaT) {

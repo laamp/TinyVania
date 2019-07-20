@@ -1,4 +1,5 @@
 import Entity from "./entity";
+import Enemy from "./enemy";
 import { randomColor, transparentColor } from "./util";
 
 import level01 from "../levels/level01";
@@ -11,6 +12,7 @@ export const levels = {
 export const parseLevel = levelData => {
   let tiles = [];
   let killVolumes = [];
+  let enemies = [];
   const tileSize = 40;
   let depth = 0;
   let stride = 0;
@@ -53,6 +55,16 @@ export const parseLevel = levelData => {
         }));
         stride++;
         break;
+      case "z":
+        let height = 100;
+        let width = 100;
+        enemies.push(new Enemy({
+          size: { w: width, h: height },
+          pos: { x: stride * tileSize - (width / 2), y: depth * tileSize - (height - tileSize) },
+          vel: { x: 0, y: 0 }
+        }));
+        stride++;
+        break;
       case " ":
         stride++;
         break;
@@ -62,5 +74,5 @@ export const parseLevel = levelData => {
     }
   }
 
-  return { tiles, killVolumes };
+  return { tiles, killVolumes, enemies };
 };

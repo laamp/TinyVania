@@ -1,5 +1,6 @@
 import Player from "./player";
 import Camera from "./camera";
+import Enemy from "./enemy";
 import { levels, parseLevel } from "./level-loader";
 import { bindKeyHandlers } from "./controller";
 import { globals, boxCollision } from "./util";
@@ -38,7 +39,8 @@ class Game {
       noCollision: [],
       blockers: [],
       player: [],
-      killVolumes: []
+      killVolumes: [],
+      enemies: []
     };
     this.loadLevel();
     this.player = new Player(this.canvas);
@@ -53,6 +55,12 @@ class Game {
 
     this.update();
     this.player.applyVelocity(this.timeSinceLastFrame);
+
+    const { enemies } = this.gameObjects;
+    enemies.forEach(enemy => {
+      enemy.vel.y = 0;
+      enemy.applyVelocity(this.timeSinceLastFrame);
+    });
 
     this.camera.update();
 
@@ -106,6 +114,7 @@ class Game {
 
     this.gameObjects.blockers = this.gameObjects.blockers.concat(level.tiles);
     this.gameObjects.killVolumes = this.gameObjects.killVolumes.concat(level.killVolumes);
+    this.gameObjects.enemies = this.gameObjects.killVolumes.concat(level.enemies);
   }
 }
 
