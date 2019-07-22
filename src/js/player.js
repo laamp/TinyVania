@@ -50,9 +50,14 @@ class Player extends Entity {
     this.attackId = 0;
     this.attackSpeed = 500;
     this.attackFrames = false;
+    this.attackVolume = null;
     this.facingLeft = false;
     this.debugColor = "magenta";
 
+    this.health = 10;
+    this.iFrameDuration = 500;
+    this.iFrames = false;
+    this.damageReset = true;
     this.moveSpeed = 5;
     this.jumpAmount = -50;
     this.bumped = false;
@@ -77,16 +82,6 @@ class Player extends Entity {
   }
 
   render(ctx) {
-    //rendering for attack hitbox
-    if (this.attackFrames) {
-      ctx.fillStyle = this.debugColor;
-      if (!this.facingLeft) {
-        ctx.fillRect(this.pos.x + this.size.w + 5, this.pos.y + 30, 94, 50);
-      } else {
-        ctx.fillRect(this.pos.x - 99, this.pos.y + 30, 94, 50);
-      }
-    }
-
     super.render(ctx);
   }
 
@@ -142,6 +137,23 @@ class Player extends Entity {
     //figure out attack frames
     if (this.actionResets.animatingAttack && this.spriteIdx === 2) {
       this.attackFrames = true;
+    }
+
+    //rendering for attack hitbox
+    if (this.attackFrames) {
+      if (!this.facingLeft) {
+        this.attackVolume = new Entity({
+          pos: { x: this.pos.x + this.size.w + 5, y: this.pos.y + 30 },
+          size: { w: 94, h: 50 }
+        });
+      } else {
+        this.attackVolume = new Entity({
+          pos: { x: this.pos.x - 99, y: this.pos.y + 30 },
+          size: { w: 94, h: 50 }
+        });
+      }
+    } else {
+      this.attackVolume = null;
     }
   }
 
@@ -337,6 +349,28 @@ class Player extends Entity {
   bump(amount) {
     this.pos.y -= amount;
     this.bumped = true;
+  }
+
+  takeDamage(damageAmount) {
+    // if (!this.damageReset) return;
+
+    this.iFrames = true;
+    this.health -= damageAmount;
+    this.damageReset = false;
+
+    if (this.facingLeft) {
+      Object.assign(this.vel, { x: 10, y: this.jumpAmount });
+    } else {
+      Object.assign(this.vel, { x: -10, y: this.jumpAmount });
+    }
+
+    setTimeout(this.takeDamageReset, this.iFrameDuration);
+  }
+
+  takeDamageReset() {
+    this.iFrames = false;
+    this.damageReset = true;
+    console.log(`iframes reset`);
   }
 }
 

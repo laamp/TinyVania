@@ -39,6 +39,7 @@ class Game {
       noCollision: [],
       blockers: [],
       player: [],
+      playerAttack: [],
       killVolumes: [],
       enemies: []
     };
@@ -92,6 +93,20 @@ class Game {
     for (let i = 0; i < blockers.length; i++) {
       this.player.calcBoundsCollision(blockers[i]);
     }
+
+    // loop through enemies for player attacking
+    //  and enemy => player body collision
+    const { enemies } = this.gameObjects;
+    enemies.forEach(enemy => {
+      if (this.player.attackVolume !== null) {
+        let result = boxCollision(this.player.attackVolume, enemy);
+        if (result) console.log("enemy hit");
+      }
+
+      if (boxCollision(this.player, enemy)) {
+        this.player.takeDamage(enemy.collisionDamage);
+      }
+    });
   }
 
   update() {
