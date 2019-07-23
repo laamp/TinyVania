@@ -56,8 +56,8 @@ export const parseLevel = levelData => {
         stride++;
         break;
       case "z":
-        let height = 100;
-        let width = 100;
+        let height = 50;
+        let width = 50;
         enemies.push(new Enemy({
           size: { w: width, h: height },
           pos: { x: stride * tileSize - (width / 2), y: depth * tileSize - (height - tileSize) },

@@ -7,7 +7,7 @@ class Entity {
     this.size = size || { w: 100, h: 100 };
     this.pos = pos || { x: 0, y: 0 };
     this.vel = vel || { x: 0, y: 0 };
-    this.color = color || "magenta";
+    this.color = color || "limegreen";
     this.sprites = sprites || null;
     this.spriteOffset = spriteOffset || { x: 0, y: 0, w: 0, h: 0 };
 

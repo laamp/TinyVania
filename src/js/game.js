@@ -59,6 +59,8 @@ class Game {
 
     const { enemies } = this.gameObjects;
     enemies.forEach(enemy => {
+      if (enemy.dead) console.log('this enemy is ded');
+
       enemy.vel.y = 0;
       enemy.applyVelocity(this.timeSinceLastFrame);
     });
@@ -95,12 +97,12 @@ class Game {
     }
 
     // loop through enemies for player attacking
-    //  and enemy => player body collision
+    // and enemy => player body collision
     const { enemies } = this.gameObjects;
     enemies.forEach(enemy => {
       if (this.player.attackVolume !== null) {
         let result = boxCollision(this.player.attackVolume, enemy);
-        if (result) console.log("enemy hit");
+        if (result) enemy.takeDamage(this.player.attackPower);
       }
 
       if (boxCollision(this.player, enemy)) {

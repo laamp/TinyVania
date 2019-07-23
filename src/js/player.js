@@ -51,11 +51,12 @@ class Player extends Entity {
     this.attackSpeed = 500;
     this.attackFrames = false;
     this.attackVolume = null;
+    this.attackPower = 1;
     this.facingLeft = false;
     this.debugColor = "magenta";
 
     this.health = 10;
-    this.iFrameDuration = 500;
+    this.iFrameDuration = 700;
     this.iFrames = false;
     this.damageReset = true;
     this.moveSpeed = 5;
@@ -79,6 +80,9 @@ class Player extends Entity {
     this.attack = this.attack.bind(this);
     this.attackAnimation = this.attackAnimation.bind(this);
     this.attackReset = this.attackReset.bind(this);
+
+    this.takeDamage = this.takeDamage.bind(this);
+    this.takeDamageReset = this.takeDamageReset.bind(this);
   }
 
   render(ctx) {
@@ -117,6 +121,14 @@ class Player extends Entity {
         break;
       case PLAYER_STATES.ATTACKING_RIGHT:
         this.sprites = characterWhipRight;
+        break;
+      case PLAYER_STATES.DAMAGED_LEFT:
+        this.spriteIdx = 0;
+        this.sprites = characterDamageLeft;
+        break;
+      case PLAYER_STATES.DAMAGED_RIGHT:
+        this.spriteIdx = 0;
+        this.sprites = characterDamageRight;
         break;
       default:
         this.sprites = [this.nullImg];
@@ -159,7 +171,13 @@ class Player extends Entity {
 
   animate() {
     if (!this.actionResets.animatingAttack) {
-      if ((userController.right) && (this.vel.y === 0)) { //running right on the ground
+      if (userController.right && userController.left) {
+        if (this.facingLeft) {
+          this.playerState = PLAYER_STATES.IDLE_LEFT;
+        } else {
+          this.playerState = PLAYER_STATES.IDLE_RIGHT;
+        }
+      } else if ((userController.right) && (this.vel.y === 0)) { //running right on the ground
         this.playerState = PLAYER_STATES.RUNNING_RIGHT;
       } else if ((userController.left) && (this.vel.y === 0)) { //running left on the ground
         this.playerState = PLAYER_STATES.RUNNING_LEFT;
@@ -211,15 +229,22 @@ class Player extends Entity {
   }
 
   input() {
-    this.vel.x = 0;
-    //moving right
-    if (userController.right && !this.boundaryCollision.right) {
-      this.vel.x = this.moveSpeed;
-    }
+    if (!this.damageReset) return;
 
-    //moving left
-    if (userController.left && !this.boundaryCollision.left) {
-      this.vel.x = -this.moveSpeed;
+    this.vel.x = 0;
+
+    if (userController.right && userController.left) {
+      this.vel.x = 0;
+    } else {
+      //moving right
+      if (userController.right && !this.boundaryCollision.right) {
+        this.vel.x = this.moveSpeed;
+      }
+
+      //moving left
+      if (userController.left && !this.boundaryCollision.left) {
+        this.vel.x = -this.moveSpeed;
+      }
     }
 
     //attacking
@@ -352,16 +377,18 @@ class Player extends Entity {
   }
 
   takeDamage(damageAmount) {
-    // if (!this.damageReset) return;
+    if (!this.damageReset) return;
 
     this.iFrames = true;
     this.health -= damageAmount;
     this.damageReset = false;
 
     if (this.facingLeft) {
-      Object.assign(this.vel, { x: 10, y: this.jumpAmount });
+      this.playerState = PLAYER_STATES.DAMAGED_LEFT;
+      Object.assign(this.vel, { x: 4, y: this.jumpAmount });
     } else {
-      Object.assign(this.vel, { x: -10, y: this.jumpAmount });
+      this.playerState = PLAYER_STATES.DAMAGED_RIGHT;
+      Object.assign(this.vel, { x: -4, y: this.jumpAmount });
     }
 
     setTimeout(this.takeDamageReset, this.iFrameDuration);
@@ -370,7 +397,12 @@ class Player extends Entity {
   takeDamageReset() {
     this.iFrames = false;
     this.damageReset = true;
-    console.log(`iframes reset`);
+
+    if (this.playerState === PLAYER_STATES.DAMAGED_LEFT) {
+      this.playerState = PLAYER_STATES.IDLE_LEFT;
+    } else {
+      this.playerState = PLAYER_STATES.IDLE_RIGHT;
+    }
   }
 }
 
