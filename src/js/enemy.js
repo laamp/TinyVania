@@ -3,11 +3,15 @@ import Entity from "./entity";
 class Enemy extends Entity {
     constructor(startVals) {
         super(startVals);
-        this.health = 20;
+        this.health = 3;
         this.dead = false;
         this.iFrames = false;
         this.collisionDamage = 1;
         this.recoverTime = 500;
+        this.boundaryCollision = {
+            bottom: false
+        };
+        this.calculateBounds();
     }
 
     render(ctx) {
@@ -25,6 +29,20 @@ class Enemy extends Entity {
         if (this.health === 0) this.dead = true;
 
         setTimeout(() => this.iFrames = false, this.recoverTime);
+    }
+
+    calculateBounds() {
+        this.boundaries = {
+            bottom: { x: this.pos.x + (this.size.w * 0.5), y: this.pos.y + this.size.h }
+        };
+    }
+
+    calcBoundsCollision(otherBox) {
+        if ((this.boundaries.bottom.x >= otherBox.pos.x) && (this.boundaries.bottom.x <= (otherBox.pos.x + otherBox.size.w)) &&
+            (this.boundaries.bottom.y >= otherBox.pos.y) && (this.boundaries.bottom.y <= (otherBox.pos.y + otherBox.size.h))) {
+            this.boundaryCollision.bottom = true;
+        }
+        return this.boundaryCollision.bottom;
     }
 }
 

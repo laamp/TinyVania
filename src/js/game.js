@@ -47,6 +47,8 @@ class Game {
     this.player = new Player(this.canvas);
     this.gameObjects.player.push(this.player);
     this.camera = new Camera(this.player, this.gameObjects, this.canvasCtx);
+
+    this.nullEnemy = new Enemy({});
   }
 
   step() {
@@ -58,12 +60,15 @@ class Game {
     this.player.applyVelocity(this.timeSinceLastFrame);
 
     const { enemies } = this.gameObjects;
-    enemies.forEach(enemy => {
-      if (enemy.dead) console.log('this enemy is ded');
+    for (let i = 0; i < enemies.length; i++) {
+      if (enemies[i].dead) {
+        console.log("Enemy killed");
+        enemies[i] = this.nullEnemy;
+      }
 
-      enemy.vel.y = 0;
-      enemy.applyVelocity(this.timeSinceLastFrame);
-    });
+      // enemies[i].vel.y = 0;
+      enemies[i].applyVelocity(this.timeSinceLastFrame);
+    }
 
     this.camera.update();
 
@@ -76,6 +81,8 @@ class Game {
     let currentTick = Date.now();
     this.timeSinceLastTick = currentTick - this.previousTickTime;
     this.previousTickTime = currentTick;
+
+    if (this.player.dead) this.init();
 
     if (this.player.boundaryCollision.bottom && this.player.vel.y > 0) {
       this.player.vel.y = 0;
@@ -90,25 +97,39 @@ class Game {
       this.player.boundaryCollision[k] = false;
     });
 
+    const { enemies } = this.gameObjects;
+
     // loop through game objects to detect collision
     const blockers = this.gameObjects.blockers;
     for (let i = 0; i < blockers.length; i++) {
+      //detecting player collision
       this.player.calcBoundsCollision(blockers[i]);
+      //detecting enemy collision
+      for (let j = 0; j < enemies.length; j++) {
+        enemies[j].calculateBounds();
+        enemies[j].calcBoundsCollision(blockers[i]);
+        if (enemies[j].boundaryCollision.bottom) {
+        }
+      }
     }
 
     // loop through enemies for player attacking
     // and enemy => player body collision
-    const { enemies } = this.gameObjects;
-    enemies.forEach(enemy => {
+    for (let i = 0; i < enemies.length; i++) {
       if (this.player.attackVolume !== null) {
-        let result = boxCollision(this.player.attackVolume, enemy);
-        if (result) enemy.takeDamage(this.player.attackPower);
+        let result = boxCollision(this.player.attackVolume, enemies[i]);
+        if (result) enemies[i].takeDamage(this.player.attackPower);
       }
 
-      if (boxCollision(this.player, enemy)) {
-        this.player.takeDamage(enemy.collisionDamage);
+      if (boxCollision(this.player, enemies[i])) {
+        this.player.takeDamage(enemies[i].collisionDamage);
       }
-    });
+
+      if (enemies[i].boundaryCollision.bottom) {
+        // console.log('breakpoint');
+        enemies[i].vel.y = 0;
+      }
+    }
   }
 
   update() {
@@ -131,7 +152,7 @@ class Game {
 
     this.gameObjects.blockers = this.gameObjects.blockers.concat(level.tiles);
     this.gameObjects.killVolumes = this.gameObjects.killVolumes.concat(level.killVolumes);
-    this.gameObjects.enemies = this.gameObjects.killVolumes.concat(level.enemies);
+    this.gameObjects.enemies = this.gameObjects.enemies.concat(level.enemies);
   }
 }
 

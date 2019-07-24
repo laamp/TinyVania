@@ -55,7 +55,8 @@ class Player extends Entity {
     this.facingLeft = false;
     this.debugColor = "magenta";
 
-    this.health = 10;
+    this.health = 5;
+    this.dead = false;
     this.iFrameDuration = 700;
     this.iFrames = false;
     this.damageReset = true;
@@ -381,6 +382,8 @@ class Player extends Entity {
 
     this.iFrames = true;
     this.health -= damageAmount;
+    console.log(`Player health is ${this.health}`);
+    if (this.health <= 0) this.dead = true;
     this.damageReset = false;
 
     if (this.facingLeft) {
