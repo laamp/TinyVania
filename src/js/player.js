@@ -90,8 +90,24 @@ class Player extends Entity {
     super.render(ctx);
   }
 
+  // every tick
   update() {
-    //sprite switching
+    this.calculateBounds();
+
+    // zero out player's velocity if they are on the ground or hit a ceiling
+    if (this.boundaryCollision.bottom && this.vel.y > 0) {
+      this.vel.y = 0;
+    }
+    if (this.boundaryCollision.top && this.vel.y < 0) {
+      this.vel.y = 0;
+    }
+
+    // reset collision for player
+    Object.keys(this.boundaryCollision).forEach(k => {
+      this.boundaryCollision[k] = false;
+    });
+
+    // sprite switching based on player state
     switch (this.playerState) {
       case PLAYER_STATES.IDLE_LEFT:
         this.sprites = characterIdleLeft;
@@ -136,7 +152,7 @@ class Player extends Entity {
         break;
     }
 
-    //is the player facing left?
+    // is the player facing left?
     if ((this.playerState === PLAYER_STATES.IDLE_LEFT) ||
       (this.playerState === PLAYER_STATES.RUNNING_LEFT) ||
       (this.playerState === PLAYER_STATES.JUMPING_LEFT) ||
@@ -147,12 +163,12 @@ class Player extends Entity {
 
     if (!this.actionResets.animatingAttack) this.animate();
 
-    //figure out attack frames
+    // figure out attack frames
     if (this.actionResets.animatingAttack && this.spriteIdx === 2) {
       this.attackFrames = true;
     }
 
-    //rendering for attack hitbox
+    // rendering for attack hitbox
     if (this.attackFrames) {
       if (!this.facingLeft) {
         this.attackVolume = new Entity({
@@ -248,7 +264,7 @@ class Player extends Entity {
       }
     }
 
-    //attacking
+    // attacking
     if (!userController.attack) this.actionResets.attackPressed = false;
     if (userController.attack &&
       this.actionResets.attack &&
@@ -257,7 +273,7 @@ class Player extends Entity {
       this.attack();
     }
 
-    //jumping
+    // jumping
     if (!userController.jump) this.actionResets.jumpPressed = false;
     if (!this.boundaryCollision.bottom) this.actionResets.onGround = false;
     if ((userController.jump) &&
@@ -372,6 +388,7 @@ class Player extends Entity {
     }
   }
 
+  // corrects player's position if they sink into the floor
   bump(amount) {
     this.pos.y -= amount;
     this.bumped = true;

@@ -3,10 +3,12 @@ import Entity from "./entity";
 class Enemy extends Entity {
     constructor(startVals) {
         super(startVals);
+        this.isNull = startVals.isNull || false;
         this.health = 3;
         this.dead = false;
         this.iFrames = false;
         this.collisionDamage = 1;
+        this.bumped = false;
         this.recoverTime = 500;
         this.boundaryCollision = {
             bottom: false
@@ -15,7 +17,7 @@ class Enemy extends Entity {
     }
 
     render(ctx) {
-        super.render(ctx);
+        if (!this.isNull) super.render(ctx);
     }
 
     takeDamage(damageAmount) {
@@ -23,8 +25,6 @@ class Enemy extends Entity {
 
         this.iFrames = true;
         this.health -= damageAmount;
-
-        console.log(`Enemy health is ${this.health}`);
 
         if (this.health === 0) this.dead = true;
 
@@ -40,9 +40,23 @@ class Enemy extends Entity {
     calcBoundsCollision(otherBox) {
         if ((this.boundaries.bottom.x >= otherBox.pos.x) && (this.boundaries.bottom.x <= (otherBox.pos.x + otherBox.size.w)) &&
             (this.boundaries.bottom.y >= otherBox.pos.y) && (this.boundaries.bottom.y <= (otherBox.pos.y + otherBox.size.h))) {
+
             this.boundaryCollision.bottom = true;
+
+            if (!this.bumped) {
+                let offset = this.boundaries.bottom.y - otherBox.pos.y;
+                this.bump(offset);
+            }
         }
-        return this.boundaryCollision.bottom;
+        if (!this.boundaryCollision.bottom) {
+            this.bumped = false;
+        }
+    }
+
+    // fix enemy position if they clip a wall
+    bump(amount) {
+        this.pos.y -= amount;
+        this.bumped = true;
     }
 }
 

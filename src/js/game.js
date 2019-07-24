@@ -48,9 +48,10 @@ class Game {
     this.gameObjects.player.push(this.player);
     this.camera = new Camera(this.player, this.gameObjects, this.canvasCtx);
 
-    this.nullEnemy = new Enemy({});
+    this.nullEnemy = new Enemy({ isNull: true });
   }
 
+  // every frame
   step() {
     let currentTime = Date.now();
     this.timeSinceLastFrame = currentTime - this.previousTime;
@@ -61,12 +62,6 @@ class Game {
 
     const { enemies } = this.gameObjects;
     for (let i = 0; i < enemies.length; i++) {
-      if (enemies[i].dead) {
-        console.log("Enemy killed");
-        enemies[i] = this.nullEnemy;
-      }
-
-      // enemies[i].vel.y = 0;
       enemies[i].applyVelocity(this.timeSinceLastFrame);
     }
 
@@ -77,38 +72,26 @@ class Game {
     }
   }
 
+  // every tick
   tick() {
     let currentTick = Date.now();
     this.timeSinceLastTick = currentTick - this.previousTickTime;
     this.previousTickTime = currentTick;
 
+    // restart game if player died
     if (this.player.dead) this.init();
-
-    if (this.player.boundaryCollision.bottom && this.player.vel.y > 0) {
-      this.player.vel.y = 0;
-    }
-    if (this.player.boundaryCollision.top && this.player.vel.y < 0) {
-      this.player.vel.y = 0;
-    }
-
-    this.player.calculateBounds();
     this.player.update();
-    Object.keys(this.player.boundaryCollision).forEach(k => {
-      this.player.boundaryCollision[k] = false;
-    });
-
-    const { enemies } = this.gameObjects;
 
     // loop through game objects to detect collision
-    const blockers = this.gameObjects.blockers;
+    const { blockers, enemies } = this.gameObjects;
     for (let i = 0; i < blockers.length; i++) {
-      //detecting player collision
+      // detecting player collision against environment
       this.player.calcBoundsCollision(blockers[i]);
-      //detecting enemy collision
+      // detecting enemy collision against environment
       for (let j = 0; j < enemies.length; j++) {
-        enemies[j].calculateBounds();
-        enemies[j].calcBoundsCollision(blockers[i]);
-        if (enemies[j].boundaryCollision.bottom) {
+        if (!enemies[j].isNull) {
+          enemies[j].calculateBounds();
+          enemies[j].calcBoundsCollision(blockers[i]);
         }
       }
     }
@@ -116,17 +99,22 @@ class Game {
     // loop through enemies for player attacking
     // and enemy => player body collision
     for (let i = 0; i < enemies.length; i++) {
+      // reassign enemy to null if dead
+      if (enemies[i].dead) enemies[i] = this.nullEnemy;
+
+      // when player is attacking, see if they hit an enemy
       if (this.player.attackVolume !== null) {
         let result = boxCollision(this.player.attackVolume, enemies[i]);
         if (result) enemies[i].takeDamage(this.player.attackPower);
       }
 
+      // if player touches enemy, deal damage
       if (boxCollision(this.player, enemies[i])) {
         this.player.takeDamage(enemies[i].collisionDamage);
       }
 
+      // stop enemy when they hit the ground
       if (enemies[i].boundaryCollision.bottom) {
-        // console.log('breakpoint');
         enemies[i].vel.y = 0;
       }
     }
@@ -142,7 +130,7 @@ class Game {
     const killVolumes = this.gameObjects.killVolumes;
     for (let i = 0; i < killVolumes.length; i++) {
       if (boxCollision(this.player, killVolumes[i])) {
-        this.init();
+        this.player.dead = true;
       }
     }
   }
