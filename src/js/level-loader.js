@@ -57,13 +57,13 @@ export const parseLevel = levelData => {
         stride++;
         break;
       case "z":
-        // let height = 50;
-        // let width = 50;
-        // enemies.push(new Enemy({
-        //   size: { w: width, h: height },
-        //   pos: { x: stride * tileSize - (width / 2), y: depth * tileSize - (height - tileSize) },
-        //   vel: { x: 0, y: 0 }
-        // }));
+        let height = 50;
+        let width = 50;
+        enemies.push(new Enemy({
+          size: { w: width, h: height },
+          pos: { x: stride * tileSize - (width / 2), y: depth * tileSize - (height - tileSize) },
+          vel: { x: 0, y: 0 }
+        }));
         zombieVolumes.push(new Entity({
           size: { w: tileSize, h: tileSize },
           pos: { x: stride * tileSize, y: depth * tileSize }

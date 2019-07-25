@@ -48,7 +48,7 @@ class Player extends Entity {
     super(startVals);
 
     this.attackId = 0;
-    this.attackSpeed = 500;
+    this.attackSpeed = 400;
     this.attackFrames = false;
     this.attackVolume = null;
     this.attackPower = 1;
@@ -102,12 +102,10 @@ class Player extends Entity {
     this.calculateBounds();
 
     // zero out player's velocity if they are on the ground or hit a ceiling
-    if (this.boundaryCollision.bottom && this.vel.y > 0) {
-      this.vel.y = 0;
-    }
-    if (this.boundaryCollision.top && this.vel.y < 0) {
-      this.vel.y = 0;
-    }
+    if (this.boundaryCollision.bottom && this.vel.y > 0) this.vel.y = 0;
+    if (this.boundaryCollision.top && this.vel.y < 0) this.vel.y = 0;
+    if (this.boundaryCollision.left && this.vel.x < 0) this.vel.x = 0;
+    if (this.boundaryCollision.right && this.vel.x > 0) this.vel.x = 0;
 
     // reset collision for player
     Object.keys(this.boundaryCollision).forEach(k => {
@@ -249,17 +247,14 @@ class Player extends Entity {
   }
 
   clearAnimInterval() {
-    console.log(`Interval id before clear ${this.animationIntervalId}`);
     clearInterval(this.animationIntervalId);
     this.animationIntervalId = null;
-    console.log(`Interval id after clear ${this.animationIntervalId}`);
   }
 
   startAnimInterval() {
     this.animationIntervalId = setInterval(() => {
       this.spriteIdx = (this.spriteIdx + 1) % this.sprites.length;
       if (!this.sprites[this.spriteIdx] || this.vel.x === 0) this.spriteIdx = 0;
-      console.log(`Interval set sprite index to ${this.spriteIdx}`);
     }, this.animSpeed);
   }
 
