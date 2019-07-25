@@ -41,7 +41,8 @@ class Game {
       player: [],
       playerAttack: [],
       killVolumes: [],
-      enemies: []
+      enemies: [],
+      zombieVolumes: []
     };
     this.loadLevel();
     this.player = new Player(this.canvas);
@@ -63,6 +64,7 @@ class Game {
     const { enemies } = this.gameObjects;
     for (let i = 0; i < enemies.length; i++) {
       enemies[i].applyVelocity(this.timeSinceLastFrame);
+      enemies[i].ai();
     }
 
     this.camera.update();
@@ -141,6 +143,7 @@ class Game {
     this.gameObjects.blockers = this.gameObjects.blockers.concat(level.tiles);
     this.gameObjects.killVolumes = this.gameObjects.killVolumes.concat(level.killVolumes);
     this.gameObjects.enemies = this.gameObjects.enemies.concat(level.enemies);
+    this.gameObjects.zombieVolumes = this.gameObjects.zombieVolumes.concat(level.zombieVolumes);
   }
 }
 

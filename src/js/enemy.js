@@ -14,6 +14,19 @@ class Enemy extends Entity {
             bottom: false
         };
         this.calculateBounds();
+
+        // remove for zombie
+        this.movingLeft = startVals.movingLeft || true;
+        this.moveSpeed = startVals.moveSpeed || 1;
+    }
+
+    ai() {
+        // remove for zombie
+        if (this.movingLeft) {
+            this.vel.x = -this.moveSpeed;
+        } else {
+            this.vel.x = this.moveSpeed;
+        }
     }
 
     render(ctx) {

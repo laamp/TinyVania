@@ -84,6 +84,13 @@ class Player extends Entity {
 
     this.takeDamage = this.takeDamage.bind(this);
     this.takeDamageReset = this.takeDamageReset.bind(this);
+
+    this.animSpeed = 150;
+    this.animationIntervalId = null;
+    this.startAnimInterval = this.startAnimInterval.bind(this);
+    this.clearAnimInterval = this.clearAnimInterval.bind(this);
+
+    this.startAnimInterval();
   }
 
   render(ctx) {
@@ -140,17 +147,16 @@ class Player extends Entity {
         this.sprites = characterWhipRight;
         break;
       case PLAYER_STATES.DAMAGED_LEFT:
-        this.spriteIdx = 0;
         this.sprites = characterDamageLeft;
         break;
       case PLAYER_STATES.DAMAGED_RIGHT:
-        this.spriteIdx = 0;
         this.sprites = characterDamageRight;
         break;
       default:
         this.sprites = [this.nullImg];
         break;
     }
+    if (!this.sprites[this.spriteIdx]) this.spriteIdx = 0;
 
     // is the player facing left?
     if ((this.playerState === PLAYER_STATES.IDLE_LEFT) ||
@@ -239,10 +245,22 @@ class Player extends Entity {
       } else if (this.playerState === PLAYER_STATES.ATTACKING_RIGHT) { //attacking right -> idle
         this.playerState = PLAYER_STATES.IDLE_RIGHT;
       }
-
-      this.spriteIdx = (this.spriteIdx + 1) % this.sprites.length;
-      if (!this.sprites[this.spriteIdx]) this.spriteIdx = 0;
     }
+  }
+
+  clearAnimInterval() {
+    console.log(`Interval id before clear ${this.animationIntervalId}`);
+    clearInterval(this.animationIntervalId);
+    this.animationIntervalId = null;
+    console.log(`Interval id after clear ${this.animationIntervalId}`);
+  }
+
+  startAnimInterval() {
+    this.animationIntervalId = setInterval(() => {
+      this.spriteIdx = (this.spriteIdx + 1) % this.sprites.length;
+      if (!this.sprites[this.spriteIdx] || this.vel.x === 0) this.spriteIdx = 0;
+      console.log(`Interval set sprite index to ${this.spriteIdx}`);
+    }, this.animSpeed);
   }
 
   input() {
@@ -270,6 +288,7 @@ class Player extends Entity {
       this.actionResets.attack &&
       !this.actionResets.attackPressed) {
       this.actionResets.attackPressed = true;
+      this.clearAnimInterval();
       this.attack();
     }
 
@@ -311,7 +330,7 @@ class Player extends Entity {
   attackReset() {
     Object.assign(this.actionResets, { animatingAttack: false, attack: true });
     this.attackFrames = false;
-    this.spriteIdx = 0;
+    this.startAnimInterval();
   }
 
   calculateBounds() {
@@ -399,7 +418,6 @@ class Player extends Entity {
 
     this.iFrames = true;
     this.health -= damageAmount;
-    console.log(`Player health is ${this.health}`);
     if (this.health <= 0) this.dead = true;
     this.damageReset = false;
 
