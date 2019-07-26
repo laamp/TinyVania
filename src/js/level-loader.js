@@ -10,6 +10,7 @@ export const levels = {
 };
 
 export const parseLevel = levelData => {
+  let playerSpawn = { x: 0, y: 0 };
   let tiles = [];
   let killVolumes = [];
   let enemies = [];
@@ -21,11 +22,15 @@ export const parseLevel = levelData => {
   let level = levelData.split("");
   for (let i = 0; i < level.length; i++) {
     switch (level[i]) {
-      case "\n":
+      case "\n": // new line
         stride = 0;
         depth++;
         break;
-      case "x":
+      case "P":
+        playerSpawn = { x: stride * tileSize, y: depth * tileSize };
+        stride++;
+        break;
+      case "x": // stone block
         tiles.push(new Entity({
           size: { w: tileSize, h: tileSize },
           pos: { x: stride * tileSize, y: depth * tileSize },
@@ -41,12 +46,12 @@ export const parseLevel = levelData => {
         }));
         stride++;
         break;
-      case "0":
+      case "0": // insta death tile
         killVolumes.push(new Entity({
           size: { w: tileSize, h: tileSize },
           pos: { x: stride * tileSize, y: depth * tileSize },
           vel: { x: 0, y: 0 },
-          color: randomColor(),
+          color: 'red',
           spriteOffset: {
             x: 0,
             y: 0,
@@ -56,21 +61,14 @@ export const parseLevel = levelData => {
         }));
         stride++;
         break;
-      case "z":
-        let height = 50;
-        let width = 50;
-        enemies.push(new Enemy({
-          size: { w: width, h: height },
-          pos: { x: stride * tileSize - (width / 2), y: depth * tileSize - (height - tileSize) },
-          vel: { x: 0, y: 0 }
-        }));
+      case "z": // zone that spawns zombies
         zombieVolumes.push(new Entity({
           size: { w: tileSize, h: tileSize },
           pos: { x: stride * tileSize, y: depth * tileSize }
         }));
         stride++;
         break;
-      case " ":
+      case " ": // blank space
         stride++;
         break;
       default:
@@ -79,5 +77,11 @@ export const parseLevel = levelData => {
     }
   }
 
-  return { tiles, killVolumes, enemies, zombieVolumes };
+  return {
+    playerSpawn,
+    tiles,
+    killVolumes,
+    enemies,
+    zombieVolumes
+  };
 };

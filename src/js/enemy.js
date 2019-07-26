@@ -11,12 +11,21 @@ class Enemy extends Entity {
         this.bumped = false;
         this.recoverTime = 500;
         this.boundaryCollision = {
-            bottom: false
+            bottom: false,
+            left: false,
+            right: false
         };
         this.calculateBounds();
 
+        this.ai = this.ai.bind(this);
+
         // remove for zombie
-        this.movingLeft = startVals.movingLeft || true;
+        if (startVals.movingLeft === undefined) {
+            this.movingLeft = true;
+        } else {
+            this.movingLeft = startVals.movingLeft;
+        }
+
         this.moveSpeed = startVals.moveSpeed || 1;
     }
 
@@ -46,11 +55,14 @@ class Enemy extends Entity {
 
     calculateBounds() {
         this.boundaries = {
-            bottom: { x: this.pos.x + (this.size.w * 0.5), y: this.pos.y + this.size.h }
+            bottom: { x: this.pos.x + (this.size.w * 0.5), y: this.pos.y + this.size.h },
+            left: { x: this.pos.x, y: this.pos.y + (this.size.h * 0.5) },
+            right: { x: this.pos.x + this.size.w, y: this.pos.y + (this.size.h * 0.5) }
         };
     }
 
     calcBoundsCollision(otherBox) {
+        // bottom collision detection
         if ((this.boundaries.bottom.x >= otherBox.pos.x) && (this.boundaries.bottom.x <= (otherBox.pos.x + otherBox.size.w)) &&
             (this.boundaries.bottom.y >= otherBox.pos.y) && (this.boundaries.bottom.y <= (otherBox.pos.y + otherBox.size.h))) {
 
@@ -63,6 +75,20 @@ class Enemy extends Entity {
         }
         if (!this.boundaryCollision.bottom) {
             this.bumped = false;
+        }
+
+        // left collision detection
+        if ((this.boundaries.left.x >= otherBox.pos.x) && (this.boundaries.left.x <= (otherBox.pos.x + otherBox.size.w)) &&
+            (this.boundaries.left.y >= otherBox.pos.y) && (this.boundaries.left.y <= (otherBox.pos.y + otherBox.size.h))) {
+            this.boundaryCollision.left = true;
+            this.dead = true;
+        }
+
+        // right collision detection
+        if ((this.boundaries.right.x >= otherBox.pos.x) && (this.boundaries.right.x <= (otherBox.pos.x + otherBox.size.w)) &&
+            (this.boundaries.right.y >= otherBox.pos.y) && (this.boundaries.right.y <= (otherBox.pos.y + otherBox.size.h))) {
+            this.boundaryCollision.right = true;
+            this.dead = true;
         }
     }
 

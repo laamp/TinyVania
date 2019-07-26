@@ -36,10 +36,11 @@ export const PLAYER_STATES = {
 };
 
 class Player extends Entity {
-  constructor(canvas) {
+  constructor({ spawnPos }) {
     let startVals = {
       size: { w: 58, h: 107 },
-      pos: { x: canvas.width / 2, y: canvas.height / 2 },
+      // pos: { x: canvas.width / 2, y: canvas.height / 2 },
+      pos: spawnPos,
       vel: { x: 0, y: 0 },
       color: randomColor(),
       sprites: characterWalkingRight,

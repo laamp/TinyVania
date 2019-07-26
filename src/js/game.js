@@ -31,6 +31,12 @@ class Game {
 
     this.tick = this.tick.bind(this);
     setInterval(this.tick);
+
+    //misc game variables
+    this.spawnZombies = false;
+    this.zombieSpawnIntervalId = null;
+    this.zombieSpawnSpeed = 1000;
+    this.zombieSpawning = this.zombieSpawning.bind(this);
   }
 
   init() {
@@ -45,7 +51,9 @@ class Game {
       zombieVolumes: []
     };
     this.loadLevel();
-    this.player = new Player(this.canvas);
+    this.player = new Player({
+      spawnPos: this.gameObjects.playerSpawn
+    });
     this.gameObjects.player.push(this.player);
     this.camera = new Camera(this.player, this.gameObjects, this.canvasCtx);
 
@@ -66,6 +74,8 @@ class Game {
       enemies[i].applyVelocity(this.timeSinceLastFrame);
       enemies[i].ai();
     }
+
+    this.zombieGenerator();
 
     this.camera.update();
 
@@ -111,7 +121,7 @@ class Game {
       }
 
       // if player touches enemy, deal damage
-      if (boxCollision(this.player, enemies[i])) {
+      if (boxCollision(this.player, enemies[i]) && !this.player.dead) {
         this.player.takeDamage(enemies[i].collisionDamage);
       }
 
@@ -140,10 +150,37 @@ class Game {
   loadLevel() {
     let level = parseLevel(levels[1]);
 
+    this.gameObjects.playerSpawn = level.playerSpawn;
     this.gameObjects.blockers = this.gameObjects.blockers.concat(level.tiles);
     this.gameObjects.killVolumes = this.gameObjects.killVolumes.concat(level.killVolumes);
     this.gameObjects.enemies = this.gameObjects.enemies.concat(level.enemies);
     this.gameObjects.zombieVolumes = this.gameObjects.zombieVolumes.concat(level.zombieVolumes);
+  }
+
+  zombieGenerator() {
+    this.spawnZombies = false;
+    const { zombieVolumes } = this.gameObjects;
+    zombieVolumes.forEach(volume => {
+      if (boxCollision(this.player, volume)) {
+        this.spawnZombies = true;
+      }
+    });
+    if (this.zombieSpawnIntervalId === null && this.spawnZombies) {
+      this.zombieSpawnIntervalId = setInterval(this.zombieSpawning, this.zombieSpawnSpeed);
+    }
+    if (this.zombieSpawnIntervalId !== null && !this.spawnZombies) {
+      clearInterval(this.zombieSpawnIntervalId);
+      this.zombieSpawnIntervalId = null;
+    }
+  }
+
+  zombieSpawning() {
+    this.gameObjects.enemies.push(new Enemy({
+      size: { w: 50, h: 50 },
+      pos: { x: 100, y: 30 },
+      color: "red",
+      movingLeft: false
+    }));
   }
 }
 

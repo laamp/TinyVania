@@ -1,4 +1,3 @@
-import { userController } from "./controller";
 import { globals } from "./util";
 import { bgImgs } from "./img-loader";
 
@@ -13,8 +12,8 @@ class Camera {
       top: 0.2,
       bottom: 0.9
     };
-    this.offsetX = 0;
-    this.offsetY = 0;
+    this.offsetX = -player.pos.x + (globals.screenWidth * 0.5);// + 500;
+    this.offsetY = -player.pos.y + (globals.screenHeight * 0.5);
 
     this.oldPosY = this.thePlayer.pos.y;
   }
