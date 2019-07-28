@@ -12,7 +12,7 @@ class Camera {
       top: 0.2,
       bottom: 0.9
     };
-    this.offsetX = -player.pos.x + (globals.screenWidth * 0.5);// + 500;
+    this.offsetX = -player.pos.x + (globals.screenWidth * 0.5);
     this.offsetY = -player.pos.y + (globals.screenHeight * 0.5);
 
     this.oldPosY = this.thePlayer.pos.y;

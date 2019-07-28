@@ -35,7 +35,7 @@ class Game {
     //misc game variables
     this.spawnZombies = false;
     this.zombieSpawnIntervalId = null;
-    this.zombieSpawnSpeed = 1000;
+    this.zombieSpawnSpeed = 2000;
     this.zombieSpawning = this.zombieSpawning.bind(this);
   }
 
@@ -126,9 +126,10 @@ class Game {
       }
 
       // stop enemy when they hit the ground
-      if (enemies[i].boundaryCollision.bottom) {
+      if (enemies[i].boundaryCollision.bottom && enemies[i].vel.y > 0) {
         enemies[i].vel.y = 0;
       }
+      enemies[i].boundaryCollision.bottom = false;
     }
   }
 
@@ -175,11 +176,28 @@ class Game {
   }
 
   zombieSpawning() {
+    let moveLeft, startPos = undefined;
+    const num = Math.random();
+    if (num < 0.5) {
+      moveLeft = false;
+      startPos = {
+        x: -this.camera.offsetX - 100,
+        y: this.player.pos.y
+      };
+    } else {
+      moveLeft = true;
+      startPos = {
+        x: -this.camera.offsetX + globals.screenWidth + 50,
+        y: this.player.pos.y
+      };
+    }
+    console.log(moveLeft, startPos);
+
     this.gameObjects.enemies.push(new Enemy({
       size: { w: 50, h: 50 },
-      pos: { x: 100, y: 30 },
+      pos: startPos,
       color: "red",
-      movingLeft: false
+      movingLeft: moveLeft
     }));
   }
 }

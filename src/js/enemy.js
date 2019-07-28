@@ -4,7 +4,7 @@ class Enemy extends Entity {
     constructor(startVals) {
         super(startVals);
         this.isNull = startVals.isNull || false;
-        this.health = 3;
+        this.health = 1;
         this.dead = false;
         this.iFrames = false;
         this.collisionDamage = 1;
@@ -40,6 +40,10 @@ class Enemy extends Entity {
 
     render(ctx) {
         if (!this.isNull) super.render(ctx);
+    }
+
+    update() {
+
     }
 
     takeDamage(damageAmount) {
