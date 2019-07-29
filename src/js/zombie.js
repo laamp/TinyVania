@@ -1,4 +1,16 @@
 import Enemy from "./enemy";
+import {
+    zombieRiseLeft,
+    zombieRiseRight,
+    zombieLeft,
+    zombieRight
+} from "./img-loader";
+
+const ZOMBIE_STATES = {
+    SPAWNING_LEFT: "SPAWNING_LEFT",
+    MOVING_LEFT: "MOVING_LEFT",
+    DEATH: "DEATH"
+};
 
 class Zombie extends Enemy {
     constructor(startVals) {

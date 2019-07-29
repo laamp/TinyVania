@@ -18,7 +18,7 @@ import {
   characterDeadRight
 } from "./img-loader";
 
-export const PLAYER_STATES = {
+const PLAYER_STATES = {
   IDLE_LEFT: "IDLE_LEFT",
   IDLE_RIGHT: "IDLE_RIGHT",
   RUNNING_LEFT: "RUNNING_LEFT",
@@ -39,7 +39,6 @@ class Player extends Entity {
   constructor({ spawnPos }) {
     let startVals = {
       size: { w: 58, h: 107 },
-      // pos: { x: canvas.width / 2, y: canvas.height / 2 },
       pos: spawnPos,
       vel: { x: 0, y: 0 },
       color: randomColor(),

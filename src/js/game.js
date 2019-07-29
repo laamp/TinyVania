@@ -6,7 +6,7 @@ import { levels, parseLevel } from "./level-loader";
 import { bindKeyHandlers } from "./controller";
 import { globals, boxCollision } from "./util";
 
-export const GAME_STATES = {
+const GAME_STATES = {
   MENU: "MENU",
   GAME_PLAYING: "GAME_PLAYING",
   GAME_PAUSED: "GAME_PAUSED"
