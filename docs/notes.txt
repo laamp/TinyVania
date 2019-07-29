@@ -1,3 +1,1 @@
-- cause zombies to randomly spawn from both sides of the screen
-- refactor enemy code into enemy script
-- move zombie behavior to its own class
+- hook up sprites for zombie (spawning, walking, death)

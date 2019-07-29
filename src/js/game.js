@@ -1,6 +1,7 @@
 import Player from "./player";
 import Camera from "./camera";
 import Enemy from "./enemy";
+import Zombie from "./zombie";
 import { levels, parseLevel } from "./level-loader";
 import { bindKeyHandlers } from "./controller";
 import { globals, boxCollision } from "./util";
@@ -125,11 +126,7 @@ class Game {
         this.player.takeDamage(enemies[i].collisionDamage);
       }
 
-      // stop enemy when they hit the ground
-      if (enemies[i].boundaryCollision.bottom && enemies[i].vel.y > 0) {
-        enemies[i].vel.y = 0;
-      }
-      enemies[i].boundaryCollision.bottom = false;
+      enemies[i].update();
     }
   }
 
@@ -176,7 +173,7 @@ class Game {
   }
 
   zombieSpawning() {
-    let moveLeft, startPos = undefined;
+    let moveLeft, startPos;
     const num = Math.random();
     if (num < 0.5) {
       moveLeft = false;
@@ -191,9 +188,8 @@ class Game {
         y: this.player.pos.y
       };
     }
-    console.log(moveLeft, startPos);
 
-    this.gameObjects.enemies.push(new Enemy({
+    this.gameObjects.enemies.push(new Zombie({
       size: { w: 50, h: 50 },
       pos: startPos,
       color: "red",

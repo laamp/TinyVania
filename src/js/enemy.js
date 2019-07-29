@@ -18,24 +18,9 @@ class Enemy extends Entity {
         this.calculateBounds();
 
         this.ai = this.ai.bind(this);
-
-        // remove for zombie
-        if (startVals.movingLeft === undefined) {
-            this.movingLeft = true;
-        } else {
-            this.movingLeft = startVals.movingLeft;
-        }
-
-        this.moveSpeed = startVals.moveSpeed || 1;
     }
 
     ai() {
-        // remove for zombie
-        if (this.movingLeft) {
-            this.vel.x = -this.moveSpeed;
-        } else {
-            this.vel.x = this.moveSpeed;
-        }
     }
 
     render(ctx) {
@@ -43,7 +28,11 @@ class Enemy extends Entity {
     }
 
     update() {
-
+        // stop enemy when they hit the ground
+        if (this.boundaryCollision.bottom && this.vel.y > 0) {
+            this.vel.y = 0;
+        }
+        this.boundaryCollision.bottom = false;
     }
 
     takeDamage(damageAmount) {
