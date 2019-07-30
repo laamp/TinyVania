@@ -3,7 +3,6 @@ import Entity from "./entity";
 class Enemy extends Entity {
     constructor(startVals) {
         super(startVals);
-        this.isNull = startVals.isNull || false;
         this.health = 1;
         this.dead = false;
         this.iFrames = false;
@@ -24,7 +23,7 @@ class Enemy extends Entity {
     }
 
     render(ctx) {
-        if (!this.isNull) super.render(ctx);
+        super.render(ctx);
     }
 
     update() {

@@ -64,7 +64,9 @@ class Camera {
     layerNames.forEach(name => {
       const renderObjs = this.gameObjects[name];
       for (let i = 0; i < renderObjs.length; i++) {
-        renderObjs[i].render(this.canvasCtx);
+        if (renderObjs[i] !== null) {
+          renderObjs[i].render(this.canvasCtx);
+        }
       }
     });
 

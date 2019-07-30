@@ -57,8 +57,6 @@ class Game {
     });
     this.gameObjects.player.push(this.player);
     this.camera = new Camera(this.player, this.gameObjects, this.canvasCtx);
-
-    this.nullEnemy = new Enemy({ isNull: true });
   }
 
   // every frame
@@ -72,8 +70,10 @@ class Game {
 
     const { enemies } = this.gameObjects;
     for (let i = 0; i < enemies.length; i++) {
-      enemies[i].applyVelocity(this.timeSinceLastFrame);
-      enemies[i].ai();
+      if (enemies[i] !== null) {
+        enemies[i].applyVelocity(this.timeSinceLastFrame);
+        enemies[i].ai();
+      }
     }
 
     this.zombieGenerator();
@@ -102,7 +102,7 @@ class Game {
       this.player.calcBoundsCollision(blockers[i]);
       // detecting enemy collision against environment
       for (let j = 0; j < enemies.length; j++) {
-        if (!enemies[j].isNull) {
+        if (enemies[j] !== null) {
           enemies[j].calculateBounds();
           enemies[j].calcBoundsCollision(blockers[i]);
         }
@@ -112,21 +112,24 @@ class Game {
     // loop through enemies for player attacking
     // and enemy => player body collision
     for (let i = 0; i < enemies.length; i++) {
-      // reassign enemy to null if dead
-      if (enemies[i].dead) enemies[i] = this.nullEnemy;
+      if (enemies[i] !== null) {
 
-      // when player is attacking, see if they hit an enemy
-      if (this.player.attackVolume !== null) {
-        let result = boxCollision(this.player.attackVolume, enemies[i]);
-        if (result) enemies[i].takeDamage(this.player.attackPower);
+        // when player is attacking, see if they hit an enemy
+        if (this.player.attackVolume !== null) {
+          let result = boxCollision(this.player.attackVolume, enemies[i]);
+          if (result) enemies[i].takeDamage(this.player.attackPower);
+        }
+
+        // if player touches enemy, deal damage
+        if (boxCollision(this.player, enemies[i]) && !this.player.dead) {
+          this.player.takeDamage(enemies[i].collisionDamage);
+        }
+
+        enemies[i].update();
+
+        // reassign enemy to null if dead
+        if (enemies[i].dead) enemies[i] = null;
       }
-
-      // if player touches enemy, deal damage
-      if (boxCollision(this.player, enemies[i]) && !this.player.dead) {
-        this.player.takeDamage(enemies[i].collisionDamage);
-      }
-
-      enemies[i].update();
     }
   }
 
@@ -190,9 +193,7 @@ class Game {
     }
 
     this.gameObjects.enemies.push(new Zombie({
-      size: { w: 50, h: 50 },
       pos: startPos,
-      color: "red",
       movingLeft: moveLeft
     }));
   }

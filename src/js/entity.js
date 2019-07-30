@@ -26,6 +26,15 @@ class Entity {
         this.size.h
       );
     } else {
+      /* v for debug v */
+      // ctx.fillStyle = this.color;
+      // ctx.fillRect(
+      //   this.pos.x,
+      //   this.pos.y,
+      //   this.size.w,
+      //   this.size.h
+      // );
+      /* ^ for debug ^ */
       ctx.drawImage(
         this.sprites[this.spriteIdx],
         this.pos.x + this.spriteOffset.x,
