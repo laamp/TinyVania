@@ -40,8 +40,6 @@ class Enemy extends Entity {
         this.iFrames = true;
         this.health -= damageAmount;
 
-        if (this.health === 0) this.dead = true;
-
         setTimeout(() => this.iFrames = false, this.recoverTime);
     }
 
@@ -73,14 +71,12 @@ class Enemy extends Entity {
         if ((this.boundaries.left.x >= otherBox.pos.x) && (this.boundaries.left.x <= (otherBox.pos.x + otherBox.size.w)) &&
             (this.boundaries.left.y >= otherBox.pos.y) && (this.boundaries.left.y <= (otherBox.pos.y + otherBox.size.h))) {
             this.boundaryCollision.left = true;
-            this.dead = true;
         }
 
         // right collision detection
         if ((this.boundaries.right.x >= otherBox.pos.x) && (this.boundaries.right.x <= (otherBox.pos.x + otherBox.size.w)) &&
             (this.boundaries.right.y >= otherBox.pos.y) && (this.boundaries.right.y <= (otherBox.pos.y + otherBox.size.h))) {
             this.boundaryCollision.right = true;
-            this.dead = true;
         }
     }
 

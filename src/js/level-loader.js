@@ -64,7 +64,8 @@ export const parseLevel = levelData => {
       case "z": // zone that spawns zombies
         zombieVolumes.push(new Entity({
           size: { w: tileSize, h: tileSize },
-          pos: { x: stride * tileSize, y: depth * tileSize }
+          pos: { x: stride * tileSize, y: depth * tileSize },
+          color: 'rgba(255, 0, 0, 0.25)'
         }));
         stride++;
         break;

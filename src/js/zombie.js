@@ -4,23 +4,23 @@ import {
     zombieRiseRight,
     zombieLeft,
     zombieRight,
-    characterIdleLeft
+    enemyDeath
 } from "./img-loader";
-
-const ZOMBIE_STATES = {
-    SPAWNING_LEFT: "SPAWNING_LEFT",
-    SPAWNING_RIGHT: "SPAWNING_RIGHT",
-    MOVING_LEFT: "MOVING_LEFT",
-    MOVING_RIGHT: "MOVING_RIGHT",
-    DEATH: "DEATH"
-};
 
 class Zombie extends Enemy {
     constructor(startVals) {
         super(startVals);
-        this.moveSpeed = startVals.moveSpeed || 1;
-        this.size = { w: 60, h: 100 };
-        this.spriteOffset = { x: -30, y: -30, w: 110, h: 130 };
+        this.moveSpeed = startVals.moveSpeed || 0;
+        this.size = {
+            w: 60,
+            h: 100
+        };
+        this.spriteOffset = {
+            x: -30,
+            y: -30,
+            w: 110,
+            h: 130
+        };
         this.color = "white";
 
         if (startVals.movingLeft === undefined) {
@@ -30,20 +30,66 @@ class Zombie extends Enemy {
         }
 
         if (this.movingLeft) {
-            this.sprites = zombieLeft;
+            this.sprites = zombieRiseLeft;
         } else {
-            this.sprites = zombieRight;
+            this.sprites = zombieRiseRight;
         }
 
+        this.spawnAnimation = this.spawnAnimation.bind(this);
         this.animate = this.animate.bind(this);
-        this.animationIntervalId = setInterval(this.animate, 250);
+        this.deathAnimation = this.deathAnimation.bind(this);
+
+        this.animationIntervalId = null;
+        this.deathAnimationId = null;
+        this.spawnId = setInterval(this.spawnAnimation, 400);
     }
 
     ai() {
-        if (this.movingLeft) {
-            this.vel.x = -this.moveSpeed;
-        } else {
-            this.vel.x = this.moveSpeed;
+        if (this.health > 0 && this.deathAnimationId === null) {
+            if (this.movingLeft) {
+                this.vel.x = -this.moveSpeed;
+            } else {
+                this.vel.x = this.moveSpeed;
+            }
+        }
+
+        if (this.deathAnimationId === null) {
+            if (this.health <= 0 || this.boundaryCollision.left || this.boundaryCollision.right) {
+                this.health = 0;
+                this.sprites = enemyDeath;
+                this.spriteIdx = 0;
+                clearInterval(this.animationIntervalId);
+                clearInterval(this.spawnId);
+                this.vel = {
+                    x: 0,
+                    y: 0
+                };
+                this.deathAnimationId = setInterval(this.deathAnimation, 200);
+            }
+        }
+    }
+
+    spawnAnimation() {
+        this.spriteIdx++;
+        if (this.spriteIdx >= this.sprites.length) {
+            clearInterval(this.spawnId);
+            this.spriteIdx = 0;
+            if (this.movingLeft) {
+                this.sprites = zombieLeft;
+            } else {
+                this.sprites = zombieRight;
+            }
+            this.moveSpeed = 1;
+            this.animationIntervalId = setInterval(this.animate, 250);
+        }
+    }
+
+    deathAnimation() {
+        this.spriteIdx++;
+        if (this.spriteIdx >= this.sprites.length) {
+            clearInterval(this.deathAnimationId);
+            this.dead = true;
+            // this.spriteIdx = 0;
         }
     }
 

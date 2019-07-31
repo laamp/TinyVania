@@ -1,6 +1,5 @@
 import Player from "./player";
 import Camera from "./camera";
-import Enemy from "./enemy";
 import Zombie from "./zombie";
 import { levels, parseLevel } from "./level-loader";
 import { bindKeyHandlers } from "./controller";
@@ -121,8 +120,10 @@ class Game {
         }
 
         // if player touches enemy, deal damage
-        if (boxCollision(this.player, enemies[i]) && !this.player.dead) {
-          this.player.takeDamage(enemies[i].collisionDamage);
+        if (enemies[i].health > 0) {
+          if (boxCollision(this.player, enemies[i]) && !this.player.dead) {
+            this.player.takeDamage(enemies[i].collisionDamage);
+          }
         }
 
         enemies[i].update();

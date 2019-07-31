@@ -35,13 +35,15 @@ class Entity {
       //   this.size.h
       // );
       /* ^ for debug ^ */
-      ctx.drawImage(
-        this.sprites[this.spriteIdx],
-        this.pos.x + this.spriteOffset.x,
-        this.pos.y + this.spriteOffset.y,
-        this.spriteOffset.w,
-        this.spriteOffset.h
-      );
+      if (this.sprites[this.spriteIdx]) {
+        ctx.drawImage(
+          this.sprites[this.spriteIdx],
+          this.pos.x + this.spriteOffset.x,
+          this.pos.y + this.spriteOffset.y,
+          this.spriteOffset.w,
+          this.spriteOffset.h
+        );
+      }
     }
   }
 
