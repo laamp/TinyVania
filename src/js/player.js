@@ -55,7 +55,8 @@ class Player extends Entity {
     this.facingLeft = false;
     this.debugColor = "magenta";
 
-    this.health = 5;
+    this.totalHealth = 10;
+    this.health = 10;
     this.dead = false;
     this.iFrameDuration = 700;
     this.iFrames = false;

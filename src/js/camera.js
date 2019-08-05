@@ -1,5 +1,9 @@
-import { globals } from "./util";
-import { bgImgs } from "./img-loader";
+import {
+  globals
+} from "./util";
+import {
+  bgImgs
+} from "./img-loader";
 
 class Camera {
   constructor(player, gameObjects, canvasCtx) {
@@ -71,6 +75,30 @@ class Camera {
     });
 
     this.thePlayer.render(this.canvasCtx);
+
+    //render the HUD
+    //background
+    this.canvasCtx.fillStyle = 'black';
+    this.canvasCtx.fillRect(0 - this.offsetX, 0 - this.offsetY, globals.screenWidth, 50);
+
+    //player text
+    this.canvasCtx.fillStyle = 'white';
+    this.canvasCtx.font = 'bold 28px monospace';
+    this.canvasCtx.fillText('PLAYER', 12 - this.offsetX, 35 - this.offsetY);
+
+    //health rectangles
+    let totalHealth = this.thePlayer.totalHealth;
+    let currentHealth = this.thePlayer.health;
+    for (let i = 0; i < totalHealth; i++) {
+      if (i + 1 <= currentHealth) {
+        this.canvasCtx.fillStyle = 'red';
+        this.canvasCtx.fillRect(125 + (i * 20) - this.offsetX, 13 - this.offsetY, 15, 24);
+      } else {
+        this.canvasCtx.fillStyle = 'transparent';
+        this.canvasCtx.strokeStyle = 'white';
+        this.canvasCtx.strokeRect(125 + (i * 20) - this.offsetX, 13 - this.offsetY, 15, 24);
+      }
+    }
   }
 }
 
