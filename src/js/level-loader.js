@@ -1,5 +1,6 @@
 import Entity from "./entity";
 import Enemy from "./enemy";
+import Ghost from "./ghost";
 import { randomColor, transparentColor } from "./util";
 
 import level01 from "../levels/level01";
@@ -66,6 +67,14 @@ export const parseLevel = levelData => {
           size: { w: tileSize, h: tileSize },
           pos: { x: stride * tileSize, y: depth * tileSize },
           color: 'rgba(255, 0, 0, 0.25)'
+        }));
+        stride++;
+        break;
+      case "g":
+        enemies.push(new Ghost({
+          pos: { x: stride * tileSize, y: depth * tileSize },
+          vel: { x: 0, y: 0 },
+          color: 'red'
         }));
         stride++;
         break;

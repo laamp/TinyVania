@@ -60,6 +60,15 @@ import enemy_death3 from "../sprites/enemy-death/enemy-death-3.png";
 import enemy_death4 from "../sprites/enemy-death/enemy-death-4.png";
 import enemy_death5 from "../sprites/enemy-death/enemy-death-5.png";
 
+import ghost1_right from "../sprites/ghost/ghost-1.png";
+import ghost1_left from "../sprites/ghost/ghost-1-flipped.png";
+import ghost2_right from "../sprites/ghost/ghost-2.png";
+import ghost2_left from "../sprites/ghost/ghost-2-flipped.png";
+import ghost3_right from "../sprites/ghost/ghost-3.png";
+import ghost3_left from "../sprites/ghost/ghost-3-flipped.png";
+import ghost4_right from "../sprites/ghost/ghost-4.png";
+import ghost4_left from "../sprites/ghost/ghost-4-flipped.png";
+
 const walk1LeftImg = new Image();
 walk1LeftImg.src = walk1_left;
 const walk1RightImg = new Image();
@@ -179,6 +188,23 @@ enemyDeath4.src = enemy_death4;
 const enemyDeath5 = new Image();
 enemyDeath5.src = enemy_death5;
 
+const ghost1Left = new Image();
+ghost1Left.src = ghost1_left;
+const ghost2Left = new Image();
+ghost2Left.src = ghost2_left;
+const ghost3Left = new Image();
+ghost3Left.src = ghost3_left;
+const ghost4Left = new Image();
+ghost4Left.src = ghost4_left;
+const ghost1Right = new Image();
+ghost1Right.src = ghost1_right;
+const ghost2Right = new Image();
+ghost2Right.src = ghost2_right;
+const ghost3Right = new Image();
+ghost3Right.src = ghost3_right;
+const ghost4Right = new Image();
+ghost4Right.src = ghost4_right;
+
 export const characterIdleLeft = [walk1LeftImg];
 export const characterIdleRight = [walk1RightImg];
 export const characterWalkingLeft = [walk1LeftImg, walk2LeftImg, walk3LeftImg, walk4LeftImg];
@@ -203,3 +229,6 @@ export const zombieRiseLeft = [skeletonRise1Left, skeletonRise2Left, skeletonRis
 export const zombieRiseRight = [skeletonRise1Right, skeletonRise2Right, skeletonRise3Right, skeletonRise4Right, skeletonRise5Right, skeletonRise6Right];
 
 export const enemyDeath = [enemyDeath1, enemyDeath2, enemyDeath3, enemyDeath4, enemyDeath5];
+
+export const ghostRight = [ghost1Right, ghost2Right, ghost3Right, ghost4Right];
+export const ghostLeft = [ghost1Left, ghost2Left, ghost3Left, ghost4Left];
