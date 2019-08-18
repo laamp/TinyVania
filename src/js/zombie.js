@@ -89,7 +89,6 @@ class Zombie extends Enemy {
         if (this.spriteIdx >= this.sprites.length) {
             clearInterval(this.deathAnimationId);
             this.dead = true;
-            // this.spriteIdx = 0;
         }
     }
 

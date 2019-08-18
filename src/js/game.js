@@ -56,6 +56,8 @@ class Game {
     });
     this.gameObjects.player.push(this.player);
     this.camera = new Camera(this.player, this.gameObjects, this.canvasCtx);
+
+    this.gameObjects.enemies.forEach(enemy => enemy.playerLoc = this.player.pos);
   }
 
   // every frame
