@@ -55,8 +55,8 @@ class Player extends Entity {
     this.facingLeft = false;
     this.debugColor = "magenta";
 
-    this.totalHealth = 10;
-    this.health = 10;
+    this.totalHealth = 6;
+    this.health = 6;
     this.dead = false;
     this.iFrameDuration = 700;
     this.iFrames = false;
@@ -88,6 +88,8 @@ class Player extends Entity {
 
     this.animSpeed = 150;
     this.animationIntervalId = null;
+    this.deathAnimId = null;
+    this.deathAnimation = this.deathAnimation.bind(this);
     this.startAnimInterval = this.startAnimInterval.bind(this);
     this.clearAnimInterval = this.clearAnimInterval.bind(this);
 
@@ -150,6 +152,12 @@ class Player extends Entity {
         break;
       case PLAYER_STATES.DAMAGED_RIGHT:
         this.sprites = characterDamageRight;
+        break;
+      case PLAYER_STATES.DEAD_LEFT:
+        this.sprite = characterDeadLeft;
+        break;
+      case PLAYER_STATES.DEAD_RIGHT:
+        this.sprite = characterDeadRight;
         break;
       default:
         this.sprites = [this.nullImg];
@@ -257,6 +265,12 @@ class Player extends Entity {
       this.spriteIdx = (this.spriteIdx + 1) % this.sprites.length;
       if (!this.sprites[this.spriteIdx] || this.vel.x === 0) this.spriteIdx = 0;
     }, this.animSpeed);
+  }
+
+  deathAnimation() {
+    this.spriteIdx = 0;
+    if (this.facingLeft) this.playerState = PLAYER_STATES.DEAD_LEFT;
+    else this.playerState = PLAYER_STATES.DEAD_RIGHT;
   }
 
   input() {
@@ -414,7 +428,10 @@ class Player extends Entity {
 
     this.iFrames = true;
     this.health -= damageAmount;
-    if (this.health <= 0) this.dead = true;
+    if (this.health <= 0) {
+      this.dead = true;
+      this.deathAnimation();
+    }
     this.damageReset = false;
 
     if (this.facingLeft) {

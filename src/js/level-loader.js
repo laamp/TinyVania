@@ -31,6 +31,24 @@ export const parseLevel = levelData => {
         playerSpawn = { x: stride * tileSize, y: depth * tileSize };
         stride++;
         break;
+      case "i": // invisible wall
+        tiles.push(new Entity({
+          size: { w: tileSize, h: tileSize },
+          pos: { x: stride * tileSize, y: depth * tileSize },
+          vel: { x: 0, y: 0 },
+          color: 'transparent'
+        }));
+        stride++;
+        break;
+      case "f": // filler wall
+        tiles.push(new Entity({
+          size: { w: tileSize, h: tileSize },
+          pos: { x: stride * tileSize, y: depth * tileSize },
+          vel: { x: 0, y: 0 },
+          color: 'rgb(41, 41, 41)'
+        }));
+        stride++;
+        break;
       case "x": // stone block
         tiles.push(new Entity({
           size: { w: tileSize, h: tileSize },
@@ -52,7 +70,8 @@ export const parseLevel = levelData => {
           size: { w: tileSize, h: tileSize },
           pos: { x: stride * tileSize, y: depth * tileSize },
           vel: { x: 0, y: 0 },
-          color: 'red',
+          // color: 'rgba(250, 35, 0, 0.7)',
+          color: 'transparent',
           spriteOffset: {
             x: 0,
             y: 0,
@@ -66,7 +85,7 @@ export const parseLevel = levelData => {
         zombieVolumes.push(new Entity({
           size: { w: tileSize, h: tileSize },
           pos: { x: stride * tileSize, y: depth * tileSize },
-          color: 'rgba(255, 0, 0, 0.25)'
+          color: 'rgba(0, 200, 0, 0.25)'
         }));
         stride++;
         break;

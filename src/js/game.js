@@ -35,7 +35,7 @@ class Game {
     //misc game variables
     this.spawnZombies = false;
     this.zombieSpawnIntervalId = null;
-    this.zombieSpawnSpeed = 2000;
+    this.zombieSpawnSpeed = 1300;
     this.zombieSpawning = this.zombieSpawning.bind(this);
   }
 
@@ -44,11 +44,11 @@ class Game {
     this.gameObjects = {
       noCollision: [],
       blockers: [],
+      zombieVolumes: [],
       player: [],
       playerAttack: [],
       killVolumes: [],
-      enemies: [],
-      zombieVolumes: []
+      enemies: []
     };
     this.loadLevel();
     this.player = new Player({
