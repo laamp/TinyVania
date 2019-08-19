@@ -1,31 +1,23 @@
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                                                                                         P                                 xxxx
-                                                                                  xxxxxxxxxxxxxxxxxxxxxxxxxxxx     xxxxxxx     xxxxxxxxxxxxdd
+                                                                                    !!!               g                       g
+                                                                                    !!!
+                      gg                                                            !!!
+                                                                                    !!!                                                                      g
+                                                                                    xxxxxx
+                                                       g                            ffffffxx  
+    g                                                                               ffffffffxxzzzzzzzzzzzzzzzz                 zzzzzzz   
+                                                                                    ffffffffffxxxxxxxxxxxxxxxx     xxxxxxx     xxxxxxx             xxxx
+                                                                                  g ffffffffffffffffffffffffff     fffffff     fffffff xxxx        ffff
+                                                                                                                                                   ffff
+                                                                                                                                               xxxxffff
+                         g                                                                                                               g    
+                                                                                     zzzzzzzzzzzzzzzzzzzzzzzzz     zzzzzzz                 xxxx
+                                                                                  xxxxxxxxxxxxxxxxxxxxxxxxxxxx     xxxxxxx     xxxxxxxxxxxxffff
                                                                                 xxffffffffffffffffffffffffffff     fffffff     ffffffffffff
                                                                               xxffffffff
                                                                             xxffffffff                     000000000000000000000000
-      xxxxx                                                               xxffffffffff                         00000000000000000
+      xxxxx    P              g          g             gg                 xxffffffffff                         00000000000000000
      xfffff                                                             xxfffffffff
     xffffffzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzxxffffffff 
    xfffffffzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzxxfffffff 
@@ -33,9 +25,6 @@
 xxfffffffffxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxffffffff
 ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 
-000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000

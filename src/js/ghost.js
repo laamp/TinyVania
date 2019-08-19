@@ -71,6 +71,13 @@ class Ghost extends Enemy {
             }
         }
 
+        if (this.health > 0) {
+            if (this.vel.x < 0) {
+                this.sprites = ghostLeft;
+            } else {
+                this.sprites = ghostRight;
+            }
+        }
     }
 
     distToPlayer() {

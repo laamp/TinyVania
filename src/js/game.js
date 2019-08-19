@@ -8,7 +8,8 @@ import { globals, boxCollision } from "./util";
 const GAME_STATES = {
   MENU: "MENU",
   GAME_PLAYING: "GAME_PLAYING",
-  GAME_PAUSED: "GAME_PAUSED"
+  GAME_PAUSED: "GAME_PAUSED",
+  GAME_WON: "GAME_WON"
 };
 
 class Game {
@@ -37,9 +38,11 @@ class Game {
     this.zombieSpawnIntervalId = null;
     this.zombieSpawnSpeed = 1300;
     this.zombieSpawning = this.zombieSpawning.bind(this);
+    this.needsReset = false;
   }
 
   init() {
+    this.needsReset = false;
     this.gameState = GAME_STATES.GAME_PLAYING;
     this.gameObjects = {
       noCollision: [],
@@ -48,7 +51,8 @@ class Game {
       player: [],
       playerAttack: [],
       killVolumes: [],
-      enemies: []
+      enemies: [],
+      victoryTiles: []
     };
     this.loadLevel();
     this.player = new Player({
@@ -93,11 +97,11 @@ class Game {
     this.previousTickTime = currentTick;
 
     // restart game if player died
-    if (this.player.dead) this.init();
+    if (this.player.dead || this.needsReset) this.init();
     this.player.update();
 
     // loop through game objects to detect collision
-    const { blockers, enemies } = this.gameObjects;
+    const { blockers, enemies, victoryTiles } = this.gameObjects;
     for (let i = 0; i < blockers.length; i++) {
       // detecting player collision against environment
       this.player.calcBoundsCollision(blockers[i]);
@@ -134,6 +138,16 @@ class Game {
         if (enemies[i].dead) enemies[i] = null;
       }
     }
+
+    // check if player won
+    for (let i = 0; i < victoryTiles.length; i++) {
+      if (boxCollision(this.player, victoryTiles[i])) {
+        this.camera.victoryScreen = true;
+        setTimeout(() => {
+          this.needsReset = true;
+        }, 2000);
+      }
+    }
   }
 
   update() {
@@ -159,6 +173,7 @@ class Game {
     this.gameObjects.killVolumes = this.gameObjects.killVolumes.concat(level.killVolumes);
     this.gameObjects.enemies = this.gameObjects.enemies.concat(level.enemies);
     this.gameObjects.zombieVolumes = this.gameObjects.zombieVolumes.concat(level.zombieVolumes);
+    this.gameObjects.victoryTiles = this.gameObjects.victoryTiles.concat(level.victoryTiles);
   }
 
   zombieGenerator() {

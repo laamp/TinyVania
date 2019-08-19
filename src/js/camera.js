@@ -21,6 +21,8 @@ class Camera {
     this.offsetY = -player.pos.y + (globals.screenHeight * 0.5);
 
     this.oldPosY = this.thePlayer.pos.y;
+
+    this.victoryScreen = false;
   }
 
   update() {
@@ -49,6 +51,17 @@ class Camera {
   }
 
   render() {
+    // when the game is won
+    if (this.victoryScreen) {
+      this.canvasCtx.fillStyle = 'black';
+      this.canvasCtx.fillRect(0 - this.offsetX, 0 - this.offsetY, globals.screenWidth, globals.screenHeight);
+
+      this.canvasCtx.fillStyle = 'rgb(230, 200, 0)';
+      this.canvasCtx.font = 'bold 40px monospace';
+      this.canvasCtx.fillText("You've won!", (globals.screenWidth * 0.38) - this.offsetX, (globals.screenHeight / 2) - this.offsetY);
+      return;
+    }
+
     //clearing the screen for a new render
     this.canvasCtx.clearRect(
       -this.offsetX, -this.offsetY,

@@ -1,5 +1,4 @@
 import Entity from "./entity";
-import Enemy from "./enemy";
 import Ghost from "./ghost";
 import { randomColor, transparentColor } from "./util";
 
@@ -16,6 +15,7 @@ export const parseLevel = levelData => {
   let killVolumes = [];
   let enemies = [];
   let zombieVolumes = [];
+  let victoryTiles = [];
   const tileSize = 40;
   let depth = 0;
   let stride = 0;
@@ -29,6 +29,14 @@ export const parseLevel = levelData => {
         break;
       case "P":
         playerSpawn = { x: stride * tileSize, y: depth * tileSize };
+        stride++;
+        break;
+      case "!": // victory tile
+        victoryTiles.push(new Entity({
+          size: { w: tileSize, h: tileSize },
+          pos: { x: stride * tileSize, y: depth * tileSize },
+          color: 'rgba(255, 255, 0, 0.3)'
+        }));
         stride++;
         break;
       case "i": // invisible wall
@@ -85,7 +93,7 @@ export const parseLevel = levelData => {
         zombieVolumes.push(new Entity({
           size: { w: tileSize, h: tileSize },
           pos: { x: stride * tileSize, y: depth * tileSize },
-          color: 'rgba(0, 200, 0, 0.25)'
+          color: 'rgba(0, 200, 0, 0.0)'
         }));
         stride++;
         break;
@@ -111,6 +119,7 @@ export const parseLevel = levelData => {
     tiles,
     killVolumes,
     enemies,
-    zombieVolumes
+    zombieVolumes,
+    victoryTiles
   };
 };
