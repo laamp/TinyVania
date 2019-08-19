@@ -2,7 +2,8 @@ import {
   globals
 } from "./util";
 import {
-  bgImgs
+  bgImgs,
+  bgParallaxImgs
 } from "./img-loader";
 
 class Camera {
@@ -56,12 +57,48 @@ class Camera {
     );
 
     //drawing the background
+    const adjWidth = bgImgs[0].width * 1.333;
+
+    const bgPos = {
+      x: globals.screenWidth * 0.5 - adjWidth * 0.5,
+      y: globals.screenHeight * 0.5 - bgImgs[0].height * 0.5
+    };
+
     this.canvasCtx.drawImage(
       bgImgs[0],
-      -this.offsetX, -this.offsetY,
-      globals.screenWidth,
-      globals.screenHeight
+      -this.offsetX + bgPos.x, -this.offsetY + bgPos.y,
+      adjWidth, bgImgs[0].height
     );
+
+    // draw moon
+    const adjSize = {
+      width: bgParallaxImgs[0].width * 0.6,
+      height: bgParallaxImgs[0].height * 0.6
+    };
+
+    this.canvasCtx.drawImage(
+      bgParallaxImgs[0],
+      -this.offsetX * 0.98 + 400, -this.offsetY + 50,
+      adjSize.width, adjSize.height
+    );
+
+    // draw clouds
+    for (let i = 0; i <= 3; i++) {
+      this.canvasCtx.drawImage(
+        bgParallaxImgs[1],
+        -this.offsetX * 0.92 + 800 + (globals.screenWidth * i), -this.offsetY + 60
+      );
+
+      this.canvasCtx.drawImage(
+        bgParallaxImgs[2],
+        -this.offsetX * 0.92 - 200 + (globals.screenWidth * i), -this.offsetY + 20
+      );
+
+      this.canvasCtx.drawImage(
+        bgParallaxImgs[3],
+        -this.offsetX * 0.92 + 500 + (globals.screenWidth * i), -this.offsetY + 165
+      );
+    }
 
     //loop through all objects and call their respective render functions
     let layerNames = Object.keys(this.gameObjects);

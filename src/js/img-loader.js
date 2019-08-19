@@ -22,6 +22,10 @@ import dead_left from "../sprites/player/dead_left.png";
 import dead_right from "../sprites/player/dead_right.png";
 
 import bg1 from "../sprites/environment/background-outside.png";
+import moon from "../sprites/environment/moon-parallax.png";
+import cloud1 from "../sprites/environment/cloud1.png";
+import cloud2 from "../sprites/environment/cloud2.png";
+import cloud3 from "../sprites/environment/cloud3.png";
 import greenStoneTile from "../sprites/environment/green-stone-tile.png";
 
 import skeleton1_left from "../sprites/skeleton/skeleton-clothed-1.png";
@@ -116,6 +120,14 @@ deadRightImg.src = dead_right;
 
 const bg1Img = new Image();
 bg1Img.src = bg1;
+const moonImg = new Image();
+moonImg.src = moon;
+const cloud1Img = new Image();
+cloud1Img.src = cloud1;
+const cloud2Img = new Image();
+cloud2Img.src = cloud2;
+const cloud3Img = new Image();
+cloud3Img.src = cloud3;
 const greenStoneTileImg = new Image();
 greenStoneTileImg.src = greenStoneTile;
 
@@ -222,6 +234,7 @@ export const characterDeadRight = [deadRightImg];
 
 export const environmentImgs = [greenStoneTileImg];
 export const bgImgs = [bg1Img];
+export const bgParallaxImgs = [moonImg, cloud1Img, cloud2Img, cloud3Img];
 
 export const zombieLeft = [skeleton1Left, skeleton2Left, skeleton3Left, skeleton4Left, skeleton5Left, skeleton6Left, skeleton7Left, skeleton8Left];
 export const zombieRight = [skeleton1Right, skeleton2Right, skeleton3Right, skeleton4Right, skeleton5Right, skeleton6Right, skeleton7Right, skeleton8Right];
