@@ -69,6 +69,8 @@ class Ghost extends Enemy {
             } else {
                 this.vel.y = -1;
             }
+        } else {
+            this.vel = { x: 0, y: 0 };
         }
 
         if (this.health > 0) {
